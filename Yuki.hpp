@@ -43,12 +43,11 @@ class Yuki {
 
 		inline static const std::string VERSION = "0.1"; ///< Version number
 
-		bool running;
 
 	public:
 		Yuki(bool debug=false);
 		~Yuki();
-		bool isRunning();
+		void run();
 		void close();
 		AssetManager *am;	///< Pointer to our Asset Manager
 		GraphicsEngine *ge;	///< Pointer to our Graphics Engine

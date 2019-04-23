@@ -32,20 +32,15 @@ class UI {
 		Yuki* yuki; ///< Our link back up to the rest of our resources.
 
 		std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> keyPressedEvents;
-		std::vector<void (*)()> keyStateEvents;
-		std::vector<void (*)()> mouseButtonEvents;
-		std::vector<void (*)()> mouseMovedEvents;
+		std::vector<void (*)(Yuki *yu)> keyStateEvents;
+		std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> mouseButtonEvents;
+		std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> mouseMovedEvents;
 
-		//Our actual threaded input loop
-		void run();
-
-		bool t_running;
-		std::thread *run_thread;
 	public:
 		UI(Yuki *yu);
 		~UI();
 
-		void start();
+		void processInput();
 
 		//Adding things to our input-event loop check.
 		void addKeyPressedEvent(void (*callback)(sf::Event::KeyEvent event, Yuki *yu));

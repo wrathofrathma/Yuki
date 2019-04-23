@@ -9,7 +9,6 @@ Yuki::Yuki(bool debug){
 	ge = nullptr;
 	am = nullptr;
 	ui = nullptr;
-	running = true;
 	init();
 }
 
@@ -23,13 +22,9 @@ Yuki::~Yuki(){
 }
 
 void Yuki::close(){
-	running = false;
-
+	ge->close();
 }
 
-bool Yuki::isRunning(){
-	return running;
-}
 void Yuki::checkOpenGL(){
 	//Straight up yoinked most of this from my graphics professor's code. It seems useful.
 	GLint MinMajor = 3;
@@ -71,7 +66,6 @@ void Yuki::checkOpenGL(){
         std::cout << "Renderer = " << glGetString(GL_RENDERER) << std::endl;
         std::cout << std::endl;
     }
-
     window.close();
 }
 void Yuki::init(){
@@ -85,6 +79,12 @@ void Yuki::init(){
 	//Once that's all nice and finished, let's start our primary event loop.
 	ui = new UI(this);
 
-	//Start our input thread.
-	ui->start();
+}
+
+void Yuki::run(){
+	while(ge->isOpen()){
+		if(ui!=nullptr)
+			ui->processInput();
+		ge->display();
+	}
 }

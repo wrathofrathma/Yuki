@@ -25,16 +25,17 @@
 
 class GraphicsEngine : public sf::RenderWindow {
 	private:
-
+		bool resize_flag;
+		int sscount;
 	public:
 		GraphicsEngine(std::string title="", GLint MajorVersion = 3, GLint MinorVersion = 3, int width=800, int height = 600);
 		~GraphicsEngine();
-
+		void setResizeFlag();
 		void display();
 		void screenshot();
 		void resize();
 		void setSize(unsigned int w, unsigned int h);
-
+		void printOpenGLErrors();
 };
 
 #endif
