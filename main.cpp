@@ -1,7 +1,9 @@
 #include <iostream>
 #include "Yuki.hpp"
 #include <thread>
+
 using namespace std;
+
 #include "Shader.hpp"
 
 void moveEvent(sf::Event::MouseMoveEvent event, Yuki *yu){
@@ -23,7 +25,7 @@ int main(){
 	yuki.ui->addMouseMovedEvent(moveEvent);
 	yuki.ui->addMouseButtonEvent(mouseButtonEvent);
 
-	Shader shader("./shaders/PassThrough");
+
 	yuki.run();
 	return 0;
 }

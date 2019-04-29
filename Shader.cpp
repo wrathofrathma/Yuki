@@ -4,9 +4,7 @@ Shader::Shader(){
   loaded=false;
 }
 Shader::Shader(const std::string &filename){
-  std::string vert = filename + ".vs";
-  std::string frag = filename + ".fs";
-  loadFromFile(vert, frag);
+  loadFromFile(filename);
 }
 Shader::Shader(std::string &vert, std::string &frag){
   loadFromFile(vert, frag);
@@ -20,7 +18,11 @@ Shader::~Shader(){
 
 	glDeleteProgram(m_program);
 }
-
+void Shader::loadFromFile(std::string filename){
+  std::string vert = filename + ".vs";
+  std::string frag = filename + ".fs";
+  loadFromFile(vert, frag);
+}
 GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
   m_program = glCreateProgram();
   m_shaders[0] = createShader(loadShader(vert), GL_VERTEX_SHADER);
@@ -37,7 +39,6 @@ GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
 	// m_uniforms[2] = glGetUniformLocation(m_program, "lightDirection");
   return m_program;
 }
-
 
 bool Shader::checkShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage)
 {
@@ -102,4 +103,16 @@ void Shader::bind(){
 
 bool Shader::isLoaded(){
   return loaded;
+}
+void Shader::setBool(const std::string &name, bool value) const
+{
+    glUniform1i(glGetUniformLocation(m_program, name.c_str()), (int)value);
+}
+void Shader::setInt(const std::string &name, int value) const
+{
+    glUniform1i(glGetUniformLocation(m_program, name.c_str()), value);
+}
+void Shader::setFloat(const std::string &name, float value) const
+{
+    glUniform1f(glGetUniformLocation(m_program, name.c_str()), value);
 }

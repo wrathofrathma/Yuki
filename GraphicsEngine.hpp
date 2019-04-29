@@ -6,6 +6,9 @@
 #include <SFML/System.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
+#include "Drawable.hpp"
+#include "drawables/Polygon.hpp"
 /**
 \file GraphicsEngine.hpp
 \brief header file for GraphicsEngine.cpp
@@ -27,6 +30,8 @@ class GraphicsEngine : public sf::RenderWindow {
 	private:
 		bool resize_flag;
 		int sscount;
+		Polygon poly;
+		bool wireframe;
 	public:
 		GraphicsEngine(std::string title="", GLint MajorVersion = 3, GLint MinorVersion = 3, int width=800, int height = 600);
 		~GraphicsEngine();
@@ -36,6 +41,9 @@ class GraphicsEngine : public sf::RenderWindow {
 		void resize();
 		void setSize(unsigned int w, unsigned int h);
 		void printOpenGLErrors();
+		void toggleWireframe();
+		bool getWireframe();
+		void setWireframe(bool v);
 };
 
 #endif
