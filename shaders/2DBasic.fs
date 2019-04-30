@@ -12,8 +12,18 @@ This is a simple GLSL pass through fragment shader.
 */
 
 in vec4 color;
+in vec2 TexCoord;
+
+out vec4 FragColor;
+
+uniform sampler2D texture1;
+uniform bool useTexture;
 
 void main()
 {
-    gl_FragColor = color;
+  if(useTexture)
+    FragColor = texture(texture1, TexCoord);
+  else
+    FragColor = color;
+  FragColor = min(FragColor, vec4(1.0));
 }

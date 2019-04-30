@@ -11,6 +11,8 @@
 
 //Forward declaration before all of the includes.
 class UI;
+class GraphicsEngine;
+
 #include "AssetManager.hpp"
 #include "GraphicsEngine.hpp"
 #include "UserInput.hpp"

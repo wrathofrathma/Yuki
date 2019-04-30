@@ -1,6 +1,10 @@
 #include "GraphicsEngine.hpp"
-GraphicsEngine::GraphicsEngine(std::string title, GLint MajorVersion, GLint MinorVersion, int width, int height) :
+#include "Yuki.hpp"
+
+GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, GLint MinorVersion, int width, int height) :
 	sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Default, sf::ContextSettings(24,8,4,MajorVersion, MinorVersion, sf::ContextSettings::Core)) {
+
+	yuki = yu;
 	setActive();
 	glClearColor(0, 0, 0, 1);
 	sscount = 0;
@@ -27,8 +31,10 @@ GraphicsEngine::GraphicsEngine(std::string title, GLint MajorVersion, GLint Mino
 		1, 1, 0.5
 	};
 	std::vector<float> cs (colors, colors+12);
-
-	poly.setColor(cs);
+	yuki->am->loadTexture("textures/test.jpg", "doge");
+	//poly.setColor(cs);
+	poly.setTexture(yuki->am->getTexture("doge"));
+	poly.setUseTexture(true);
 	wireframe = false;
 	setVerticalSyncEnabled(true);
 }
@@ -89,20 +95,4 @@ void GraphicsEngine::screenshot()
     sf::Image img = texture.copyToImage();
     img.saveToFile(ssfilename);
     sscount++;
-}
-/**
-\brief Prints all OpenGL errors to stderr.
-
-*/
-
-void GraphicsEngine::printOpenGLErrors()
-{
-    GLenum errCode;
-    const GLubyte *errString;
-
-    while ((errCode = glGetError()) != GL_NO_ERROR)
-    {
-        errString = gluErrorString(errCode);
-        fprintf(stderr, "OpenGL Error: %s\n", errString);
-    }
 }

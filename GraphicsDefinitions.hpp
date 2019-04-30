@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
+#include <iostream>
 #include <string>
 /**
 \file GraphicsDefinitions.hpp
@@ -17,5 +18,7 @@
 #define PI 3.14159265358979323846264338328
 #define PI_DIV_180 0.0174532925199432957692369076849
 #define deg PI_DIV_180
+
+void printOpenGLErrors();
 
 #endif

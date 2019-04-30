@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
+#include "Texture.hpp"
 
 /**
 \file AssetManager.hpp
@@ -23,6 +25,14 @@
 */
 
 class AssetManager {
+  private:
+    std::map<std::string, Texture*> textures;
+  public:
+    AssetManager();
+    ~AssetManager();
+
+    Texture* getTexture(std::string key);
+    void loadTexture(std::string filename, std::string key);
 
 
 };

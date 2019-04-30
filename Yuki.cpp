@@ -72,9 +72,9 @@ void Yuki::init(){
 	//First check to see if our computer supports our OpenGL version
 	checkOpenGL();
 	//If everything didn't explode by now, we can load our assets
-
+	am = new AssetManager();
 	//If things load decently, we can then create our window
-	ge = new GraphicsEngine(program_title, opengl_major, opengl_minor);
+	ge = new GraphicsEngine(this, program_title, opengl_major, opengl_minor);
 
 	//Once that's all nice and finished, let's start our primary event loop.
 	ui = new UI(this);
