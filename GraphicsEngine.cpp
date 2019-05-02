@@ -8,14 +8,19 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	setActive();
 	glClearColor(0, 0, 0, 1);
 	sscount = 0;
-	float vv[] = {
-	     0.5f,  0.5f, 0.0f,  // top right
-	     0.5f, -0.5f, 0.0f,  // bottom right
-	    -0.5f, -0.5f, 0.0f,  // bottom left
-	    -0.5f,  0.5f, 0.0f   // top left
-	};
-	std::vector<float> vertices (vv, vv+12);
+	//Testing Camera stuff
+	Shader shader("shaders/2DBasic");
+	cameras.insert(std::pair<std::string, Camera*>("default", new Camera(shader.getUniformLocation("proj"), shader.getUniformLocation("view"), getSize().x, getSize().y, 50.0f)));
+	setActiveCamera("default");
 
+	// Testing polygon stuff
+	float vv[] = {
+	     0.5f,  0.5f, 0.0f, 1.0f, // top right
+	     0.5f, -0.5f, 0.0f, 1.0f, // bottom right
+	    -0.5f, -0.5f, 0.0f, 1.0f, // bottom left
+	    -0.5f,  0.5f, 0.0f,  1.0f  // top left
+	};
+	std::vector<float> vertices (vv, vv+16);
 	std::vector<unsigned int> indices;
 	indices.push_back(0);
 	indices.push_back(1);
@@ -34,17 +39,29 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	yuki->am->loadTexture("textures/test.jpg", "doge");
 	//poly.setColor(cs);
 	poly.setTexture(yuki->am->getTexture("doge"));
-	poly.setUseTexture(true);
+	poly.setUseTexture(true)
+	//End of polygon tests
+
+	;
 	wireframe = false;
 	setVerticalSyncEnabled(true);
 }
 
 GraphicsEngine::~GraphicsEngine(){
-
+	std::map<std::string, Camera*>::iterator it = cameras.begin();
+	for( ; it!=cameras.end(); it++){
+		delete it->second;
+	}
+	cameras.clear();
 }
 bool GraphicsEngine::getWireframe(){
 	return wireframe;
 }
+void GraphicsEngine::setActiveCamera(std::string c){
+	if(cameras.count(c) > 0)
+		active_camera = c;
+}
+
 void GraphicsEngine::setWireframe(bool v){
 	if(wireframe != v)
 		toggleWireframe();
@@ -63,6 +80,8 @@ void GraphicsEngine::toggleWireframe(){
 void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	cameras[active_camera]->update();
+
 	poly.draw();
 
 

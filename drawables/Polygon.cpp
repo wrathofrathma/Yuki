@@ -12,6 +12,9 @@ Polygon::Polygon(){
   shader.loadFromFile("shaders/2DBasic");
   setUseTexture(false);
   update = true;
+  modelMatrix = glm::mat4(1.0f);
+  shader.bind();
+  uModel = shader.getUniformLocation("model");
 }
 
 Polygon::~Polygon(){
@@ -33,7 +36,7 @@ void Polygon::setTexture(Texture *tex){
   shader.setInt("texture1", 0);
 
   //Now we need to spread our texture
-  for(unsigned int i=0; i<vertices.size(); i+=3){
+  for(unsigned int i=0; i<vertices.size(); i+=4){
     float v1 = vertices[i];
     float v2 = vertices[i+1];
 
@@ -56,7 +59,7 @@ void Polygon::loadVertices(vector<float> _vertices, vector<unsigned int> _indice
 }
 void Polygon::setColor(float r, float g, float b){
   colors.clear();
-  for(unsigned int i=0; i<vertices.size()/3; i++){
+  for(unsigned int i=0; i<vertices.size()/4; i++){
     colors.push_back(r);
     colors.push_back(g);
     colors.push_back(b);
@@ -72,7 +75,7 @@ void Polygon::setColor(std::vector<float> c){
     colors = c;
   else {
     //Here we have more vertices than colors or more colors, let's treat it as one color.
-    for(unsigned int i=0; i<vertices.size()/3; i++){
+    for(unsigned int i=0; i<vertices.size()/4; i++){
       colors.push_back(c[0]);
       colors.push_back(c[1]);
       colors.push_back(c[2]);
@@ -112,7 +115,7 @@ void Polygon::updateGraphicsCard(){
   //Tell the shader how to find its data
   glVertexAttribPointer(vTexture, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertice_size + color_size));
   glVertexAttribPointer(vColor, 3, GL_FLOAT, GL_TRUE, 0, BUFFER_OFFSET(vertice_size));
-  glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
+  glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
 
   glEnableVertexAttribArray(vPosition);
   glEnableVertexAttribArray(vColor);
@@ -127,6 +130,9 @@ void Polygon::setUseTexture(bool use){
   useTexture = use;
 }
 void Polygon::draw(){
+  //Every model has its own model matrix. So we should upload before every draw.
+  glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
   if(update){
     updateGraphicsCard();
   }

@@ -42,10 +42,8 @@ class Shader {
     void operator=(const Shader& other) {}
 
     static const unsigned int NUM_SHADER = 2;
-    static const unsigned int NUM_UNIFORM = 1;
     GLuint m_program; ///< Shader program ID.
     GLuint m_shaders[NUM_SHADER]; ///< Array containing our vertex & fragment shaders.
-    GLuint m_uniforms[NUM_UNIFORM];
 
     GLuint createShader(const std::string &text, GLenum type);
     std::string getShaderString(GLenum);
@@ -64,5 +62,6 @@ class Shader {
     void setFloat(const std::string &name, float value) const;
     GLuint loadFromFile(std::string &vert, std::string &frag);
     void loadFromFile(std::string filename);
+    GLuint getUniformLocation(const std::string &name);
 };
 #endif

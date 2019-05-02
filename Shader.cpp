@@ -23,6 +23,11 @@ void Shader::loadFromFile(std::string filename){
   std::string frag = filename + ".fs";
   loadFromFile(vert, frag);
 }
+
+GLuint Shader::getUniformLocation(const std::string &name){
+  return glGetUniformLocation(m_program, name.c_str());
+}
+
 GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
   m_program = glCreateProgram();
   m_shaders[0] = createShader(loadShader(vert), GL_VERTEX_SHADER);
@@ -34,9 +39,7 @@ GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
 
   glLinkProgram(m_program);
   loaded = checkShaderError(m_program, GL_LINK_STATUS, true, "Invalid shader program.");
-  // m_uniforms[0] = glGetUniformLocation(m_program, "MVP");
-	// m_uniforms[1] = glGetUniformLocation(m_program, "Normal");
-	// m_uniforms[2] = glGetUniformLocation(m_program, "lightDirection");
+
   return m_program;
 }
 
