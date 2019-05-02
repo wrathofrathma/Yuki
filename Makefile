@@ -9,7 +9,10 @@ OBJ=$(SRC:.cpp=.o)
 
 prog: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
-
+	$(MAKE) clean
 clean:
 	rm *.o
 	rm drawables/*.o
+
+run:
+	./prog
