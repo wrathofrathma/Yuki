@@ -13,16 +13,34 @@ void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 //	cout << "Key pressed!" << endl;
 	switch(event.code){
 		case sf::Keyboard::W:
-			cout << "W" << endl;
+			yu->ge->getCamera()->move(glm::vec3(0,0,-0.1));
 			break;
 		case sf::Keyboard::A:
-			cout << "A" << endl;
+			yu->ge->getCamera()->move(glm::vec3(-0.1,0,0));
 			break;
 		case sf::Keyboard::S:
-			cout << "S" << endl;
+			yu->ge->getCamera()->move(glm::vec3(0,0,0.1));
 			break;
 		case sf::Keyboard::D:
-			cout << "D" << endl;
+			yu->ge->getCamera()->move(glm::vec3(0.1,0,0));
+			break;
+		case sf::Keyboard::Up:
+			yu->ge->getCamera()->rotate(glm::vec3(0,0.1,0));
+			break;
+		case sf::Keyboard::Down:
+			yu->ge->getCamera()->rotate(glm::vec3(0,-0.1,0));
+			break;
+		case sf::Keyboard::Left:
+			yu->ge->getCamera()->rotate(glm::vec3(-0.1,0,0));
+			break;
+		case sf::Keyboard::Right:
+			yu->ge->getCamera()->rotate(glm::vec3(0.1,0,0));
+			break;
+		case sf::Keyboard::Space:
+			yu->ge->getCamera()->move(glm::vec3(0,0.1,0));
+			break;
+		case sf::Keyboard::LShift:
+			yu->ge->getCamera()->move(glm::vec3(0,-0.1,0));
 			break;
 		case sf::Keyboard::Escape:
 			yu->close();

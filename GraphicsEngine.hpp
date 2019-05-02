@@ -59,6 +59,7 @@ class GraphicsEngine : public sf::RenderWindow {
 		bool getWireframe();
 		void setWireframe(bool v);
 		void setActiveCamera(std::string c);
+		Camera* getCamera();
 };
 
 #endif

@@ -29,6 +29,7 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	indices.push_back(2);
 	indices.push_back(3);
 	poly.loadVertices(vertices, indices);
+
 	float colors[] = {
 		1, 1, 1,
 		0.5, 1, 1,
@@ -81,7 +82,6 @@ void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	cameras[active_camera]->update();
-
 	poly.draw();
 
 
@@ -114,4 +114,8 @@ void GraphicsEngine::screenshot()
     sf::Image img = texture.copyToImage();
     img.saveToFile(ssfilename);
     sscount++;
+}
+
+Camera* GraphicsEngine::getCamera(){
+	return cameras[active_camera];
 }
