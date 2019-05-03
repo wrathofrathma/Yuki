@@ -8,7 +8,7 @@ Polygon::Polygon(AssetManager *am) : Drawable(am){
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
-  glGenTextures(1, &TEX);
+  glGenTextures(1, &tex);
   shader = am->getShader("2DBasic");
   orientation = glm::vec3(0,0,0);
   setUseTexture(false);
@@ -19,9 +19,7 @@ Polygon::Polygon(AssetManager *am) : Drawable(am){
 }
 
 Polygon::~Polygon(){
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &dataPtr);
-  glDeleteBuffers(1, &indicePtr);
+
 }
 
 GLuint const Polygon::getVAO(){
@@ -127,16 +125,11 @@ void Polygon::updateGraphicsCard(){
   glBindVertexArray(0);
   update = false;
 }
-void Polygon::setUseTexture(bool use){
-  shader->bind();
-  shader->setBool("useTexture", use);
-  useTexture = use;
-}
 
 void Polygon::draw(){
   //Every model has its own model matrix. So we should upload before every draw.
   glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(generateModelMatrix()));
-
+  setUseTexture(useTexture);
   if(update){
     updateGraphicsCard();
   }

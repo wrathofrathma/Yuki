@@ -4,7 +4,7 @@
 UI::UI(Yuki *yu){
 	yuki=yu;
 	mouseDown=false;
-	setMouseSensitivity(sf::Vector2f(0.002f, 0.002f));
+	setMouseSensitivity(sf::Vector2f(0.001f, 0.001f));
 }
 UI::~UI(){
 

@@ -29,13 +29,36 @@
 
 class Drawable : public QuaternionObject {
   protected:
+    GLint vPosition; ///< Shader position of vertex data.
+    GLint vColor; ///< Shader position of vertex color.
+    GLint vNormal; ///< Shader position of vertex normal.
+    GLint vTexture; ///< Shader position of texture
+
+    unsigned int vertex_count; ///< Total number of vertices in the object.
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<float> colors; ///< Vector containing the (r,g,b) color values for each vertice.
+    std::vector<float> texture_coords; ///< Vector containing our texture coordinates.
+
+    Shader *shader;
+
+    Texture *texture;
+    GLuint VAO;
+    GLuint indicePtr;
+    GLuint dataPtr;
+
     AssetManager *asset_manager;
     GLuint uModel; ///< Shader uniform position of model matrix.
+    GLuint tex; ///< Actual texture id.
+    bool useTexture;
 
+    bool update; ///< Signals that we need to update the graphics card.
   public:
     Drawable(AssetManager *am);
     virtual ~Drawable();
     virtual void draw() = 0;
+    virtual void updateGraphicsCard() = 0;
+    void setUseTexture(bool);
 };
 
 #endif

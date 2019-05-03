@@ -19,6 +19,7 @@
 #include "GraphicsDefinitions.hpp"
 #include "Camera.hpp"
 #include "drawables/Quad.hpp"
+#include "drawables/Cube.hpp"
 class Yuki;
 
 /**
@@ -43,7 +44,7 @@ class GraphicsEngine : public sf::RenderWindow {
 		bool resize_flag;
 		int sscount;
 		Quad *quad;
-
+		Cube *cube;
 		bool wireframe;
 		Yuki *yuki;
 		std::map<std::string, Camera*> cameras;

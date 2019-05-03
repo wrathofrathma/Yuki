@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Yuki.hpp"
-#include <thread>
 
 using namespace std;
 

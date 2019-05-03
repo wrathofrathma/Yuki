@@ -20,6 +20,7 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 
 	quad = new Quad(yuki->am);
 	quad->setTexture(yuki->am->getTexture("doge"));
+	cube = new Cube(yuki->am);
 	//poly->setTexture(yuki->am->getTexture("doge"));
 
 	//End of polygon tests
@@ -35,6 +36,7 @@ GraphicsEngine::~GraphicsEngine(){
 	}
 	cameras.clear();
 	delete quad;
+	delete cube;
 }
 bool GraphicsEngine::getWireframe(){
 	return wireframe;
@@ -63,8 +65,9 @@ void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	cameras[active_camera]->update();
-
 	quad->draw();
+
+	cube->draw();
 
 	sf::RenderWindow::display();
 	printOpenGLErrors();
