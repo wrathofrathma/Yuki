@@ -40,6 +40,8 @@ private:
   GLuint indicePtr;
   GLuint dataPtr;
 
+  glm::vec3 YPR;
+
   GLuint TEX;
   bool useTexture;
   bool update;
@@ -57,6 +59,9 @@ private:
     void storeDataInAttributeList(int attributeNumber, float *data);
     void setTexture(Texture *tex);
     void setUseTexture(bool use);
-
+    glm::mat4 getRotation();
+    glm::quat getRotationQ();
+    void move(glm::vec3 offset);
+    void rotate(glm::vec3 rotation);
 };
 #endif

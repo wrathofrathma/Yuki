@@ -82,6 +82,7 @@ void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	cameras[active_camera]->update();
+	//poly.rotate(glm::vec3(0.01, -0.01, 0));
 	poly.draw();
 
 

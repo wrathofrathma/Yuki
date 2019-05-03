@@ -35,7 +35,9 @@ class UI {
 		std::vector<void (*)(Yuki *yu)> keyStateEvents;
 		std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> mouseButtonEvents;
 		std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> mouseMovedEvents;
-
+		sf::Vector2i last_mouse_pos;
+		bool mouseDown;
+		sf::Vector2f mouse_sensitivity;
 	public:
 		UI(Yuki *yu);
 		~UI();
@@ -47,6 +49,12 @@ class UI {
 		void addKeyStateProcessingEvent(void (*callback)(Yuki *yu));
 		void addMouseButtonEvent(void (*callback)(sf::Event::MouseButtonEvent event, Yuki *yu));
 		void addMouseMovedEvent(void (*callback)(sf::Event::MouseMoveEvent event, Yuki *yu));
+		void setMouseDown(bool);
+		bool getMouseDown();
+		sf::Vector2i getLastMousePos();
+		void setMousePos(sf::Vector2i pos);
+		void setMouseSensitivity(sf::Vector2f sensitivity);
+		sf::Vector2f getMouseSensitivity();
 };
 
 #endif

@@ -10,9 +10,11 @@ Polygon::Polygon(){
   glGenBuffers(1, &indicePtr);
   glGenTextures(1, &TEX);
   shader.loadFromFile("shaders/2DBasic");
+  YPR = glm::vec3(0,0,0);
   setUseTexture(false);
   update = true;
-  modelMatrix = glm::mat4(1.0f);
+  //modelMatrix = glm::mat4(1.0f);
+  modelMatrix = getRotation();
   shader.bind();
   uModel = shader.getUniformLocation("model");
 }
@@ -27,6 +29,20 @@ GLuint const Polygon::getVAO(){
   return VAO;
 }
 
+glm::quat Polygon::getRotationQ(){
+  //generate quaternions based on our Yaw Pitch and Roll
+  glm::quat qyaw = glm::angleAxis(YPR.x, glm::vec3(0,1,0));
+  glm::quat qpitch = glm::angleAxis(-YPR.y, glm::vec3(1,0,0));
+  glm::quat qroll = glm::angleAxis(YPR.z, glm::vec3(0,0,1));
+  //Generate the total accumulated rotation
+  glm::quat orientation = qroll * qpitch * qyaw;
+  //Normalize it/make it length 1
+  return glm::normalize(orientation);
+}
+
+glm::mat4 Polygon::getRotation(){
+  return glm::mat4_cast(getRotationQ());
+}
 unsigned int Polygon::getVertexCount(){
   return vertices.size();
 }
@@ -129,9 +145,13 @@ void Polygon::setUseTexture(bool use){
   shader.setBool("useTexture", use);
   useTexture = use;
 }
+
+void Polygon::rotate(glm::vec3 rotation){
+  YPR += rotation;
+}
 void Polygon::draw(){
   //Every model has its own model matrix. So we should upload before every draw.
-  glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+  glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(getRotation()));
 
   if(update){
     updateGraphicsCard();

@@ -8,40 +8,23 @@ using namespace std;
 
 void moveEvent(sf::Event::MouseMoveEvent event, Yuki *yu){
 	//cout << "Mouse moved!" << endl;
+	UI *ui = yu->ui;
+	sf::Vector2i last_pos = ui->getLastMousePos();
+	sf::Vector2f mouse_sensitivity = ui->getMouseSensitivity();
+
+	if(ui->getMouseDown()){
+		float delta_x = event.x - last_pos.x;
+		float delta_y = event.y - last_pos.y;
+		float x = delta_x * mouse_sensitivity.x;
+		float y = delta_y * mouse_sensitivity.y;
+		yu->ge->getCamera()->rotate(glm::vec3(-x,y, 0));
+	}
+	ui->setMousePos(sf::Vector2i(event.x, event.y));
 }
 void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 //	cout << "Key pressed!" << endl;
 	switch(event.code){
-		case sf::Keyboard::W:
-			yu->ge->getCamera()->move(glm::vec3(0,0,-0.1));
-			break;
-		case sf::Keyboard::A:
-			yu->ge->getCamera()->move(glm::vec3(-0.1,0,0));
-			break;
-		case sf::Keyboard::S:
-			yu->ge->getCamera()->move(glm::vec3(0,0,0.1));
-			break;
-		case sf::Keyboard::D:
-			yu->ge->getCamera()->move(glm::vec3(0.1,0,0));
-			break;
-		case sf::Keyboard::Up:
-			yu->ge->getCamera()->rotate(glm::vec3(0,0.1,0));
-			break;
-		case sf::Keyboard::Down:
-			yu->ge->getCamera()->rotate(glm::vec3(0,-0.1,0));
-			break;
-		case sf::Keyboard::Left:
-			yu->ge->getCamera()->rotate(glm::vec3(-0.1,0,0));
-			break;
-		case sf::Keyboard::Right:
-			yu->ge->getCamera()->rotate(glm::vec3(0.1,0,0));
-			break;
-		case sf::Keyboard::Space:
-			yu->ge->getCamera()->move(glm::vec3(0,0.1,0));
-			break;
-		case sf::Keyboard::LShift:
-			yu->ge->getCamera()->move(glm::vec3(0,-0.1,0));
-			break;
+
 		case sf::Keyboard::Escape:
 			yu->close();
 			break;
@@ -51,9 +34,41 @@ void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 }
 void mouseButtonEvent(sf::Event::MouseButtonEvent event, Yuki *yu){
 //	cout << "Mouse button pressed!" << endl;
+
 }
+
+
 void stateProcessing(Yuki *yu){
-//	cout << "Mouse moved!" << endl;
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+		yu->ge->getCamera()->move(glm::vec3(0,0,-0.1));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		yu->ge->getCamera()->move(glm::vec3(-0.1,0,0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+		yu->ge->getCamera()->move(glm::vec3(0,0,0.1));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		yu->ge->getCamera()->move(glm::vec3(0.1,0,0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+		yu->ge->getCamera()->rotate(glm::vec3(0,0.1,0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+		yu->ge->getCamera()->rotate(glm::vec3(0,-0.1,0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+		yu->ge->getCamera()->rotate(glm::vec3(-0.1,0,0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+		yu->ge->getCamera()->rotate(glm::vec3(0.1,0,0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+		yu->ge->getCamera()->move(glm::vec3(0,0.1,0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+		yu->ge->getCamera()->move(glm::vec3(0,-0.1,0));
+	}
 }
 
 int main(){
@@ -61,7 +76,7 @@ int main(){
 	yuki.ui->addKeyPressedEvent(keyPressedEvent);
 	yuki.ui->addMouseMovedEvent(moveEvent);
 	yuki.ui->addMouseButtonEvent(mouseButtonEvent);
-
+	yuki.ui->addKeyStateProcessingEvent(stateProcessing);
 
 	yuki.run();
 	return 0;
