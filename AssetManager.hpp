@@ -6,7 +6,7 @@
 #include <string>
 #include <map>
 #include "Texture.hpp"
-
+#include "Shader.hpp"
 /**
 \file AssetManager.hpp
 \brief header file for AssetManager.cpp
@@ -27,6 +27,7 @@
 class AssetManager {
   private:
     std::map<std::string, Texture*> textures;
+    std::map<std::string, Shader*> shaders;
   public:
     AssetManager();
     ~AssetManager();
@@ -34,7 +35,7 @@ class AssetManager {
     Texture* getTexture(std::string key);
     void loadTexture(std::string filename, std::string key);
 
-
+    Shader* getShader(std::string key);
 };
 
 #endif

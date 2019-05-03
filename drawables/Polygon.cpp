@@ -1,6 +1,6 @@
 #include "Polygon.hpp"
 
-Polygon::Polygon(){
+Polygon::Polygon(AssetManager *am) : Drawable(am){
   vPosition = 0;
   vColor = 1;
   vTexture = 2;
@@ -9,14 +9,13 @@ Polygon::Polygon(){
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
   glGenTextures(1, &TEX);
-  shader.loadFromFile("shaders/2DBasic");
-  YPR = glm::vec3(0,0,0);
+  shader = am->getShader("shaders/2DBasic");
+  orientation = glm::vec3(0,0,0);
   setUseTexture(false);
   update = true;
-  //modelMatrix = glm::mat4(1.0f);
-  modelMatrix = getRotation();
-  shader.bind();
-  uModel = shader.getUniformLocation("model");
+
+  shader->bind();
+  uModel = shader->getUniformLocation("model");
 }
 
 Polygon::~Polygon(){
@@ -29,27 +28,13 @@ GLuint const Polygon::getVAO(){
   return VAO;
 }
 
-glm::quat Polygon::getRotationQ(){
-  //generate quaternions based on our Yaw Pitch and Roll
-  glm::quat qyaw = glm::angleAxis(YPR.x, glm::vec3(0,1,0));
-  glm::quat qpitch = glm::angleAxis(-YPR.y, glm::vec3(1,0,0));
-  glm::quat qroll = glm::angleAxis(YPR.z, glm::vec3(0,0,1));
-  //Generate the total accumulated rotation
-  glm::quat orientation = qroll * qpitch * qyaw;
-  //Normalize it/make it length 1
-  return glm::normalize(orientation);
-}
-
-glm::mat4 Polygon::getRotation(){
-  return glm::mat4_cast(getRotationQ());
-}
 unsigned int Polygon::getVertexCount(){
   return vertices.size();
 }
 void Polygon::setTexture(Texture *tex){
   texture = tex;
-  shader.bind();
-  shader.setInt("texture1", 0);
+  shader->bind();
+  shader->setInt("texture1", 0);
 
   //Now we need to spread our texture
   for(unsigned int i=0; i<vertices.size(); i+=4){
@@ -65,6 +50,7 @@ void Polygon::setTexture(Texture *tex){
   setUseTexture(true);
   update = true;
 }
+
 //Loads the data to our vertice & indice vectors and then to the graphics card.
 void Polygon::loadVertices(vector<float> _vertices, vector<unsigned int> _indices){
   vertices.clear();
@@ -73,6 +59,7 @@ void Polygon::loadVertices(vector<float> _vertices, vector<unsigned int> _indice
   indices = _indices;
   update = true;
 }
+
 void Polygon::setColor(float r, float g, float b){
   colors.clear();
   for(unsigned int i=0; i<vertices.size()/4; i++){
@@ -83,6 +70,7 @@ void Polygon::setColor(float r, float g, float b){
   setUseTexture(false);
   update = true;
 }
+
 void Polygon::setColor(std::vector<float> c){
   colors.clear();
   if(c.size() < 3)
@@ -103,7 +91,6 @@ void Polygon::setColor(std::vector<float> c){
 
 //Update's the vertex data on the graphics card.
 void Polygon::updateGraphicsCard(){
-
   //Some pre-calc to make this cleaner.
   unsigned int vertice_size = vertices.size() * sizeof(float);
   unsigned int color_size = colors.size() * sizeof(float);
@@ -141,22 +128,19 @@ void Polygon::updateGraphicsCard(){
   update = false;
 }
 void Polygon::setUseTexture(bool use){
-  shader.bind();
-  shader.setBool("useTexture", use);
+  shader->bind();
+  shader->setBool("useTexture", use);
   useTexture = use;
 }
 
-void Polygon::rotate(glm::vec3 rotation){
-  YPR += rotation;
-}
 void Polygon::draw(){
   //Every model has its own model matrix. So we should upload before every draw.
-  glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(getRotation()));
+  glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(generateModelMatrix()));
 
   if(update){
     updateGraphicsCard();
   }
-  shader.bind();
+  shader->bind();
   if(useTexture){
     glActiveTexture(GL_TEXTURE0); //Activate texture unit
     glBindTexture(GL_TEXTURE_2D, texture->getID());

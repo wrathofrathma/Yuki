@@ -33,3 +33,15 @@ Texture* AssetManager::getTexture(std::string key){
     return (it->second);
   return nullptr;
 }
+Shader* AssetManager::getShader(std::string key){
+  if(shaders.count(key)==0){
+    Shader *s = new Shader(key);
+    if(!s->isLoaded()){
+      delete s;
+      return nullptr;
+    }
+    shaders.insert(pair<std::string, Shader*>(key, s));
+    return s;
+  }
+  return shaders[key];
+}

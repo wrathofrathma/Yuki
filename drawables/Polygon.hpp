@@ -17,9 +17,9 @@
 using namespace std;
 
 class Polygon : public Drawable {
-private:
+  protected:
 
-  GLuint uModel; ///< Shader uniform position of model matrix.
+  //GLuint uModel; ///< Shader uniform position of model matrix.
   glm::mat4 modelMatrix; ///< This individual model's matrix.
 
   GLint vPosition; ///< Shader position of vertex data.
@@ -34,19 +34,18 @@ private:
   std::vector<float> colors; ///< Vector containing the (r,g,b) color values for each vertice.
   std::vector<float> texture_coords; ///< Vector containing our texture coordinates.
 
-  Shader shader;
   Texture *texture;
   GLuint VAO;
   GLuint indicePtr;
   GLuint dataPtr;
 
-  glm::vec3 YPR;
+  Shader *shader;
 
   GLuint TEX;
   bool useTexture;
   bool update;
   public:
-    Polygon();
+    Polygon(AssetManager *am);
     ~Polygon();
 
     void draw();
@@ -59,9 +58,6 @@ private:
     void storeDataInAttributeList(int attributeNumber, float *data);
     void setTexture(Texture *tex);
     void setUseTexture(bool use);
-    glm::mat4 getRotation();
-    glm::quat getRotationQ();
-    void move(glm::vec3 offset);
-    void rotate(glm::vec3 rotation);
+
 };
 #endif

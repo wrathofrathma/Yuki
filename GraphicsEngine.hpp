@@ -42,7 +42,9 @@ class GraphicsEngine : public sf::RenderWindow {
 	private:
 		bool resize_flag;
 		int sscount;
-		Polygon poly;
+		Polygon *poly;
+		Polygon *poly2;
+
 		bool wireframe;
 		Yuki *yuki;
 		std::map<std::string, Camera*> cameras;

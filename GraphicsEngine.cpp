@@ -8,28 +8,73 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	setActive();
 	glClearColor(0, 0, 0, 1);
 	sscount = 0;
+	poly = new Polygon(yuki->am);
+	//poly2 = new Polygon(yuki->am);
 	//Testing Camera stuff
 	Shader shader("shaders/2DBasic");
 	cameras.insert(std::pair<std::string, Camera*>("default", new Camera(shader.getUniformLocation("proj"), shader.getUniformLocation("view"), getSize().x, getSize().y, 50.0f)));
 	setActiveCamera("default");
 
 	// Testing polygon stuff
-	float vv[] = {
-	     0.5f,  0.5f, 0.0f, 1.0f, // top right
-	     0.5f, -0.5f, 0.0f, 1.0f, // bottom right
-	    -0.5f, -0.5f, 0.0f, 1.0f, // bottom left
-	    -0.5f,  0.5f, 0.0f,  1.0f  // top left
-	};
-	std::vector<float> vertices (vv, vv+16);
-	std::vector<unsigned int> indices;
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(3);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(3);
-	poly.loadVertices(vertices, indices);
+	// float vv[] = {
+	//      0.5f,  0.5f, 0.0f, 1.0f, // top right
+	//      0.5f, -0.5f, 0.0f, 1.0f, // bottom right
+	//     -0.5f, -0.5f, 0.0f, 1.0f, // bottom left
+	//     -0.5f,  0.5f, 0.0f,  1.0f  // top left
+	// };
+	unsigned int vi[] = {0, 1, 2,
+		2, 3, 0,
+		6, 5, 4,
+		4, 7, 6,
+		10, 9, 8,
+		8, 11, 10,
+		12, 13, 14,
+		14, 15, 12,
+		16, 17, 18,
+		18, 19, 16,
+		22, 21, 20,
+		20, 23, 22
+		};
+	GLfloat vv[] = {-0.5, 0.5, 0.5, 1,
+	  -0.5, -0.5, 0.5, 1,
+	  0.5, -0.5, 0.5, 1,
+	  0.5, 0.5, 0.5, 1,
 
+	  -0.5, 0.5, -0.5, 1,
+	  -0.5, -0.5, -0.5, 1,
+	  0.5, -0.5, -0.5, 1,
+	  0.5, 0.5, -0.5, 1,
+
+	  -0.5, 0.5, 0.5, 1,
+	  -0.5, 0.5, -0.5, 1,
+	  0.5, 0.5, -0.5, 1,
+	  0.5, 0.5, 0.5, 1,
+
+	  -0.5, -0.5, 0.5, 1,
+	  -0.5, -0.5, -0.5, 1,
+	  0.5, -0.5, -0.5, 1,
+	  0.5, -0.5, 0.5, 1,
+
+	  0.5, -0.5, 0.5, 1,
+	  0.5, -0.5, -0.5, 1,
+	  0.5, 0.5, -0.5, 1,
+	  0.5, 0.5, 0.5, 1,
+
+	  -0.5, -0.5, 0.5, 1,
+	  -0.5, -0.5, -0.5, 1,
+	  -0.5, 0.5, -0.5, 1,
+	  -0.5, 0.5, 0.5, 1,
+	 };
+	std::vector<float> vertices (vv, vv+96);
+	std::vector<unsigned int> indices(vi, vi+36);
+	// indices.push_back(0);
+	// indices.push_back(1);
+	// indices.push_back(3);
+	// indices.push_back(1);
+	// indices.push_back(2);
+	// indices.push_back(3);
+	// poly2->loadVertices(vertices, indices);
+	 poly->loadVertices(vertices, indices);
 	float colors[] = {
 		1, 1, 1,
 		0.5, 1, 1,
@@ -38,12 +83,12 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	};
 	std::vector<float> cs (colors, colors+12);
 	yuki->am->loadTexture("textures/test.jpg", "doge");
-	//poly.setColor(cs);
-	poly.setTexture(yuki->am->getTexture("doge"));
-	poly.setUseTexture(true)
+	//poly->setColor(cs);
+	poly->setTexture(yuki->am->getTexture("doge"));
+	//poly2->setTexture(yuki->am->getTexture("doge"));
+
 	//End of polygon tests
 
-	;
 	wireframe = false;
 	setVerticalSyncEnabled(true);
 }
@@ -54,6 +99,7 @@ GraphicsEngine::~GraphicsEngine(){
 		delete it->second;
 	}
 	cameras.clear();
+	delete poly;
 }
 bool GraphicsEngine::getWireframe(){
 	return wireframe;
@@ -82,9 +128,11 @@ void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	cameras[active_camera]->update();
-	//poly.rotate(glm::vec3(0.01, -0.01, 0));
-	poly.draw();
-
+	poly->rotate(glm::vec3(0.01, -0.01, 0));
+	//poly->scale(glm::vec3(0.005, 0.005, 0.005));
+	//poly->translate(glm::vec3(0.0, 0.1, 0.0));
+	poly->draw();
+	//poly2->draw();
 
 
 	sf::RenderWindow::display();

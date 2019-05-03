@@ -1,7 +1,7 @@
 #include "Drawable.hpp"
 
-Drawable::Drawable(){
-
+Drawable::Drawable(AssetManager *am){
+  asset_manager = am;
 
 }
 

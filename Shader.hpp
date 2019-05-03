@@ -15,20 +15,9 @@
 
 */
 
-/**
-\struct ShaderInfo
 
-\brief Structure that holds shader information.
 
-*/
 
-typedef struct
-{
-    GLenum type;  ///< Type of shader, GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, ...
-    const char* filename;  ///< Filename of shader code file, if loading from a file. Set to "" if loading from memory.
-    const std::string code; ///< Code string of shader code, if loading from memory. Set to "" (or ignore) if loading from a file.
-    GLuint shader; ///< Output storage for glCreateShader function, not needed as input from user.
-} ShaderInfo;
 
 /**
 \class Shader
