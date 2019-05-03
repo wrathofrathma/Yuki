@@ -35,7 +35,7 @@ class AssetManager {
     ~AssetManager();
 
     Texture* getTexture(std::string key);
-    bool loadTexture(std::string filename, std::string key);
+    bool loadTexture(std::vector<std::string> filenames, std::string key);
     void loadTextureIndex();
     void loadShaderIndex();
     Shader* getShader(std::string key);

@@ -1,8 +1,9 @@
 # This is our texture index file.
 # Any lines starting with # are considered comments and therefor ignored.
 # For now we're going to stick with incredibly basic functionality and follow a format
-# texture_id image_path
+# s texture_id image_path
+# c texture_id image1_path image2_path image3_path image4_path image5_path image6_path
 # Let's avoid spaces because I'm lazy.
 
-doge textures/doge.jpg
-doge textures/doge.jpg
+s doge textures/doge.jpg
+c blue_space_box textures/bkg1_right.png textures/bkg1_left.png textures/bkg1_top.png textures/bkg1_bot.png textures/bkg1_back.png textures/bkg1_front.png

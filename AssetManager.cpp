@@ -8,7 +8,7 @@ AssetManager::AssetManager(){
 
 //Loads all textures in the texture index file in ./textures/
 void AssetManager::loadTextureIndex(){
-  map<std::string, std::string> index_map;
+  map<std::string, std::vector<std::string>> index_map;
   //Loading our index file.
   ifstream file("./textures/texture_index", ifstream::in);
   if(!file.is_open()){
@@ -16,14 +16,19 @@ void AssetManager::loadTextureIndex(){
     return;
   }
   //Load into our index map before loading each texture.
-  string key, path, line;
+  vector<string> texture_types;
+  string key, path, line, type;
   while(getline(file, line)){
     if(line.size()==0 || line[0]=='#')
       continue;
     stringstream ss(line);
+    ss >> type;
+    texture_types.push_back(type);
     ss >> key;
-    ss >> path;
-    index_map.insert(pair<std::string, std::string>(key,path));
+    index_map.insert(pair<std::string, vector<std::string>>(key,std::vector<std::string>()));
+    while(ss >> path){
+      index_map[key].push_back(path);
+    }
   }
   file.close();
 
@@ -32,15 +37,22 @@ void AssetManager::loadTextureIndex(){
   path.clear();
   while(index_map.size()>0){
     key = index_map.begin()->first;
-    path = index_map.begin()->second;
-    cout << "Loading texture [ " << key << " , " << path << " ]" << endl;
-    if(!loadTexture(path, key)){
-      cout << "Failed to load texture [ " << key << " , " << path << " ]" << endl;
+    path = index_map.begin()->second[0];
+    if(index_map.begin()->second.size()==1){
+      cout << "Loading texture " << key << endl;
+      if(!loadTexture(index_map.begin()->second, key)){
+        cout << "Failed to load texture [ " << key << " , " << path << " ]" << endl;
+      }
+    }
+    else if(index_map.begin()->second.size()>1){
+      cout << "Loading CubeMap texture " << key << endl;
+      if(!loadTexture(index_map.begin()->second, key)){
+        cout << "Failed to load texture [ " << key << " , " << path << " ]" << endl;
+      }
     }
     index_map.erase(index_map.begin());
   }
   cout << "Loaded " << textures.size() << " textures." << endl;
-  cout << "|"<<textures.begin()->first << "|" << endl;
 }
 
 //Loads all textures in the index index file in ./shaders/
@@ -94,11 +106,15 @@ AssetManager::~AssetManager(){
   }
 }
 
-bool AssetManager::loadTexture(std::string filename, std::string key){
+bool AssetManager::loadTexture(std::vector<std::string> filenames, std::string key){
   //Check if already loaded.
   if(textures.count(key) > 0)
     return true;
-  Texture *t = new Texture(filename);
+  Texture *t;
+  if(filenames.size()==1)
+    t = new Texture(filenames[0]);
+  else
+    t = new Texture(filenames);
 
   if(t->isLoaded()){
     textures.insert(std::pair<std::string, Texture*>(key, t));
