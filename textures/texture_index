@@ -1,0 +1,8 @@
+# This is our texture index file.
+# Any lines starting with # are considered comments and therefor ignored.
+# For now we're going to stick with incredibly basic functionality and follow a format
+# texture_id image_path
+# Let's avoid spaces because I'm lazy.
+
+doge textures/doge.jpg
+doge textures/doge.jpg

@@ -17,8 +17,8 @@
 #include <map>
 #include "Drawable.hpp"
 #include "GraphicsDefinitions.hpp"
-#include "drawables/Polygon.hpp"
 #include "Camera.hpp"
+#include "drawables/Quad.hpp"
 class Yuki;
 
 /**
@@ -42,8 +42,7 @@ class GraphicsEngine : public sf::RenderWindow {
 	private:
 		bool resize_flag;
 		int sscount;
-		Polygon *poly;
-		Polygon *poly2;
+		Quad *quad;
 
 		bool wireframe;
 		Yuki *yuki;

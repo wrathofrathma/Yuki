@@ -4,9 +4,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <map>
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include "GraphicsDefinitions.hpp"
 /**
 \file AssetManager.hpp
 \brief header file for AssetManager.cpp
@@ -33,8 +35,9 @@ class AssetManager {
     ~AssetManager();
 
     Texture* getTexture(std::string key);
-    void loadTexture(std::string filename, std::string key);
-
+    bool loadTexture(std::string filename, std::string key);
+    void loadTextureIndex();
+    void loadShaderIndex();
     Shader* getShader(std::string key);
 };
 

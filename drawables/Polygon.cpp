@@ -9,7 +9,7 @@ Polygon::Polygon(AssetManager *am) : Drawable(am){
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
   glGenTextures(1, &TEX);
-  shader = am->getShader("shaders/2DBasic");
+  shader = am->getShader("2DBasic");
   orientation = glm::vec3(0,0,0);
   setUseTexture(false);
   update = true;
