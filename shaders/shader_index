@@ -5,3 +5,4 @@
 # Let's avoid spaces because I'm lazy.
 
 2DBasic shaders/2DBasic.vs shaders/2DBasic.fs
+3DCubeMap shaders/CubeMap.vs shaders/CubeMap.fs
