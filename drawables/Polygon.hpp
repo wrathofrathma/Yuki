@@ -19,7 +19,6 @@ using namespace std;
 class Polygon : public Drawable {
   protected:
 
-  //GLuint uModel; ///< Shader uniform position of model matrix.
   glm::mat4 modelMatrix; ///< This individual model's matrix.
 
   GLint vPosition; ///< Shader position of vertex data.

@@ -13,6 +13,13 @@ AssetManager::~AssetManager(){
     textures.erase(it);
     delete t;
   }
+  // Clean up shaders
+  while(!shaders.empty()){
+    std::map<std::string, Shader*>::iterator sit = shaders.begin();
+    Shader *s = sit->second;
+    shaders.erase(sit);
+    delete s;
+  }
 }
 
 void AssetManager::loadTexture(std::string filename, std::string key){
