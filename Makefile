@@ -13,7 +13,7 @@ prog: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
-	rm $(OBJDIR)/*
+	rm $(shell find $(OBJDIR) -name "*.o")
 
 run:
 	./prog
