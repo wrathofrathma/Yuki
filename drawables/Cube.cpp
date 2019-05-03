@@ -150,7 +150,7 @@ void Cube::draw(){
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture->getID());
   }
   glBindVertexArray(VAO);
-  glDepthMask(GL_TRUE);
+  //glDepthMask(GL_TRUE);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicePtr);
 
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

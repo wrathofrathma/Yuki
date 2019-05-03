@@ -25,6 +25,9 @@ void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 		case sf::Keyboard::Escape:
 			yu->close();
 			break;
+		case sf::Keyboard::M:
+			yu->ge->toggleWireframe();
+			break;
 	  default:
 			break;
 	};

@@ -27,6 +27,9 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 
 	wireframe = false;
 	setVerticalSyncEnabled(true);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	cube->scale(glm::vec3(2.0f));
 }
 
 GraphicsEngine::~GraphicsEngine(){
