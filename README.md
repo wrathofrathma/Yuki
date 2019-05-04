@@ -33,6 +33,6 @@ I like snow and my only other real hobby is studying japanese, so I'm trying to 
 * Beam/Rays
 
 #### Technologies used
-SFML - Input & Window handling. Maybe down the line I'll use their sound class, but I haven't looked into it too much yet.
-Bullet physics engine(TM) - We haven't started this yet in class, but I'm assuming I might want this.
-OpenGL - Pretty much the bulk of the class.
+* SFML - Input & Window handling. Maybe down the line I'll use their sound class, but I haven't looked into it too much yet.
+* Bullet physics engine(TM) - We haven't started this yet in class, but I'm assuming I might want this.
+* OpenGL - Pretty much the bulk of the class.
