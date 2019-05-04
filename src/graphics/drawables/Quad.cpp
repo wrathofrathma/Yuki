@@ -19,11 +19,9 @@ void Quad::generateQuad(){
   //Indices
   unsigned int vi[] = { 0, 1, 3, 1, 2, 3 };
 
-  //Load the vertices.
-  std::vector<float> verts (vv, vv+16);
-  std::vector<unsigned int> inds(vi, vi+6);
-  loadVertices(verts, inds);
-
+  //Load using drawable inherited functions.
+  setVertices(vv, 16);
+  setIndices(vi, 6);
   //Set to white as a default texture.
   setColor(1,1,1);
 }

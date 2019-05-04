@@ -112,14 +112,17 @@ void Drawable::updateGraphicsCard(){
   glBufferSubData(GL_ARRAY_BUFFER, vertice_size, color_size, &colors[0]);
   //Texture
   glBufferSubData(GL_ARRAY_BUFFER, vertice_size + color_size, text_size, &texture_uvs[0]);
-
+  //Normals
+  glBufferSubData(GL_ARRAY_BUFFER, vertice_size + color_size + text_size, normal_size, &normals[0]);
   //Tell the shader how to find its data
   glVertexAttribPointer(vTexture, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertice_size + color_size));
   glVertexAttribPointer(vColor, 3, GL_FLOAT, GL_TRUE, 0, BUFFER_OFFSET(vertice_size));
   glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
+  glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertice_size + color_size + text_size));
 
   glEnableVertexAttribArray(vPosition);
   glEnableVertexAttribArray(vColor);
+  glEnableVertexAttribArray(vNormal);
   glEnableVertexAttribArray(vTexture);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);

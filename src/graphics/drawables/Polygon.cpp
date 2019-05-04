@@ -45,15 +45,6 @@ void Polygon::setTexture(Texture *tex){
   update = true;
 }
 
-//Loads the data to our vertice & indice vectors and then to the graphics card.
-void Polygon::loadVertices(vector<float> _vertices, vector<unsigned int> _indices){
-  vertices.clear();
-  indices.clear();
-  vertices = _vertices;
-  indices = _indices;
-  update = true;
-}
-
 void Polygon::setColor(float r, float g, float b){
   colors.clear();
   for(unsigned int i=0; i<vertices.size()/4; i++){

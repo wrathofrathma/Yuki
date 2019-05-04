@@ -75,7 +75,6 @@ void AssetManager::loadShaderIndex(){
   while(getline(file, line)){
     if(line.size()==0 || line[0]=='#')
       continue;
-    cout << line << endl;
     stringstream ss(line);
     ss >> key;
     ss >> vs_path;
