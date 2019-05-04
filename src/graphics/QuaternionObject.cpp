@@ -70,5 +70,5 @@ glm::mat4 QuaternionObject::generateModelMatrix(){
 }
 
 void QuaternionObject::scale(glm::vec3 delta){
-  current_scale+=delta;
+  current_scale*=delta;
 }

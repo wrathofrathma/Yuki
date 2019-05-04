@@ -71,7 +71,10 @@ void stateProcessing(Yuki *yu){
 		yu->ge->getCamera()->translate(glm::vec3(0,-m,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L)){
-		yu->ge->objects[0]->scale(glm::vec3(2.0, 2.0, 2.0));
+		yu->ge->objects[0]->scale(glm::vec3(2.0));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)){
+		yu->ge->objects[0]->scale(glm::vec3(0.5, 0.5, 0.5));
 	}
 }
 
