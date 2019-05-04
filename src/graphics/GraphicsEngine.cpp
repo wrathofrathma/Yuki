@@ -9,10 +9,7 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	sscount = 0;
 	yuki->am->loadShaderIndex(); // We need to call this from here because we need an active opengl context.
 	yuki->am->loadTextureIndex(); //We also need an active context for this too.
-	//Need to grab a shader so we can get the uniform locations we need for our camera.
 
-//	Shader *shader = yuki->am->getShader("2DBasic");
-//	shader->bind(); //Need to bind our shader before doing anything else since we are about to mess with uniforms.
 	//Generate an active camera labeled "default"
 	cameras.insert(std::pair<std::string, Camera*>("default", new Camera(getSize().x, getSize().y, 50.0f)));
 	setActiveCamera("default");
@@ -32,7 +29,10 @@ GraphicsEngine::~GraphicsEngine(){
 	cameras.clear();
 	//Ghetto cleanup of objects.
 	for(unsigned int i=0; i<objects.size(); i++){
-		delete objects[i];
+		if(objects[i]!=nullptr){
+			delete objects[i];
+			objects[i]=nullptr;
+		}
 	}
 }
 bool GraphicsEngine::getWireframe(){
@@ -68,7 +68,9 @@ void GraphicsEngine::display(){
 	for(std::map<std::string, Shader*>::iterator it = yuki->am->getShaders().begin(); it!=yuki->am->getShaders().end(); it++){
 			cameras[active_camera]->applyUpdate(it->second);
 	}
-	
+	for(unsigned int i=0; i<lights.size(); i++){
+		lights[i]->loadToShader(yuki->am->getShader("2DBasic"),i);
+	}
 	//Temporary draw loop until we get a better world/scene class working.
 	for(Drawable *object : objects){
 		object->draw();

@@ -9,10 +9,14 @@ uniform mat4 model; // Model matrix
 uniform mat4 view; // View matrix
 uniform mat4 proj; // Projection matrix
 
+out vec4 position;
+out vec3 normal;
 out vec4 color;
 out vec2 tex_coord;
 
 void main(){
+  normal = vnormal;
+  position = model * vpos;
   color = vec4(vcolor, 1.0f);
   tex_coord = text_uv;
   gl_Position = proj * view * model * vpos;

@@ -152,7 +152,6 @@ void Drawable::setShader(Shader *s){
   shader = s;
   update = true;
   shader->bind();
-
   uModel = shader->getUniformLocation("model");
   init();
 }

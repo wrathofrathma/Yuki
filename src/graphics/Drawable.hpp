@@ -29,7 +29,7 @@
 \brief The Drawable class is base class for anything that wants to be drawn in our primary draw loop.
 */
 
-class Drawable : public QuaternionObject {
+class Drawable : virtual public QuaternionObject {
   protected:
     GLint vPosition; ///< Shader position of vertex data.
     GLint vColor; ///< Shader position of vertex color.

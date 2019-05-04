@@ -34,7 +34,6 @@ void Camera::updateView(){
 }
 
 void Camera::update(){
-  updateProjection();
   updateView();
 }
 void Camera::applyUpdate(Shader *shader){

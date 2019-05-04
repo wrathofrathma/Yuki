@@ -21,7 +21,8 @@
 #include "graphics/QuaternionObject.hpp"
 #include "graphics/Camera.hpp"
 #include "graphics/Material.hpp"
-
+#include "graphics/Light.hpp"
+#include "graphics/drawables/LightCube.hpp"
 //Drawables
 #include "graphics/drawables/Polygon.hpp"
 #include "graphics/drawables/Quad.hpp"

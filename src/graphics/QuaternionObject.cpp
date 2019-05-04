@@ -72,3 +72,7 @@ glm::mat4 QuaternionObject::generateModelMatrix(){
 void QuaternionObject::scale(glm::vec3 delta){
   current_scale*=delta;
 }
+
+glm::vec3 QuaternionObject::getOrientation(){
+  return orientation;
+}

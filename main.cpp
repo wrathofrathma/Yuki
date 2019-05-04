@@ -40,17 +40,33 @@ void mouseButtonEvent(sf::Event::MouseButtonEvent event, Yuki *yu){
 
 void stateProcessing(Yuki *yu){
 	float m = 0.04;
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		yu->ge->getCamera()->translate(glm::vec3(0,0,-m));
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+			yu->ge->lights[0]->translate(glm::vec3(0,0,-m*2));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+			yu->ge->lights[0]->translate(glm::vec3(-m*2,0,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+			yu->ge->lights[0]->translate(glm::vec3(0,0,m*2));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+			yu->ge->lights[0]->translate(glm::vec3(m*2,0,0));
+		}
 	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-		yu->ge->getCamera()->translate(glm::vec3(-m,0,0));
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-		yu->ge->getCamera()->translate(glm::vec3(0,0,m));
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-		yu->ge->getCamera()->translate(glm::vec3(m,0,0));
+	else{
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+			yu->ge->getCamera()->translate(glm::vec3(0,0,-m));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+			yu->ge->getCamera()->translate(glm::vec3(-m,0,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+			yu->ge->getCamera()->translate(glm::vec3(0,0,m));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+			yu->ge->getCamera()->translate(glm::vec3(m,0,0));
+		}
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 		yu->ge->getCamera()->rotate(glm::vec3(0,m,0));
@@ -76,6 +92,12 @@ void stateProcessing(Yuki *yu){
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)){
 		yu->ge->objects[0]->scale(glm::vec3(0.5, 0.5, 0.5));
 	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Dash)){
+		yu->ge->lights[0]->setAmbient(yu->ge->lights[0]->getAmbient()-glm::vec4(0.01));
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Equal)){
+		yu->ge->lights[0]->setAmbient(yu->ge->lights[0]->getAmbient()+glm::vec4(0.01));
+	}
 }
 
 void setScene(Yuki &yu){
@@ -86,10 +108,12 @@ void setScene(Yuki &yu){
 	yu.ge->objects.push_back(cube);
 	yu.ge->objects.push_back(quad);
 
-	Cube *light = new Cube(yu.am);
-	light->setShader("Light");
-	light->scale(glm::vec3(0.2f));
+	LightCube *light = new LightCube(yu.am);
+//	light->scale(glm::vec3(0.2f));
 	yu.ge->objects.push_back(light);
+
+	yu.ge->lights.push_back(light);
+
 }
 
 
