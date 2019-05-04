@@ -26,8 +26,7 @@ class Polygon : public Drawable {
     void setColor(float r, float g, float b);
     void setColor(std::vector<float> c);
     void loadVertices(vector<float> _vertices, vector<unsigned int> _indices);
-    void updateGraphicsCard();
     void setTexture(Texture *tex);
-
+    void setTexture(std::string tex);
 };
 #endif

@@ -42,8 +42,6 @@ class GraphicsEngine : public sf::RenderWindow {
 	private:
 		bool resize_flag;
 		int sscount;
-		Quad *quad;
-		Cube *cube;
 		bool wireframe;
 		Yuki *yuki;
 		std::map<std::string, Camera*> cameras;
@@ -61,6 +59,7 @@ class GraphicsEngine : public sf::RenderWindow {
 		void setWireframe(bool v);
 		void setActiveCamera(std::string c);
 		Camera* getCamera();
+		std::vector<Drawable*> objects; //Temporary object housing until we get worlds and scenes setup.
 };
 
 #endif

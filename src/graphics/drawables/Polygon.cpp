@@ -4,7 +4,6 @@ Polygon::Polygon(AssetManager *am) : Drawable(am){
   vPosition = 0;
   vColor = 1;
   vTexture = 2;
-  texture = nullptr;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
@@ -25,12 +24,15 @@ Polygon::~Polygon(){
 GLuint const Polygon::getVAO(){
   return VAO;
 }
+void Polygon::setTexture(std::string tex){
+  setTexture(asset_manager->getTexture(tex));
+}
 
 unsigned int Polygon::getVertexCount(){
   return vertices.size();
 }
 void Polygon::setTexture(Texture *tex){
-  texture = tex;
+  textures.push_back(tex);
   shader->bind();
   shader->setInt("texture1", 0);
 
@@ -41,8 +43,8 @@ void Polygon::setTexture(Texture *tex){
 
     //Let's use these values, and assume our polygons are genrated at size 1, from 0.5 to -0.5 and scaled up using matrices later.
     //This way we can directly translate our textures early.
-    texture_coords.push_back(v1 + 0.5);
-    texture_coords.push_back(v2 + 0.5);
+    texture_uvs.push_back(v1 + 0.5);
+    texture_uvs.push_back(v2 + 0.5);
   }
 
   setUseTexture(true);
@@ -87,45 +89,6 @@ void Polygon::setColor(std::vector<float> c){
   update = true;
 }
 
-//Update's the vertex data on the graphics card.
-void Polygon::updateGraphicsCard(){
-  //Some pre-calc to make this cleaner.
-  unsigned int vertice_size = vertices.size() * sizeof(float);
-  unsigned int color_size = colors.size() * sizeof(float);
-  unsigned int text_size = texture_coords.size() * sizeof(float);
-  unsigned int indice_size = indices.size() * sizeof(unsigned int);
-  unsigned int data_size = text_size + color_size + vertice_size;
-
-  glBindVertexArray(VAO);
-  //Load indices
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicePtr);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indice_size, &indices[0], GL_DYNAMIC_DRAW);
-
-  //Allocate space for data
-  glBindBuffer(GL_ARRAY_BUFFER, dataPtr);
-  glBufferData(GL_ARRAY_BUFFER, data_size, NULL, GL_DYNAMIC_DRAW);
-
-  //Load data as parts of sub partitions of the buffer
-  //vertices
-  glBufferSubData(GL_ARRAY_BUFFER, 0, vertice_size, &vertices[0]);
-  //Color
-  glBufferSubData(GL_ARRAY_BUFFER, vertice_size, color_size, &colors[0]);
-  //Texture
-  glBufferSubData(GL_ARRAY_BUFFER, vertice_size + color_size, text_size, &texture_coords[0]);
-
-  //Tell the shader how to find its data
-  glVertexAttribPointer(vTexture, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertice_size + color_size));
-  glVertexAttribPointer(vColor, 3, GL_FLOAT, GL_TRUE, 0, BUFFER_OFFSET(vertice_size));
-  glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
-
-  glEnableVertexAttribArray(vPosition);
-  glEnableVertexAttribArray(vColor);
-  glEnableVertexAttribArray(vTexture);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-  update = false;
-}
-
 void Polygon::draw(){
   //Every model has its own model matrix. So we should upload before every draw.
   glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(generateModelMatrix()));
@@ -135,8 +98,10 @@ void Polygon::draw(){
   }
   shader->bind();
   if(useTexture){
-    glActiveTexture(GL_TEXTURE0); //Activate texture unit
-    glBindTexture(GL_TEXTURE_2D, texture->getID());
+    if(textures.size()>0){
+      glActiveTexture(GL_TEXTURE0); //Activate texture unit
+      glBindTexture(GL_TEXTURE_2D, textures[0]->getID());
+    }
   }
   glBindVertexArray(VAO);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicePtr);

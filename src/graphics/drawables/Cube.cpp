@@ -4,7 +4,6 @@ Cube::Cube(AssetManager *am) : Drawable(am){
   vPosition = 0;
   vColor = 1;
   vTexture = 2;
-  texture = nullptr;
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &dataPtr);
@@ -100,43 +99,6 @@ void Cube::generateCube(){
   colors = std::vector<float>(vc, vc+24*3);
 }
 
-void Cube::updateGraphicsCard(){
-  unsigned int vertice_size = vertices.size() * sizeof(float);
-  unsigned int color_size = colors.size() * sizeof(float);
-  unsigned int text_size = texture_coords.size() * sizeof(float);
-  unsigned int indice_size = indices.size() * sizeof(unsigned int);
-  unsigned int data_size = text_size + color_size + vertice_size;
-
-  glBindVertexArray(VAO);
-  //Load indices
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicePtr);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indice_size, &indices[0], GL_DYNAMIC_DRAW);
-
-  //Allocate space for data
-  glBindBuffer(GL_ARRAY_BUFFER, dataPtr);
-  glBufferData(GL_ARRAY_BUFFER, data_size, NULL, GL_DYNAMIC_DRAW);
-
-  //Load data as parts of sub partitions of the buffer
-  //vertices
-  glBufferSubData(GL_ARRAY_BUFFER, 0, vertice_size, &vertices[0]);
-  //Color
-  glBufferSubData(GL_ARRAY_BUFFER, vertice_size, color_size, &colors[0]);
-  //Texture
-  glBufferSubData(GL_ARRAY_BUFFER, vertice_size + color_size, text_size, &texture_coords[0]);
-
-  //Tell the shader how to find its data
-  glVertexAttribPointer(vTexture, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertice_size + color_size));
-  glVertexAttribPointer(vColor, 3, GL_FLOAT, GL_TRUE, 0, BUFFER_OFFSET(vertice_size));
-  glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
-
-  glEnableVertexAttribArray(vPosition);
-  glEnableVertexAttribArray(vColor);
-  glEnableVertexAttribArray(vTexture);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-
-  update = false;
-}
 void Cube::draw(){
   glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(generateModelMatrix()));
   setUseTexture(useTexture);
@@ -146,8 +108,8 @@ void Cube::draw(){
   }
 
   shader->bind();
-  if(useTexture){
-    glBindTexture(GL_TEXTURE_CUBE_MAP, texture->getID());
+  if(useTexture && textures.size() > 0){
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textures[0]->getID());
   }
   glBindVertexArray(VAO);
   //glDepthMask(GL_TRUE);

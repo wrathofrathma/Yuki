@@ -10,6 +10,7 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	yuki->am->loadShaderIndex(); // We need to call this from here because we need an active opengl context.
 	yuki->am->loadTextureIndex(); //We also need an active context for this too.
 	//Need to grab a shader so we can get the uniform locations we need for our camera.
+
 	Shader *shader = yuki->am->getShader("2DBasic");
 	shader->bind(); //Need to bind our shader before doing anything else since we are about to mess with uniforms.
 	//Generate an active camera labeled "default"
@@ -17,18 +18,10 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	setActiveCamera("default");
 
 
-	quad = new Quad(yuki->am);
-	quad->setTexture(yuki->am->getTexture("doge"));
-	cube = new Cube(yuki->am);
-	//poly->setTexture(yuki->am->getTexture("doge"));
-
-	//End of polygon tests
-
 	wireframe = false;
 	setVerticalSyncEnabled(true);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	cube->scale(glm::vec3(2.0f));
 }
 
 GraphicsEngine::~GraphicsEngine(){
@@ -37,8 +30,10 @@ GraphicsEngine::~GraphicsEngine(){
 		delete it->second;
 	}
 	cameras.clear();
-	delete quad;
-	delete cube;
+	//Ghetto cleanup of objects.
+	for(unsigned int i=0; i<objects.size(); i++){
+		delete objects[i];
+	}
 }
 bool GraphicsEngine::getWireframe(){
 	return wireframe;
@@ -67,9 +62,11 @@ void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	cameras[active_camera]->update();
-	quad->draw();
 
-	cube->draw();
+	//Temporary draw loop until we get a better world/scene class working.
+	for(Drawable *object : objects){
+		object->draw();
+	}
 
 	sf::RenderWindow::display();
 	printOpenGLErrors();

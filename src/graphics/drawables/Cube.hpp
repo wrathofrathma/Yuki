@@ -19,7 +19,6 @@ class Cube : public Drawable {
     Cube(AssetManager *am);
     ~Cube();
     void draw();
-    void updateGraphicsCard();
 };
 
 #endif

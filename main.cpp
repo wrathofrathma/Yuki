@@ -1,7 +1,7 @@
 #include <iostream>
 #include "src/Yuki.hpp"
 
-//This file is effectively our "Game" or test file. Everything else is done in the game engine. 
+//This file is effectively our "Game" or test file. Everything else is done in the game engine.
 
 using namespace std;
 
@@ -71,6 +71,18 @@ void stateProcessing(Yuki *yu){
 	}
 }
 
+void setScene(Yuki &yu){
+	Cube *cube = new Cube(yu.am);
+	Quad *quad = new Quad(yu.am);
+	quad->setTexture("doge");
+	cube->scale(glm::vec3(3.0f));
+	yu.ge->objects.push_back(cube);
+	yu.ge->objects.push_back(quad);
+
+
+}
+
+
 int main(){
 	Yuki yuki;
 	yuki.ui->addKeyPressedEvent(keyPressedEvent);
@@ -78,6 +90,7 @@ int main(){
 	yuki.ui->addMouseButtonEvent(mouseButtonEvent);
 	yuki.ui->addKeyStateProcessingEvent(stateProcessing);
 
+	setScene(yuki);
 	yuki.run();
 	return 0;
 }
