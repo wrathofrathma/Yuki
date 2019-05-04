@@ -69,7 +69,7 @@ void Drawable::setTextureUVs(float* uvs, unsigned int count){
 
 void Drawable::setNormals(float* norms, unsigned int count){
   normals.clear();
-  normals = std::vector<unsigned int>(norms, norms+count);
+  normals = std::vector<float>(norms, norms+count);
   update = true;
 }
 

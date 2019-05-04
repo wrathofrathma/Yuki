@@ -1,6 +1,6 @@
 #include "Cube.hpp"
 Cube::Cube(AssetManager *am) : Drawable(am){
-  
+
   shader = am->getShader("2DBasic");
   orientation = glm::vec3(0,0,0);
   setUseTexture(false);
@@ -85,9 +85,9 @@ void Cube::generateCube(){
     22, 21, 20,
     20, 23, 22
   };
-  indices = std::vector<unsigned int>(vi, vi+36);
-  vertices = std::vector<float>(vv, vv+24*6);
-  colors = std::vector<float>(vc, vc+24*3);
+  setIndices(vi, 36);
+  setVertices(vv, 24*6);
+  setColors(vc, 24*3);
 }
 
 void Cube::draw(){
