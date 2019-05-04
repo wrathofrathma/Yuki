@@ -29,6 +29,7 @@ class QuaternionObject {
     glm::vec3 position;
     glm::vec3 current_scale;
 
+    glm::mat4 model_matrix;
   public:
     QuaternionObject();
     ~QuaternionObject();

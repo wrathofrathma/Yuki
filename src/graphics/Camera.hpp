@@ -20,7 +20,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "QuaternionObject.hpp"
-
+#include "Shader.hpp"
 
 class Camera : public QuaternionObject {
   private:

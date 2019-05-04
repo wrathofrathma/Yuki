@@ -4,6 +4,7 @@ Cube::Cube(AssetManager *am) : Drawable(am){
   shader = am->getShader("2DBasic");
   orientation = glm::vec3(0,0,0);
   setUseTexture(false);
+  uModel = shader->getUniformLocation("model");
 
   generateCube();
   update = true;
@@ -91,14 +92,15 @@ void Cube::generateCube(){
 }
 
 void Cube::draw(){
-  glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(generateModelMatrix()));
+  generateModelMatrix();
+  shader->setMat4(uModel, model_matrix);
   setUseTexture(useTexture);
 
   if(update){
     updateGraphicsCard();
   }
-
   shader->bind();
+
   if(useTexture && textures.size() > 0){
     glBindTexture(GL_TEXTURE_CUBE_MAP, textures[0]->getID());
   }

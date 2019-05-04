@@ -70,6 +70,9 @@ void stateProcessing(Yuki *yu){
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
 		yu->ge->getCamera()->translate(glm::vec3(0,-m,0));
 	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L)){
+		yu->ge->objects[0]->scale(glm::vec3(2.0, 2.0, 2.0));
+	}
 }
 
 void setScene(Yuki &yu){
@@ -79,7 +82,6 @@ void setScene(Yuki &yu){
 	cube->scale(glm::vec3(3.0f));
 	yu.ge->objects.push_back(cube);
 	yu.ge->objects.push_back(quad);
-
 
 }
 

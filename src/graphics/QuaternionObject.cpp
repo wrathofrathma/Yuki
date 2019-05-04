@@ -4,6 +4,7 @@ QuaternionObject::QuaternionObject(){
   position = glm::vec3(0);
   orientation = glm::vec3(0);
   current_scale = glm::vec3(1.0f);
+  model_matrix = glm::mat4(1.0f);
 }
 QuaternionObject::~QuaternionObject(){
 
@@ -64,7 +65,8 @@ glm::mat4 QuaternionObject::generateModelMatrix(){
   glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
   glm::mat4 rotationMatrix = getRotationMatrix();
   glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), current_scale);
-  return translationMatrix * rotationMatrix * scaleMatrix;
+  model_matrix = translationMatrix * rotationMatrix * scaleMatrix;
+  return model_matrix;
 }
 
 void QuaternionObject::scale(glm::vec3 delta){

@@ -107,6 +107,7 @@ void Shader::bind(){
 bool Shader::isLoaded(){
   return loaded;
 }
+
 void Shader::setBool(const std::string &name, bool value) const
 {
     glUniform1i(glGetUniformLocation(m_program, name.c_str()), (int)value);
@@ -118,4 +119,34 @@ void Shader::setInt(const std::string &name, int value) const
 void Shader::setFloat(const std::string &name, float value) const
 {
     glUniform1f(glGetUniformLocation(m_program, name.c_str()), value);
+}
+void Shader::setVec3(const std::string &name, glm::vec3 &value) const
+{
+  glUniform3f(glGetUniformLocation(m_program, name.c_str()), value.x, value.y, value.z);
+}
+void Shader::setVec4(const std::string &name, glm::vec4 &value) const
+{
+  glUniform4f(glGetUniformLocation(m_program, name.c_str()), value.x, value.y, value.z, value.w);
+}
+void Shader::setMat4(const std::string &name, glm::mat4 &value) const
+{
+  glUniformMatrix4fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+}
+void Shader::setBool(GLuint uniformLocation, bool value){
+  glUniform1i(uniformLocation, (int)value);
+}
+void Shader::setInt(GLuint uniformLocation, int value){
+  glUniform1i(uniformLocation, value);
+}
+void Shader::setFloat(GLuint uniformLocation, float value){
+  glUniform1f(uniformLocation, value);
+}
+void Shader::setVec3(GLuint uniformLocation, glm::vec3 &value){
+  glUniform3f(uniformLocation, value.x, value.y, value.z);
+}
+void Shader::setVec4(GLuint uniformLocation, glm::vec4 &value){
+  glUniform4f(uniformLocation, value.x, value.y, value.z, value.w);
+}
+void Shader::setMat4(GLuint uniformLocation, glm::mat4 &value){
+  glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
 }

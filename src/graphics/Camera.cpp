@@ -26,7 +26,7 @@ void Camera::resize(unsigned int width, unsigned int height){
 }
 void Camera::updateProjection(){
   glm::mat4 projection = glm::perspective(glm::radians(FoV), float(width) / float(height), clip_near, clip_far);
-  glUniformMatrix4fv(uProj, 1, GL_FALSE, glm::value_ptr(projection));
+  Shader::setMat4(uProj, projection);
 }
 
 void Camera::updateView(){
@@ -34,7 +34,7 @@ void Camera::updateView(){
   glm::mat4 translation = glm::mat4(1.0f);
   translation = glm::translate(translation,-position);
   glm::mat4 view = rotation * translation;
-  glUniformMatrix4fv(uView, 1, GL_FALSE, glm::value_ptr(view));
+  Shader::setMat4(uView, view);
 }
 
 void Camera::update(){

@@ -5,6 +5,11 @@
 #include <string>
 #include <fstream>
 #include <GL/glew.h>
+#include <glm/vec3.hpp> // glm::vec3
+#include <glm/vec4.hpp> // glm::vec4
+#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/gtc/type_ptr.hpp>
+
 /**
 \file Shader.hpp
 \brief header file for Shader.cpp
@@ -39,6 +44,7 @@ class Shader {
     static std::string loadShader(const std::string& filename);
     bool checkShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
     bool loaded;
+
   public:
     Shader();
     Shader(const std::string &filename);
@@ -49,6 +55,17 @@ class Shader {
     void setBool(const std::string &name, bool value) const;
     void setInt(const std::string &name, int value) const;
     void setFloat(const std::string &name, float value) const;
+    void setVec3(const std::string &name, glm::vec3 &value) const;
+    void setVec4(const std::string &name, glm::vec4 &value) const;
+    void setMat4(const std::string &name, glm::mat4 &value) const;
+
+    static void setBool(GLuint uniformLocation, bool value);
+    static void setInt(GLuint uniformLocation, int value);
+    static void setFloat(GLuint uniformLocation, float value);
+    static void setVec3(GLuint uniformLocation, glm::vec3 &value);
+    static void setVec4(GLuint uniformLocation, glm::vec4 &value);
+    static void setMat4(GLuint uniformLocation, glm::mat4 &value);
+
     GLuint loadFromFile(std::string &vert, std::string &frag);
     void loadFromFile(std::string filename);
     GLuint getUniformLocation(const std::string &name);
