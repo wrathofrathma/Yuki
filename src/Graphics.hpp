@@ -26,7 +26,6 @@
 #include "graphics/drawables/Polygon.hpp"
 #include "graphics/drawables/Quad.hpp"
 #include "graphics/drawables/Cube.hpp"
-#include "graphics/drawables/LightObject.hpp"
 #include "graphics/drawables/Model.hpp"
 
 
