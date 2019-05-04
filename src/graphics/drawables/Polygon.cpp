@@ -76,13 +76,14 @@ void Polygon::setColor(std::vector<float> c){
 
 void Polygon::draw(){
   //Every model has its own model matrix. So we should upload before every draw.
+  shader->bind();
   generateModelMatrix();
   shader->setMat4(uModel, model_matrix);
   setUseTexture(useTexture);
   if(update){
     updateGraphicsCard();
   }
-  shader->bind();
+
 
   if(useTexture){
     if(textures.size()>0){

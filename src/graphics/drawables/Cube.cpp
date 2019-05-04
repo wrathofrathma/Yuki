@@ -92,6 +92,9 @@ void Cube::generateCube(){
 }
 
 void Cube::draw(){
+
+  shader->bind();
+
   generateModelMatrix();
   shader->setMat4(uModel, model_matrix);
   setUseTexture(useTexture);
@@ -99,7 +102,6 @@ void Cube::draw(){
   if(update){
     updateGraphicsCard();
   }
-  shader->bind();
 
   if(useTexture && textures.size() > 0){
     glBindTexture(GL_TEXTURE_CUBE_MAP, textures[0]->getID());

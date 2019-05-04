@@ -1,8 +1,6 @@
 #include "Camera.hpp"
 
-Camera::Camera(GLuint uProj, GLuint uView, unsigned int width, unsigned int height, float FoV = 50.0f){
-  this->uProj = uProj;
-  this->uView = uView;
+Camera::Camera(unsigned int width, unsigned int height, float FoV = 50.0f){
   this->width = width;
   this->height = height;
   this->FoV = FoV;
@@ -25,23 +23,25 @@ void Camera::resize(unsigned int width, unsigned int height){
   updateProjection();
 }
 void Camera::updateProjection(){
-  glm::mat4 projection = glm::perspective(glm::radians(FoV), float(width) / float(height), clip_near, clip_far);
-  Shader::setMat4(uProj, projection);
+  projection = glm::perspective(glm::radians(FoV), float(width) / float(height), clip_near, clip_far);
 }
 
 void Camera::updateView(){
   glm::mat4 rotation = getRotationMatrix();
   glm::mat4 translation = glm::mat4(1.0f);
   translation = glm::translate(translation,-position);
-  glm::mat4 view = rotation * translation;
-  Shader::setMat4(uView, view);
+  view = rotation * translation;
 }
 
 void Camera::update(){
   updateProjection();
   updateView();
 }
-
+void Camera::applyUpdate(Shader *shader){
+  shader->bind();
+  shader->setMat4(shader->getUniformLocation(VIEW), view);
+  shader->setMat4(shader->getUniformLocation(PROJECTION), projection);
+}
 void Camera::setFOV(float fov){
   FoV = fov;
   updateProjection();

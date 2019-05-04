@@ -21,7 +21,11 @@
 */
 
 
-
+enum UNIFORM_ID{
+  MODEL,
+  VIEW,
+  PROJECTION,
+};
 
 
 /**
@@ -34,11 +38,11 @@ class Shader {
   private:
     Shader(const Shader& other) {}
     void operator=(const Shader& other) {}
-
+    static const unsigned int NUM_UNIFORMS = 3; ///< Our number of uniforms we're going to track. For now just the MVP matrices since I think we'll change textures a bit later.
     static const unsigned int NUM_SHADER = 2;
     GLuint m_program; ///< Shader program ID.
     GLuint m_shaders[NUM_SHADER]; ///< Array containing our vertex & fragment shaders.
-
+    GLuint m_uniforms[NUM_UNIFORMS]; ///< Array containing our uniform values so we don't have to search it every frame.
     GLuint createShader(const std::string &text, GLenum type);
     std::string getShaderString(GLenum);
     static std::string loadShader(const std::string& filename);
@@ -69,5 +73,6 @@ class Shader {
     GLuint loadFromFile(std::string &vert, std::string &frag);
     void loadFromFile(std::string filename);
     GLuint getUniformLocation(const std::string &name);
+    GLuint getUniformLocation(UNIFORM_ID type);
 };
 #endif

@@ -27,6 +27,17 @@ void Shader::loadFromFile(std::string filename){
 GLuint Shader::getUniformLocation(const std::string &name){
   return glGetUniformLocation(m_program, name.c_str());
 }
+GLuint Shader::getUniformLocation(UNIFORM_ID type){
+  switch(type){
+    case MODEL:
+      return m_uniforms[MODEL];
+    case VIEW:
+      return m_uniforms[VIEW];
+    case PROJECTION:
+      return m_uniforms[PROJECTION];
+  }
+  return 0;
+}
 
 GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
   m_program = glCreateProgram();
@@ -39,7 +50,12 @@ GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
 
   glLinkProgram(m_program);
   loaded = checkShaderError(m_program, GL_LINK_STATUS, true, "Invalid shader program.");
-
+  if(loaded){
+    //Setup uniforms.
+    m_uniforms[0] = getUniformLocation("model");
+    m_uniforms[1] = getUniformLocation("view");
+    m_uniforms[2] = getUniformLocation("proj");
+  }
   return m_program;
 }
 

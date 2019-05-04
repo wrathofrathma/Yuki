@@ -44,6 +44,7 @@ class AssetManager {
     void loadTextureIndex();
     void loadShaderIndex();
     Shader* getShader(std::string key);
+    std::map<std::string, Shader*> getShaders();
 };
 
 #endif

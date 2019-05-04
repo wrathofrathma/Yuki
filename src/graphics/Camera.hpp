@@ -24,8 +24,6 @@
 
 class Camera : public QuaternionObject {
   private:
-    GLuint uView; ///< Uniform variable storing location of shader view matrix
-    GLuint uProj; ///< Uniform variable storing location of shader projection matrix
     float FoV; ///< Field of view.
 
     glm::vec3 camera_lookat; ///< Place we're looking at.
@@ -34,8 +32,10 @@ class Camera : public QuaternionObject {
     unsigned int height;
     unsigned int width;
 
+    glm::mat4 view; ///< Our view matrix. We don't want to calculate this more than once a frame.
+    glm::mat4 projection; ///< Our projection matrix. We don't want to calculate this more than once a frame.
   public:
-    Camera(GLuint uProj, GLuint uView, unsigned int width, unsigned int height, float FoV);
+    Camera(unsigned int width, unsigned int height, float FoV);
     ~Camera();
     void resize(unsigned int width, unsigned int height);
     void updateProjection();
@@ -43,6 +43,7 @@ class Camera : public QuaternionObject {
     void update();
     void setFOV(float fov);
     void setClipping(float near, float far);
+    void applyUpdate(Shader *shader);
 };
 
 #endif

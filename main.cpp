@@ -86,6 +86,10 @@ void setScene(Yuki &yu){
 	yu.ge->objects.push_back(cube);
 	yu.ge->objects.push_back(quad);
 
+	Cube *light = new Cube(yu.am);
+	light->setShader("Light");
+	light->scale(glm::vec3(0.2f));
+	yu.ge->objects.push_back(light);
 }
 
 

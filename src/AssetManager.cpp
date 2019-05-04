@@ -155,3 +155,6 @@ Shader* AssetManager::getShader(std::string key){
   }
   return shaders[key];
 }
+std::map<std::string, Shader*> AssetManager::getShaders(){
+  return shaders;
+}

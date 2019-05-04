@@ -7,12 +7,18 @@ Drawable::Drawable(AssetManager *am){
   vColor = 2;
   vTexture = 3;
 
+  init();
+}
+
+Drawable::~Drawable(){
+  cleanup();
+}
+void Drawable::init(){
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
 }
-
-Drawable::~Drawable(){
+void Drawable::cleanup(){
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &dataPtr);
   glDeleteBuffers(1, &indicePtr);
@@ -131,4 +137,22 @@ void Drawable::updateGraphicsCard(){
 
 void Drawable::setMaterial(Material mat){
   material = mat;
+  update = true;
+}
+void Drawable::setShader(const std::string &name){
+  cleanup();
+  shader = asset_manager->getShader(name);
+  update = true;
+  shader->bind();
+  uModel = shader->getUniformLocation("model");
+  init();
+}
+void Drawable::setShader(Shader *s){
+  cleanup();
+  shader = s;
+  update = true;
+  shader->bind();
+
+  uModel = shader->getUniformLocation("model");
+  init();
 }

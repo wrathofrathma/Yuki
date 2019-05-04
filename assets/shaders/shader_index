@@ -6,4 +6,4 @@
 
 2DBasic 2DBasic.vs 2DBasic.fs
 3DCubeMap CubeMap.vs CubeMap.fs
-#Light Light.vs Light.fs
+Light 2DBasic.vs Light.fs

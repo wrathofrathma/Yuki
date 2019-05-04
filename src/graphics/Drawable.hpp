@@ -87,6 +87,11 @@ class Drawable : public QuaternionObject {
     void addTexture(Texture* text);
 
     void setMaterial(Material mat);
+
+    void setShader(const std::string &name);
+    void setShader(Shader *s);
+    void init();
+    void cleanup();
 };
 
 #endif

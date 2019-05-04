@@ -11,10 +11,10 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	yuki->am->loadTextureIndex(); //We also need an active context for this too.
 	//Need to grab a shader so we can get the uniform locations we need for our camera.
 
-	Shader *shader = yuki->am->getShader("2DBasic");
-	shader->bind(); //Need to bind our shader before doing anything else since we are about to mess with uniforms.
+//	Shader *shader = yuki->am->getShader("2DBasic");
+//	shader->bind(); //Need to bind our shader before doing anything else since we are about to mess with uniforms.
 	//Generate an active camera labeled "default"
-	cameras.insert(std::pair<std::string, Camera*>("default", new Camera(shader->getUniformLocation("proj"), shader->getUniformLocation("view"), getSize().x, getSize().y, 50.0f)));
+	cameras.insert(std::pair<std::string, Camera*>("default", new Camera(getSize().x, getSize().y, 50.0f)));
 	setActiveCamera("default");
 
 
@@ -61,8 +61,14 @@ void GraphicsEngine::toggleWireframe(){
 void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	cameras[active_camera]->update();
 
+	cameras[active_camera]->update(); //Generate camera updates.
+
+	//We need to let every shader know the current view and projection matrices.
+	for(std::map<std::string, Shader*>::iterator it = yuki->am->getShaders().begin(); it!=yuki->am->getShaders().end(); it++){
+			cameras[active_camera]->applyUpdate(it->second);
+	}
+	
 	//Temporary draw loop until we get a better world/scene class working.
 	for(Drawable *object : objects){
 		object->draw();
