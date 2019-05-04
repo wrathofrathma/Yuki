@@ -1,6 +1,8 @@
 #include <iostream>
 #include "src/Yuki.hpp"
 
+//This file is effectively our "Game" or test file. Everything else is done in the game engine. 
+
 using namespace std;
 
 

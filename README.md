@@ -11,14 +11,12 @@ I like snow and my only other real hobby is studying japanese, so I'm trying to 
 * Mediocre Shader class. It functions.
 * Basic polygon drawing, texturing, & coloring.
 * Asset Manager to hold and distribute shared resources.
-* Quaternion based camera.
+* Quaternion based rotations
+* Unlocked camera.
+* Cubes!
 
 #### TODO List
 * Spherical Camera
-* Model & loading
-* Quaternion based model rotations
-* Transformations
-* Basic Shapes(Circle, rec, triangle) generation
 * Model generation(Cube, spheres, and planes)
 * Materials
 * Lighting
