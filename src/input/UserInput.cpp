@@ -1,5 +1,4 @@
 #include "UserInput.hpp"
-#include "Yuki.hpp"
 
 UI::UI(Yuki *yu){
 	yuki=yu;

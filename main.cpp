@@ -1,9 +1,8 @@
 #include <iostream>
-#include "Yuki.hpp"
+#include "src/Yuki.hpp"
 
 using namespace std;
 
-#include "Shader.hpp"
 
 void moveEvent(sf::Event::MouseMoveEvent event, Yuki *yu){
 	UI *ui = yu->ui;
@@ -39,34 +38,34 @@ void mouseButtonEvent(sf::Event::MouseButtonEvent event, Yuki *yu){
 
 void stateProcessing(Yuki *yu){
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		yu->ge->getCamera()->translate(glm::vec3(0,0,-0.1));
+		yu->ge->getCamera()->translate(glm::vec3(0,0,-0.03));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-		yu->ge->getCamera()->translate(glm::vec3(-0.1,0,0));
+		yu->ge->getCamera()->translate(glm::vec3(-0.03,0,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-		yu->ge->getCamera()->translate(glm::vec3(0,0,0.1));
+		yu->ge->getCamera()->translate(glm::vec3(0,0,0.03));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-		yu->ge->getCamera()->translate(glm::vec3(0.1,0,0));
+		yu->ge->getCamera()->translate(glm::vec3(0.03,0,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-		yu->ge->getCamera()->rotate(glm::vec3(0,0.1,0));
+		yu->ge->getCamera()->rotate(glm::vec3(0,0.03,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-		yu->ge->getCamera()->rotate(glm::vec3(0,-0.1,0));
+		yu->ge->getCamera()->rotate(glm::vec3(0,-0.03,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-		yu->ge->getCamera()->rotate(glm::vec3(-0.1,0,0));
+		yu->ge->getCamera()->rotate(glm::vec3(-0.03,0,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-		yu->ge->getCamera()->rotate(glm::vec3(0.1,0,0));
+		yu->ge->getCamera()->rotate(glm::vec3(0.03,0,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-		yu->ge->getCamera()->translate(glm::vec3(0,0.1,0));
+		yu->ge->getCamera()->translate(glm::vec3(0,0.03,0));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-		yu->ge->getCamera()->translate(glm::vec3(0,-0.1,0));
+		yu->ge->getCamera()->translate(glm::vec3(0,-0.03,0));
 	}
 }
 

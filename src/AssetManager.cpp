@@ -3,14 +3,17 @@
 using namespace std;
 AssetManager::AssetManager(){
 
-
+  asset_dir = "assets/";
+  textures_dir = asset_dir + "textures/";
+  shaders_dir = asset_dir + "shaders/";
 }
 
 //Loads all textures in the texture index file in ./textures/
 void AssetManager::loadTextureIndex(){
   map<std::string, std::vector<std::string>> index_map;
   //Loading our index file.
-  ifstream file("./textures/texture_index", ifstream::in);
+  std::string index_path = textures_dir + "texture_index";
+  ifstream file(index_path.c_str(), ifstream::in);
   if(!file.is_open()){
     cout << "Unable to open texture index." << endl;
     return;
@@ -36,8 +39,10 @@ void AssetManager::loadTextureIndex(){
   key.clear();
   path.clear();
   while(index_map.size()>0){
+
     key = index_map.begin()->first;
     path = index_map.begin()->second[0];
+
     if(index_map.begin()->second.size()==1){
       cout << "Loading texture " << key << endl;
       if(!loadTexture(index_map.begin()->second, key)){
@@ -59,7 +64,8 @@ void AssetManager::loadTextureIndex(){
 void AssetManager::loadShaderIndex(){
   map<std::string, std::string> index_map;
   //Loading our index file.
-  ifstream file("shaders/shader_index", ifstream::in);
+  std::string shader_index_path = shaders_dir + "shader_index";
+  ifstream file(shader_index_path, ifstream::in);
   if(!file.is_open()){
     cout << "Unable to open shader index." << endl;
     return;
@@ -76,6 +82,8 @@ void AssetManager::loadShaderIndex(){
     ss >> fs_path;
     if(shaders.count(key)==0){
       cout << "Loading shader " << key << " [ " << vs_path << " | " << fs_path << " ]"<< endl;
+      vs_path = shaders_dir + vs_path;
+      fs_path = shaders_dir + fs_path;
       Shader *shader = new Shader(vs_path, fs_path);
       if(!shader->isLoaded()){
         cout << "Couldn't load shader: " << key << endl;
@@ -111,6 +119,9 @@ bool AssetManager::loadTexture(std::vector<std::string> filenames, std::string k
   if(textures.count(key) > 0)
     return true;
   Texture *t;
+  for(unsigned int i=0; i<filenames.size(); i++){
+    filenames[i] = textures_dir + filenames[i];
+  }
   if(filenames.size()==1)
     t = new Texture(filenames[0]);
   else

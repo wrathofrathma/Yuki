@@ -5,5 +5,5 @@
 # c texture_id image1_path image2_path image3_path image4_path image5_path image6_path
 # Let's avoid spaces because I'm lazy.
 
-s doge textures/doge.jpg
-c blue_space_box textures/bkg1_right.png textures/bkg1_left.png textures/bkg1_top.png textures/bkg1_bot.png textures/bkg1_back.png textures/bkg1_front.png
+s doge doge.jpg
+c blue_space_box bkg1_right.png bkg1_left.png bkg1_top.png bkg1_bot.png bkg1_back.png bkg1_front.png

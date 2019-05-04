@@ -21,9 +21,10 @@ uniform bool useTexture;
 
 void main()
 {
+  float ambientStrength = 0.1;
   if(useTexture)
-    FragColor = texture(texture1, TexCoord);
+    FragColor =  texture(texture1, TexCoord);
   else
     FragColor = color;
-  FragColor = min(FragColor, vec4(1.0));
+  FragColor = ambientStrength * min(FragColor, vec4(1.0));
 }

@@ -6,9 +6,11 @@
 #include <string>
 #include <sstream>
 #include <map>
-#include "Texture.hpp"
-#include "Shader.hpp"
-#include "GraphicsDefinitions.hpp"
+
+#include "graphics/Texture.hpp"
+#include "graphics/Shader.hpp"
+#include "graphics/GraphicsDefinitions.hpp"
+
 /**
 \file AssetManager.hpp
 \brief header file for AssetManager.cpp
@@ -30,6 +32,9 @@ class AssetManager {
   private:
     std::map<std::string, Texture*> textures;
     std::map<std::string, Shader*> shaders;
+    std::string asset_dir;
+    std::string shaders_dir;
+    std::string textures_dir;
   public:
     AssetManager();
     ~AssetManager();

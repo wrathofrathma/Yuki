@@ -14,7 +14,7 @@ class UI;
 class GraphicsEngine;
 
 #include "AssetManager.hpp"
-#include "GraphicsEngine.hpp"
+#include "Graphics.hpp"
 #include "UserInput.hpp"
 /**
 \file Yuki.hpp

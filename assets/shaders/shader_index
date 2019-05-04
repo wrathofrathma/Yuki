@@ -4,5 +4,6 @@
 # shader_id vertex_shader fragment_shader
 # Let's avoid spaces because I'm lazy.
 
-2DBasic shaders/2DBasic.vs shaders/2DBasic.fs
-3DCubeMap shaders/CubeMap.vs shaders/CubeMap.fs
+2DBasic 2DBasic.vs 2DBasic.fs
+3DCubeMap CubeMap.vs CubeMap.fs
+#Light Light.vs Light.fs

@@ -1,8 +1,8 @@
 CC=g++ -std=c++17
 CFLAGS=-Wall -I. -O2 -s -lsfml-graphics -lsfml-window -lsfml-system -lGL -lGLEW -pthread -lGLU
 OBJDIR=obj
-SRCDIR = .
-SRC:=$(shell find $(SRCDIR) -name "*.cpp")
+SRCDIR = ./src
+SRC:=main.cpp $(shell find $(SRCDIR) -name "*.cpp")
 OBJ:=$(SRC:%.cpp=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o: %.cpp

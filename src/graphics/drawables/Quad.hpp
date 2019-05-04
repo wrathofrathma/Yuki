@@ -2,7 +2,7 @@
 #define QUAD_HPP
 
 #include "Polygon.hpp"
-#include "../AssetManager.hpp"
+
 class Quad : public Polygon {
   private:
     glm::vec4 dimensions;

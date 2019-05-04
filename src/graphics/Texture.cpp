@@ -1,5 +1,5 @@
 #include "Texture.hpp"
-#include <iostream>
+
 using namespace std;
 
 Texture::Texture(std::string filename){

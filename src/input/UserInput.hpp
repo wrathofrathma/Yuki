@@ -9,6 +9,8 @@
 #include <vector>
 #include <thread>
 //Forward declaration for later.
+#include "../Yuki.hpp"
+
 class Yuki;
 /**
 \file UserInput.hpp
@@ -56,5 +58,4 @@ class UI {
 		void setMouseSensitivity(sf::Vector2f sensitivity);
 		sf::Vector2f getMouseSensitivity();
 };
-
 #endif

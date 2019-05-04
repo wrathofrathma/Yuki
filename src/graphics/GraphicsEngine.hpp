@@ -15,11 +15,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Drawable.hpp"
-#include "GraphicsDefinitions.hpp"
-#include "Camera.hpp"
-#include "drawables/Quad.hpp"
-#include "drawables/Cube.hpp"
+
+#include "../Graphics.hpp" //I know this is weird but realistically we need all of this stuff.
+#include "../Yuki.hpp" // If this errors, put ti back in the .cpp and rely on forward declaration.
+
 class Yuki;
 
 /**

@@ -1,9 +1,7 @@
 #ifndef CUBE_HPP
 #define CUBE_HPP
 #include "../Drawable.hpp"
-#include "../Texture.hpp"
 #include <string>
-#include "../Shader.hpp"
 enum CubeTextureType {
   CUBE_MAP,
   TEXTURED,

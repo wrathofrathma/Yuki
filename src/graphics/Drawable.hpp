@@ -9,7 +9,7 @@
 #include <glm/ext/matrix_clip_space.hpp> // glm::perspective
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp> // value ptr
-#include "AssetManager.hpp"
+#include "../AssetManager.hpp"
 #include "QuaternionObject.hpp"
 /**
 \file Drawable.hpp
