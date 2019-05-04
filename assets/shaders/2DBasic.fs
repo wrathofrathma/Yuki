@@ -12,7 +12,7 @@ This is a simple GLSL pass through fragment shader.
 */
 
 in vec4 color;
-in vec2 TexCoord;
+in vec2 tex_coord;
 
 out vec4 FragColor;
 
@@ -21,9 +21,9 @@ uniform bool useTexture;
 
 void main()
 {
-  float ambientStrength = 0.1;
+  float ambientStrength = 1.0;
   if(useTexture)
-    FragColor =  texture(texture1, TexCoord);
+    FragColor =  texture(texture1, tex_coord);
   else
     FragColor = color;
   FragColor = ambientStrength * min(FragColor, vec4(1.0));

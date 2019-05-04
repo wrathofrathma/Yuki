@@ -50,21 +50,37 @@ class Drawable : public QuaternionObject {
     AssetManager *asset_manager;
     GLuint uModel; ///< Shader uniform position of model matrix.
     GLuint tex; ///< Actual texture id.
-    bool useTexture;
+
+    bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.
 
     bool update; ///< Signals that we need to update the graphics card.
   public:
     Drawable(AssetManager *am);
     virtual ~Drawable();
+
+    //Draw needs to be virtual to make thing simple.
     virtual void draw() = 0;
+
+    //Almost every object will use the same updateGraphicsCard function, so let's stick it her but make it virtual in case we need something new later.
     virtual void updateGraphicsCard();
     void setUseTexture(bool);
+
+    //Getter specifically for our copy constructors.
     AssetManager *getAssetManager();
+
+    //Set methods. Either vectors or floats + count to generate vectors.
     void setVertices(std::vector<float> v);
     void setIndices(std::vector<unsigned int> ind);
     void setTextureUVs(std::vector<float> uvs);
     void setNormals(std::vector<float> norms);
     void setColors(std::vector<float> c);
+
+    void setVertices(float* v, unsigned int count);
+    void setIndices(unsigned int* ind, unsigned int count);
+    void setTextureUVs(float* uvs, unsigned int count);
+    void setNormals(float* norms, unsigned int count);
+    void setColors(float* c, unsigned int count);
+
     void addTexture(std::vector<Texture*> texts);
     void addTexture(Texture* text);
 };

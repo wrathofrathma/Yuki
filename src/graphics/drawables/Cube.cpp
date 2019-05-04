@@ -1,15 +1,6 @@
 #include "Cube.hpp"
 Cube::Cube(AssetManager *am) : Drawable(am){
-  asset_manager = am;
-  vPosition = 0;
-  vColor = 1;
-  vTexture = 2;
-
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &dataPtr);
-  glGenBuffers(1, &indicePtr);
-  glGenTextures(1, &tex);
-
+  
   shader = am->getShader("2DBasic");
   orientation = glm::vec3(0,0,0);
   setUseTexture(false);

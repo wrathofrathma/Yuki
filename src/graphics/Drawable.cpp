@@ -2,7 +2,15 @@
 
 Drawable::Drawable(AssetManager *am){
   asset_manager = am;
+  vPosition = 0;
+  vNormal = 1;
+  vColor = 2;
+  vTexture = 3;
 
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &dataPtr);
+  glGenBuffers(1, &indicePtr);
+  glGenTextures(1, &tex);
 }
 
 Drawable::~Drawable(){
@@ -41,6 +49,37 @@ void Drawable::setColors(std::vector<float> c){
   update = true;
 }
 
+void Drawable::setVertices(float* v, unsigned int count){
+  vertices.clear();
+  vertices = std::vector<float>(v, v+count);
+  update = true;
+}
+
+void Drawable::setIndices(unsigned int* ind, unsigned int count){
+  indices.clear();
+  indices = std::vector<unsigned int>(ind, ind+count);
+  update = true;
+}
+
+void Drawable::setTextureUVs(float* uvs, unsigned int count){
+  texture_uvs.clear();
+  texture_uvs = std::vector<float>(uvs, uvs+count);
+  update = true;
+}
+
+void Drawable::setNormals(float* norms, unsigned int count){
+  normals.clear();
+  normals = std::vector<unsigned int>(norms, norms+count);
+  update = true;
+}
+
+void Drawable::setColors(float* c, unsigned int count){
+  colors.clear();
+  colors = std::vector<float>(c, c+count);
+  update = true;
+}
+
+
 void Drawable::addTexture(std::vector<Texture*> texts){
   for(Texture *t : texts)
     textures.push_back(t);
@@ -54,7 +93,8 @@ void Drawable::updateGraphicsCard(){
   unsigned int color_size = colors.size() * sizeof(float);
   unsigned int text_size = texture_uvs.size() * sizeof(float);
   unsigned int indice_size = indices.size() * sizeof(unsigned int);
-  unsigned int data_size = text_size + color_size + vertice_size;
+  unsigned int normal_size = normals.size() * sizeof(float);
+  unsigned int data_size = text_size + color_size + vertice_size + normal_size;
 
   glBindVertexArray(VAO);
   //Load indices
