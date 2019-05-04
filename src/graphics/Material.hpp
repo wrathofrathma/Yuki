@@ -12,6 +12,8 @@ class Material {
 
   public:
     Material(glm::vec4 a, glm::vec4 d, glm::vec4 s, glm::vec4 e, float shininess);
+    Material(){};
+    Material(Material &m1);
     ~Material();
 
     glm::vec4 getAmbient();

@@ -11,6 +11,8 @@
 #include <glm/gtc/type_ptr.hpp> // value ptr
 #include "../AssetManager.hpp"
 #include "QuaternionObject.hpp"
+#include "Material.hpp"
+
 /**
 \file Drawable.hpp
 \brief Header file for Drawable.cpp
@@ -40,7 +42,8 @@ class Drawable : public QuaternionObject {
     std::vector<float> colors; ///< Vector containing the (r,g,b) color values for each vertice.
     std::vector<float> texture_uvs; ///< Vector containing our texture coordinates.
 
-    Shader *shader;
+    Material material; ///< Our object's material.
+    Shader *shader; ///< Pointer to whatever shader we end up using.
 
     std::vector<Texture*> textures;
     GLuint VAO; ///< VAO
@@ -49,7 +52,6 @@ class Drawable : public QuaternionObject {
 
     AssetManager *asset_manager;
     GLuint uModel; ///< Shader uniform position of model matrix.
-    GLuint tex; ///< Actual texture id.
 
     bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.
 
@@ -83,6 +85,8 @@ class Drawable : public QuaternionObject {
 
     void addTexture(std::vector<Texture*> texts);
     void addTexture(Texture* text);
+
+    void setMaterial(Material mat);
 };
 
 #endif

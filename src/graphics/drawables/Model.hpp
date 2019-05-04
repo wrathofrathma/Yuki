@@ -10,8 +10,7 @@ class Model : public Drawable {
   public:
     Model(AssetManager *asset_manager);
     Model(Model &m1);
-    
+
     void draw();
-    void updateGraphicsCard();
 };
 #endif

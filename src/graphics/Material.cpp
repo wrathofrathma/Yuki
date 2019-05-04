@@ -7,6 +7,13 @@ Material::Material(glm::vec4 a, glm::vec4 d, glm::vec4 s, glm::vec4 e, float sh)
   emission = e;
   shininess = sh;
 }
+Material::Material(Material &m1){
+  setAmbient(m1.getAmbient());
+  setDiffuse(m1.getDiffuse());
+  setSpecular(m1.getSpecular());
+  setEmission(m1.getEmission());
+  setShininess(m1.getShininess());
+}
 
 Material::~Material(){
 

@@ -10,7 +10,6 @@ Drawable::Drawable(AssetManager *am){
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
-  glGenTextures(1, &tex);
 }
 
 Drawable::~Drawable(){
@@ -128,4 +127,8 @@ void Drawable::updateGraphicsCard(){
   glBindVertexArray(0);
 
   update = false;
+}
+
+void Drawable::setMaterial(Material mat){
+  material = mat;
 }
