@@ -15,7 +15,7 @@ out vec4 color;
 out vec2 tex_coord;
 
 void main(){
-  normal = vnormal;
+  normal = mat3(transpose(inverse(model))) * vnormal;
   position = model * vpos;
   color = vec4(vcolor, 1.0f);
   tex_coord = text_uv;

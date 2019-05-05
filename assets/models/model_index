@@ -1,0 +1,4 @@
+# Same as other indexes, # signals a commented line.
+
+# Format
+# model_id obj_file mtl_file

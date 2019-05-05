@@ -41,5 +41,5 @@ void main()
     FragColor =  texture(texture1, tex_coord);
   else
     FragColor = color;
-  FragColor = (light.ambient + diffuse) *FragColor, vec4(1.0);
+  FragColor = (light.ambient + diffuse) * min(FragColor, vec4(1.0));
 }
