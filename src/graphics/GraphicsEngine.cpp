@@ -65,8 +65,8 @@ void GraphicsEngine::display(){
 	cameras[active_camera]->update(); //Generate camera updates.
 
 	//We need to let every shader know the current view and projection matrices.
-	for(std::map<std::string, Shader*>::iterator it = yuki->am->getShaders().begin(); it!=yuki->am->getShaders().end(); it++){
-			cameras[active_camera]->applyUpdate(it->second);
+	for(auto const& [key, val] : yuki->am->getShaders()){
+		cameras[active_camera]->applyUpdate(val);
 	}
 	for(unsigned int i=0; i<lights.size(); i++){
 		lights[i]->loadToShader(yuki->am->getShader("2DBasic"),i);
