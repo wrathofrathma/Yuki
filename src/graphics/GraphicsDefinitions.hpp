@@ -5,6 +5,8 @@
 #include <SFML/OpenGL.hpp>
 #include <iostream>
 #include <string>
+#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
 /**
 \file GraphicsDefinitions.hpp
 \brief Basic material properties for normal surfaces, texture struct, vertex struct, and some other miscelleneous definitions.
@@ -20,5 +22,5 @@
 #define deg PI_DIV_180
 
 void printOpenGLErrors();
-
+glm::vec3 calcSurfaceNormal(std::vector<glm::vec3> vertices);
 #endif
