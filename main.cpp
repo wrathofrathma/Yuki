@@ -42,22 +42,25 @@ void stateProcessing(Yuki *yu){
 	float m = 0.04;
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-			yu->ge->lights[0]->translate(glm::vec3(0,0,-m*2));
+			yu->ge->pLights[0]->translate(glm::vec3(0,0,-m*2));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-			yu->ge->lights[0]->translate(glm::vec3(-m*2,0,0));
+			yu->ge->pLights[0]->translate(glm::vec3(-m*2,0,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-			yu->ge->lights[0]->translate(glm::vec3(0,0,m*2));
+			yu->ge->pLights[0]->translate(glm::vec3(0,0,m*2));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-			yu->ge->lights[0]->translate(glm::vec3(m*2,0,0));
+			yu->ge->pLights[0]->translate(glm::vec3(m*2,0,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-			yu->ge->lights[0]->translate(glm::vec3(0,m,0));
+			yu->ge->pLights[0]->translate(glm::vec3(0,m,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-			yu->ge->lights[0]->translate(glm::vec3(0,-m,0));
+			yu->ge->pLights[0]->translate(glm::vec3(0,-m,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){
+			yu->ge->screenshot();
 		}
 	}
 	else{
@@ -100,29 +103,46 @@ void stateProcessing(Yuki *yu){
 		yu->ge->objects[0]->scale(glm::vec3(0.5, 0.5, 0.5));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Dash)){
-		yu->ge->lights[0]->setAmbient(yu->ge->lights[0]->getAmbient()-glm::vec4(0.01));
+		yu->ge->pLights[0]->setAmbient(yu->ge->pLights[0]->getAmbient()-glm::vec4(0.01));
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Equal)){
-		yu->ge->lights[0]->setAmbient(yu->ge->lights[0]->getAmbient()+glm::vec4(0.01));
+		yu->ge->pLights[0]->setAmbient(yu->ge->pLights[0]->getAmbient()+glm::vec4(0.01));
 	}
 }
 
 void setScene(Yuki &yu){
-	Cube *cube = new Cube(yu.am);
+	yu.ge->getCamera()->setPosition(glm::vec3(4,4,4));
+	for(int i=0; i<4; i++){
+		for(int j=1; j<5; j++){
+			for(int k=1; k<6; k++){
+				Cube* cube = new Cube(yu.am);
+				cube->setPosition(glm::vec3(2*i,2*j,2*k));
+				cube->setMaterial(Materials::bluePlastic);
+				yu.ge->objects.push_back(cube);
+			}
+		}
+	}
+
 	Quad *plane = new Quad(yu.am);
 	plane->setTexture("doge");
 	plane->scale(glm::vec3(20.0f));
 	plane->rotate(glm::vec3(0,1.57,0));
-	cube->scale(glm::vec3(3.0f));
-	yu.ge->objects.push_back(cube);
+	plane->setMaterial(Materials::Default);
 	yu.ge->objects.push_back(plane);
-
-	for(int i = 0; i<1; i++){
-		LightCube *light = new LightCube(yu.am);
-		light->setPosition(glm::vec3(i,i,i));
-		yu.ge->lights.push_back(light);
-		yu.ge->objects.push_back(light);
-	}
+	LightCube *lc = new LightCube(yu.am);
+	lc->setPosition(glm::vec3(0,20,-0));
+	lc->setAmbient(glm::vec4(1));
+	lc->setSpecular(glm::vec4(1));
+	lc->setDiffuse(glm::vec4(0));
+	lc->setOn(true);
+	yu.ge->objects.push_back(lc);
+	yu.ge->pLights.push_back(lc);
+	Light* light = new Light(DIRECTIONAL);
+	light->setAmbient(glm::vec4(0.1));
+	light->setDiffuse(glm::vec4(0.4));
+	light->setSpecular(glm::vec4(0));
+	light->setOrientation(glm::vec3(-1,-1,-1));
+	yu.ge->dLights.push_back(light);
 }
 
 

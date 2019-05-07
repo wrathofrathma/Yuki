@@ -3,6 +3,7 @@
 \brief Prints all OpenGL errors to stderr.
 
 */
+
 using namespace std;
 void printOpenGLErrors()
 {

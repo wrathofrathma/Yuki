@@ -33,6 +33,9 @@ glm::vec3 QuaternionObject::getXAxis(){
   glm::quat rotation = getRotationQuat();
   return glm::conjugate(rotation) * glm::vec3(1, 0, 0);
 }
+void QuaternionObject::setOrientation(glm::vec3 o){
+  orientation = o;
+}
 
 glm::vec3 QuaternionObject::getYAxis(){
   glm::quat rotation = getRotationQuat();

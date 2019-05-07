@@ -171,7 +171,7 @@ void Drawable::initDraw(){
   generateModelMatrix();
   shader->setMat4(uModel, model_matrix);
   setUseTexture(useTexture);
-  loadMaterial();
+  loadMaterial(); //Let's change this later when when we start loading proper meshes. Maybe then we can move texturing to material class.
   if(update){
     updateGraphicsCard();
   }

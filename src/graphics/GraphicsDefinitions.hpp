@@ -57,6 +57,13 @@ defined material attributes.
 
 namespace Materials
 {
+  static Material Default(
+      glm::vec4(1),
+      glm::vec4(1),
+      glm::vec4(1),
+      glm::vec4(1),
+      32.0
+  );
 
 static Material redPlastic(
     glm::vec4(0.3, 0.0, 0.0, 1.0),

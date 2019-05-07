@@ -45,5 +45,6 @@ class QuaternionObject {
     void setPosition(glm::vec3 pos);
     glm::vec3 getPosition();
     glm::vec3 getOrientation();
+    void setOrientation(glm::vec3 o);
 };
 #endif

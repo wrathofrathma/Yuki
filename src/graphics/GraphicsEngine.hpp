@@ -60,7 +60,8 @@ class GraphicsEngine : public sf::RenderWindow {
 		void setActiveCamera(std::string c);
 		Camera* getCamera();
 		std::vector<Drawable*> objects; //Temporary object housing until we get worlds and scenes setup.
-		std::vector<Light*> lights; //temporary object for housing lights
+		std::vector<Light*> dLights; //temporary housing for directional lights
+		std::vector<Light*> pLights; //temporary object for housing point lights
 };
 
 #endif

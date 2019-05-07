@@ -25,6 +25,7 @@ void Camera::resize(unsigned int width, unsigned int height){
 void Camera::updateProjection(){
   projection = glm::perspective(glm::radians(FoV), float(width) / float(height), clip_near, clip_far);
 }
+
 void Camera::updateView(){
   glm::mat4 rotation = getRotationMatrix();
   glm::mat4 translation = glm::mat4(1.0f);

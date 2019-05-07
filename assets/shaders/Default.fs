@@ -1,6 +1,6 @@
 #version 330 core
 
-//Point lights have a position in the world,
+//Point lights have a position in the world and radiate light in all directions.
 struct PointLight {
     bool on;             ///< Light on or off.
     float constant; ///< Attenuation constant
@@ -20,6 +20,21 @@ struct DirectionalLight {
   vec4 ambient; ///< Ambient color of the light.
   vec4 diffuse; ///< Diffuse color of the light.
   vec4 specular; ///< Specular color of the light.
+};
+
+//Spot lights have both a position in the world, and a direction.
+struct SpotLight{
+  bool on;
+  vec4 direction; ///< Direction the light is shining.
+  vec4 position; ///< Position of the light.
+  vec4 ambient; ///< Ambient color of the light.
+  vec4 diffuse; ///< Diffuse color of the light.
+  vec4 specular; ///< Specular color of the light.
+  float cutOff; ///< Cutoff angle used to determine if our fragment is inside of our lit area.
+  float outerCutOff;
+  float constant; ///< Attenuation constant
+  float linear; ///< Attenuation linear term
+  float quadratic; ///< Attenuation quadratic term
 };
 
 //Materials determine how our surface fragment reacts to our lighting.
@@ -43,10 +58,16 @@ uniform bool useTexture; ///< Boolean value that determines if we render the tex
 uniform vec3 camera_pos; ///< Camera position.
 uniform Material material; ///< Material of the surface.
 
+#define NR_POINT_LIGHTS 10 ///< Preprocessor directive containing the total number of point lights possible in a scene.
+#define NR_DIRECTIONAL_LIGHTS 10  ///< Preprocessor directive containing total number of directional lights possible in a scene.
+#define NR_SPOT_LIGHTS 10 ///< Preprocessor directive containing total number of spot lights possible in a scene.
+uniform PointLight pointLights[NR_POINT_LIGHTS]; ///< C style array of point lights.
+uniform DirectionalLight directionalLights[NR_DIRECTIONAL_LIGHTS]; ///< C style array of directional lights.
+uniform SpotLight spotLights[NR_SPOT_LIGHTS]; ///< C style array of spot lights.
 
 //Takes in a point light structure, vector normal, fragment position, view direction, and color.
 vec4 CalcPointLight(PointLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
-  vec4 lightDirection = normalize(light.position - fragPos);
+  vec3 lightDirection = normalize(light.position.xyz - fragPos.xyz);
   //Diffuse
   float diff = max(dot(norm, lightDirection.xyz), 0.0);
   //Specular.
@@ -66,9 +87,9 @@ vec4 CalcPointLight(PointLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
 }
 
 vec4 CalcDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDir){
-  vec4 lightDirection = normalize(-light.direction);
+  vec3 lightDirection = normalize(-light.direction.xyz);
   //Diffuse
-  float diff = max(dot(normal, lightDirection.xyz), 0.0);
+  float diff = max(dot(normal, lightDirection), 0.0);
   //Specular1
   vec3 reflectDir = reflect(-lightDirection.xyz, normal);
   float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
@@ -79,28 +100,55 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDir){
   return (ambient + diffuse + specular);
 }
 
-#define NR_POINT_LIGHTS 10 ///< Preprocessor directive containing the total number of point lights possible in a scene.
-#define NR_DIRECTIONAL_LIGHTS 10  ///< Preprocessor directive containing total number of directional lights possible in a scene.
-#define NR_SPOT_LIGHTS 10 ///< Preprocessor directive containing total number of spot lights possible in a scene.
-uniform PointLight pointLights[NR_POINT_LIGHTS]; ///< C style array of point lights.
-uniform DirectionalLight directionalLights[NR_DIRECTIONAL_LIGHTS]; ///< C style array of directional lights.
+vec4 CalcSpotLight(SpotLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
+  vec3 lightDirection = normalize(light.position.xyz - fragPos.xyz);
+  //Diffuse
+  float diff = max(dot(norm, lightDirection.xyz), 0.0);
+  //Specular.
+  vec3 reflectDirection = reflect(-lightDirection.xyz, norm);
+  float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);
+  //Attenuation
+  float distance = length(light.position - fragPos);
+  float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+
+  //Spotlight intensity
+  float theta = dot(lightDirection, normalize(-light.direction.xyz));
+  float epsilon = light.cutOff - light.outerCutOff;
+  float intensity = clamp((theta - light.outerCutOff)/epsilon, 0.0, 1.0);
+
+  vec4 ambient  = light.ambient  * material.ambient;
+  vec4 diffuse  = light.diffuse  * diff * material.diffuse;
+  vec4 specular = light.specular * spec * material.specular;
+
+  ambient *= attenuation * intensity;
+  diffuse *= attenuation * intensity;
+  specular *= attenuation * intensity;
+  return (ambient + diffuse + specular);
+}
 
 void main()
 {
   vec3 norm = normalize(normal);
   vec3 viewDirection = normalize(camera_pos - frag_pos.xyz);
-  vec4 result = vec4(0);
+  vec4 result = vec4(0.0);
+
   for(int i=0; i<NR_DIRECTIONAL_LIGHTS; i++){
-    result+=CalcDirectionalLight(directionalLights[i], norm, viewDirection);
+    if(directionalLights[i].on)
+      result+=CalcDirectionalLight(directionalLights[i], norm, viewDirection);
   }
   for(int i=0; i<NR_POINT_LIGHTS; i++){
-    result+=CalcPointLight(pointLights[i],norm,frag_pos,viewDirection);
+    if(pointLights[i].on)
+      result+=CalcPointLight(pointLights[i],norm,frag_pos,viewDirection);
   }
-  //Initialize our color object based on whether we're using a texture or not.
+  for(int i=0; i<NR_SPOT_LIGHTS; i++){
+    if(spotLights[i].on)
+      result+=CalcSpotLight(spotLights[i], norm,frag_pos,viewDirection);
+  }
 
   if(useTexture)
-    FragColor =  texture(texture1, tex_coord);
+   FragColor =  texture(texture1, tex_coord);
   else
-    FragColor = vec4(icolor,1);
-  FragColor =  FragColor * result;
+     FragColor = vec4(icolor,1);
+  FragColor = FragColor * result;
+
 }

@@ -14,6 +14,7 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	cameras.insert(std::pair<std::string, Camera*>("default", new Camera(getSize().x, getSize().y, 50.0f)));
 	setActiveCamera("default");
 
+
 	wireframe = false;
 	setVerticalSyncEnabled(true);
 	glEnable(GL_DEPTH_TEST);
@@ -31,6 +32,12 @@ GraphicsEngine::~GraphicsEngine(){
 		if(objects[i]!=nullptr){
 			delete objects[i];
 			objects[i]=nullptr;
+		}
+	}
+	for(unsigned int i=0; i<dLights.size(); i++){
+		if(dLights[i]!=nullptr){
+			delete dLights[i];
+			dLights[i]=nullptr;
 		}
 	}
 }
@@ -67,9 +74,17 @@ void GraphicsEngine::display(){
 	for(auto const& [key, val] : yuki->am->getShaders()){
 		cameras[active_camera]->applyUpdate(val);
 	}
-	// for(unsigned int i=0; i<lights.size(); i++){
-	// 	lights[i]->loadToShader(yuki->am->getShader("Default"),i);
-	// }
+
+	//Update directional light information
+	for(unsigned int i=0; i<10; i++){
+		if(i < dLights.size())
+			dLights[i]->loadToShader(yuki->am->getShader("Default"),i);
+	}
+	//Update point light information
+	for(unsigned int i=0; i<10; i++){
+		if(i < pLights.size())
+			pLights[i]->loadToShader(yuki->am->getShader("Default"),i);
+	}
 	//Temporary draw loop until we get a better world/scene class working.
 	for(Drawable *object : objects){
 		object->draw();
