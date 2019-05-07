@@ -1,6 +1,8 @@
 #ifndef CUBE_HPP
 #define CUBE_HPP
 #include "../Drawable.hpp"
+#include <cstdlib>
+#include <ctime>
 #include <string>
 enum CubeTextureType {
   CUBE_MAP,
