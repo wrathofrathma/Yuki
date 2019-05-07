@@ -140,6 +140,8 @@ Texture* AssetManager::getTexture(std::string key){
   std::map<std::string, Texture*>::iterator it = textures.find(key);
   if(it!=textures.end())
     return (it->second);
+  if(textures.size()>0)
+    return textures[0];
   return nullptr;
 }
 

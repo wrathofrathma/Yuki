@@ -117,8 +117,16 @@ void setScene(Yuki &yu){
 	plane->scale(glm::vec3(20.0f));
 	plane->rotate(glm::vec3(0,1.57,0));
 	plane->setMaterial(Materials::Default);
-
 	yu.ge->objects.push_back(plane);
+
+	Quad* wall1 = new Quad(yu.am);
+	wall1->setShader("Rotate");
+	wall1->setTexture("cat1");
+	wall1->scale(glm::vec3(20.f));
+	wall1->setPosition(glm::vec3(0,10,-20));
+	wall1->setMaterial(Materials::Default);
+	yu.ge->objects.push_back(wall1);
+
 	LightCube *lc = new LightCube(yu.am);
 	lc->setPosition(glm::vec3(0,20,-0));
 	lc->setAmbient(glm::vec4(1));

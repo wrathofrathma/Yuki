@@ -123,6 +123,8 @@ void Cube::setTexture(Texture* text){
     textures.clear();
     textures.push_back(text);
   }
+
+  setUseTexture(true);
 }
 
 //Sets a texture to every face in the order of
