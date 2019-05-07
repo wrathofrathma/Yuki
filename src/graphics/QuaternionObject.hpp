@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "GraphicsDefinitions.hpp"
+#include "SpacialObject.hpp"
+
 /**
 \file QuaternionObject.hpp
 \brief Header file for QuaternionObject.cpp
@@ -22,13 +24,10 @@
 \brief The QuaternionObject class repesents any object in 2D or 3D space. And a utility function for generating a model matrix.
 */
 
-class QuaternionObject {
+class QuaternionObject : virtual public SpacialObject {
 
   protected:
-    glm::vec3 orientation;
-    glm::vec3 position;
     glm::vec3 current_scale;
-
     glm::mat4 model_matrix;
   public:
     QuaternionObject();
@@ -42,9 +41,5 @@ class QuaternionObject {
     glm::vec3 getXAxis();
     glm::vec3 getYAxis();
     glm::vec3 getZAxis();
-    void setPosition(glm::vec3 pos);
-    glm::vec3 getPosition();
-    glm::vec3 getOrientation();
-    void setOrientation(glm::vec3 o);
 };
 #endif

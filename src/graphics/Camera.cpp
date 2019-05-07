@@ -5,13 +5,11 @@ Camera::Camera(unsigned int width, unsigned int height, float FoV = 50.0f){
   this->height = height;
   this->FoV = FoV;
 
-  position = glm::vec3(0, 0, 2);
-  orientation = glm::vec3(0,0,0);
+
   clip_near = 0.1f;
   clip_far = 100.0f;
 
   updateProjection();
-  updateView();
 }
 
 Camera::~Camera(){
@@ -26,12 +24,7 @@ void Camera::updateProjection(){
   projection = glm::perspective(glm::radians(FoV), float(width) / float(height), clip_near, clip_far);
 }
 
-void Camera::updateView(){
-  glm::mat4 rotation = getRotationMatrix();
-  glm::mat4 translation = glm::mat4(1.0f);
-  translation = glm::translate(translation,-position);
-  view = rotation * translation;
-}
+
 glm::mat4 Camera::getView(){
   return view;
 }
@@ -39,9 +32,8 @@ glm::mat4 Camera::getView(){
 glm::mat4 Camera::getProjection(){
   return projection;
 }
-
-void Camera::update(){
-  updateView();
+CAMERA_TYPE Camera::getType(){
+  return type;
 }
 void Camera::applyUpdate(Shader *shader){
   shader->bind();
