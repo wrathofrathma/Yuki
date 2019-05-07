@@ -10,8 +10,9 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	yuki->am->loadTextureIndex(); //We also need an active context for this too.
 
 	//Generate an active camera labeled "default"
-	cameras.insert(std::pair<std::string, Camera*>("default", new Camera(getSize().x, getSize().y, 50.0f)));
-	setActiveCamera("default");
+	cameras.insert(std::pair<std::string, Camera*>("Sphere", new SphericalCamera(getSize().x, getSize().y, 50.0f)));
+	cameras.insert(std::pair<std::string, Camera*>("Free", new FreeCamera(getSize().x, getSize().y, 50.0f)));
+	setActiveCamera("Free");
 
 
 	wireframe = false;
@@ -23,7 +24,10 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 GraphicsEngine::~GraphicsEngine(){
 	std::map<std::string, Camera*>::iterator it = cameras.begin();
 	for( ; it!=cameras.end(); it++){
-		delete it->second;
+		if(it->second->getType() == FREE)
+			delete ((FreeCamera*)it->second);
+		else
+			delete ((SphericalCamera*)it->second);
 	}
 	cameras.clear();
 	//Ghetto cleanup of objects.
@@ -65,7 +69,6 @@ void GraphicsEngine::toggleWireframe(){
 }
 
 void GraphicsEngine::updateShaders(){
-
 	for(auto const& [key, val] : yuki->am->getShaders()){
 		cameras[active_camera]->applyUpdate(val);
 		for(unsigned int i=0; i<10; i++){
@@ -82,7 +85,6 @@ void GraphicsEngine::updateShaders(){
 		}
 	}
 	yuki->am->getShader("Rotate")->setFloat("time",clock.getElapsedTime().asSeconds()/2.0);
-
 }
 void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
@@ -128,4 +130,12 @@ void GraphicsEngine::screenshot()
 
 Camera* GraphicsEngine::getCamera(){
 	return cameras[active_camera];
+}
+
+void GraphicsEngine::toggleCamera(){
+	if(active_camera.compare("Free")==0)
+		setActiveCamera("Sphere");
+	else{
+		setActiveCamera("Free");
+	}
 }

@@ -20,6 +20,9 @@
 
 #include "graphics/QuaternionObject.hpp"
 #include "graphics/Camera.hpp"
+#include "graphics/FreeCamera.hpp"
+#include "graphics/SphericalCamera.hpp"
+
 #include "graphics/Material.hpp"
 #include "graphics/Light.hpp"
 #include "graphics/drawables/LightCube.hpp"

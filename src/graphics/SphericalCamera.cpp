@@ -1,0 +1,171 @@
+#include "SphericalCamera.hpp"
+
+/**
+\file SphericalCamera.cpp
+
+\brief Implementation file for the SphericalCamera class.
+
+\author    Christopher Arausa
+\version   1.2
+\date      05/07/2019
+
+*/
+
+/**
+\brief Constructor
+
+Position is at (1, 0, 0) pointing toward the origin.
+
+*/
+
+SphericalCamera::SphericalCamera(unsigned int width, unsigned int height, float FoV) : Camera(width,height,FoV) {
+    type = SPHERICAL;
+    r = 10;
+    theta = 0;
+    psi = 0;
+    updateView();
+}
+
+/**
+\brief Sets the position of the camera
+
+\param R --- Radius of camera to origin.
+\param Theta --- Theta rotation on the xz plane counter clockwise from positive x axis.
+\param Psi --- Psi rotation from the xz plane to radial.
+
+*/
+
+void SphericalCamera::setPosition(float R, float Theta, float Psi) {
+    r = R;
+    theta = Theta;
+    psi = Psi;
+    position = glm::vec3(r*cos(psi*deg)*cos(theta*deg),r*sin(psi*deg),r*cos(psi*deg)*sin(theta*deg));
+}
+
+/**
+\brief Updates the view matrix for the current position and line of sight to the origin.
+*/
+
+void SphericalCamera::updateView() {
+    glm::vec3 eye = glm::vec3(r*cos(psi*deg)*cos(theta*deg),r*sin(psi*deg),r*cos(psi*deg)*sin(theta*deg));
+    glm::vec3 center = glm::vec3(0, 0, 0);
+    glm::vec3 up = glm::vec3(0, 1, 0);
+    view = glm::lookAt(eye, center, up);
+}
+
+/**
+\brief Adds to the camera radius.
+
+\param num --- amount to add to the radius of the camera.
+
+*/
+
+void SphericalCamera::addR(float num) {
+    r += num;
+    if (r < 0.000001f) r = 0.000001f;
+}
+
+/**
+\brief Adds to the theta angle of the camera.
+
+\param num --- amount to add to the theta angle of the camera.
+
+*/
+
+void SphericalCamera::addTheta(float num) {
+    theta += num;
+    if (theta > 360) theta -= 360;
+    if (theta < 0) theta += 360;
+}
+
+/**
+\brief Adds to the psi angle of the camera.
+
+\param num --- amount to add to the psi angle of the camera.
+
+*/
+
+void SphericalCamera::addPsi(float num) {
+    psi += num;
+    if (psi > 90) psi = 90;
+    if (psi < -90) psi = -90;
+}
+
+/**
+\brief Sets the radius of the camera.
+
+\param num --- new value of the radius.
+
+*/
+
+void SphericalCamera::setR(float num) {
+    r = num;
+    if (r < 0.000001f) r = 0.000001f;
+}
+
+/**
+\brief Sets the theta angle of the camera.
+
+\param num --- New value of the theta angle.
+
+*/
+
+void SphericalCamera::setTheta(float num) {
+    theta = num;
+    while (theta > 360) theta -= 360;
+    while (theta < 0) theta += 360;
+}
+
+/**
+\brief Sets the psi angle of the camera.
+
+\param num --- New value of the psi angle.
+
+*/
+
+void SphericalCamera::setPsi(float num) {
+    psi = num;
+    if (psi > 90) psi = 90;
+    if (psi < -90) psi = -90;
+}
+
+/**
+\brief Returns the current value of the camera radius.
+
+\return The current value of the camera radius.
+
+*/
+
+float SphericalCamera::getR() {
+    return r;
+}
+
+/**
+\brief Returns the current value of the theta angle of the camera.
+
+\return The current value of the theta angle of the camera.
+
+*/
+
+float SphericalCamera::getTheta() {
+    return theta;
+}
+
+/**
+\brief Returns the current value of the psi angle of the camera.
+
+\return The current value of the psi angle of the camera.
+
+*/
+
+float SphericalCamera::getPsi() {
+    return psi;
+}
+
+/**
+\brief Function called every draw cycle to update the camera values
+*/
+
+void SphericalCamera::update() {
+  updateView();
+}
