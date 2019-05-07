@@ -1,7 +1,7 @@
 #ifndef YUKI_LIGHT_HPP
 #define YUKI_LIGHT_HPP
 
-#include "QuaternionObject.hpp"
+#include "SpacialObject.hpp"
 #include "../Shader.hpp"
 
 enum LIGHT_TYPE {
@@ -10,7 +10,7 @@ enum LIGHT_TYPE {
   SPOT
 };
 
-class Light : virtual public QuaternionObject {
+class Light : virtual public SpacialObject {
   protected:
     bool on; ///< Light on or off.
     glm::vec4 ambient; ///< Ambient color of the light.

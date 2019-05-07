@@ -10,7 +10,7 @@
 #include "../GraphicsDefinitions.hpp"
 #include "SpacialObject.hpp"
 
-class OrbitalObject : public SpacialObject{
+class OrbitalObject : virtual public SpacialObject{
   protected:
     float r;      ///< Radius of camera to origin.
     float theta;  ///< Theta rotation on the xz plane counter clockwise from positive x axis.
