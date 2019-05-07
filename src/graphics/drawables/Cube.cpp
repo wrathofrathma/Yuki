@@ -67,30 +67,35 @@ void Cube::generateCube(){
     0.0f,  0.0f, -1.0f,
     0.0f,  0.0f, -1.0f,
     0.0f,  0.0f, -1.0f,
+
     0.0f,  0.0f, 1.0f,
     0.0f,  0.0f, 1.0f,
     0.0f,  0.0f, 1.0f,
     0.0f,  0.0f, 1.0f,
     0.0f,  0.0f, 1.0f,
     0.0f,  0.0f, 1.0f,
+
     -1.0f,  0.0f,  0.0f,
     -1.0f,  0.0f,  0.0f,
     -1.0f,  0.0f,  0.0f,
     -1.0f,  0.0f,  0.0f,
     -1.0f,  0.0f,  0.0f,
     -1.0f,  0.0f,  0.0f,
+
     1.0f,  0.0f,  0.0f,
     1.0f,  0.0f,  0.0f,
     1.0f,  0.0f,  0.0f,
     1.0f,  0.0f,  0.0f,
     1.0f,  0.0f,  0.0f,
     1.0f,  0.0f,  0.0f,
+
     0.0f, -1.0f,  0.0f,
     0.0f, -1.0f,  0.0f,
     0.0f, -1.0f,  0.0f,
     0.0f, -1.0f,  0.0f,
     0.0f, -1.0f,  0.0f,
     0.0f, -1.0f,  0.0f,
+
     0.0f,  1.0f,  0.0f,
     0.0f,  1.0f,  0.0f,
     0.0f,  1.0f,  0.0f,
@@ -99,8 +104,8 @@ void Cube::generateCube(){
     0.0f,  1.0f,  0.0f
   };
   srand(time(nullptr));
-  float vc[90];
-  for(int i=0; i<90; i++){
+  float vc[36*3];
+  for(int i=0; i<36*3; i++){
     vc[i] = (rand() % 100)/100.0;
   }
 
@@ -121,7 +126,7 @@ void Cube::generateCube(){
 
   setIndices(vi, 36);
   setVertices(vv, 6*24);
-  setColors(vc, 30*3);
+  setColors(vc, 36*3);
   setNormals(vn, 24*6);
 }
 
