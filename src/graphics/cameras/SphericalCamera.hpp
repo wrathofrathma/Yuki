@@ -7,7 +7,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <cmath>
 #include "Camera.hpp"
-#include "GraphicsDefinitions.hpp"
+#include "../GraphicsDefinitions.hpp"
+#include "../components/OrbitalObject.hpp"
 
 /**
 \file SphericalCamera.hpp
@@ -28,27 +29,11 @@ points to the origin.
 
 */
 
-class SphericalCamera : public Camera {
+class SphericalCamera : public Camera, public OrbitalObject {
   private:
-    float r;      ///< Radius of camera to origin.
-    float theta;  ///< Theta rotation on the xz plane counter clockwise from positive x axis.
-    float psi;    ///< Psi rotation from the xz plane to radial.
 
   public:
     SphericalCamera(unsigned int width, unsigned int height, float FoV);
-    void setPosition(float R, float Theta, float Psi);
-
-    void addR(float num);
-    void addTheta(float num);
-    void addPsi(float num);
-
-    void setR(float num);
-    void setTheta(float num);
-    void setPsi(float num);
-
-    float getR();
-    float getTheta();
-    float getPsi();
 
     void update();
     void updateView();

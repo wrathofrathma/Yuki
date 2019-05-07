@@ -1,6 +1,6 @@
 #ifndef CUBE_HPP
 #define CUBE_HPP
-#include "../Drawable.hpp"
+#include "../components/Drawable.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <string>

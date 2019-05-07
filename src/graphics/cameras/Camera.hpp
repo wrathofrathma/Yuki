@@ -18,8 +18,8 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Shader.hpp"
-#include "SpacialObject.hpp"
+#include "../Shader.hpp"
+#include "../components/SpacialObject.hpp"
 
 enum CAMERA_TYPE {
   FREE,

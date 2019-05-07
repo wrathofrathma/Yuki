@@ -2,7 +2,7 @@
 #define YUKI_LIGHT_HPP
 
 #include "QuaternionObject.hpp"
-#include "Shader.hpp"
+#include "../Shader.hpp"
 
 enum LIGHT_TYPE {
   POINT,

@@ -13,26 +13,30 @@
 #include <vector>
 #include <iostream>
 
+
 #include "graphics/GraphicsDefinitions.hpp"
 #include "graphics/Texture.hpp"
-#include "graphics/Drawable.hpp"
 #include "graphics/Shader.hpp"
-
-#include "graphics/QuaternionObject.hpp"
-#include "graphics/Camera.hpp"
-#include "graphics/FreeCamera.hpp"
-#include "graphics/SphericalCamera.hpp"
-
 #include "graphics/Material.hpp"
-#include "graphics/Light.hpp"
-#include "graphics/drawables/LightCube.hpp"
+
+//Components
+#include "graphics/components/SpacialObject.hpp"
+#include "graphics/components/QuaternionObject.hpp"
+#include "graphics/components/OrbitalObject.hpp"
+#include "graphics/components/Light.hpp"
+#include "graphics/components/Drawable.hpp"
+
+//Cameras
+#include "graphics/cameras/Camera.hpp"
+#include "graphics/cameras/FreeCamera.hpp"
+#include "graphics/cameras/SphericalCamera.hpp"
+
 //Drawables
 #include "graphics/drawables/Polygon.hpp"
 #include "graphics/drawables/Quad.hpp"
 #include "graphics/drawables/Cube.hpp"
 #include "graphics/drawables/Model.hpp"
-
-
+#include "graphics/drawables/LightCube.hpp"
 
 #include "graphics/GraphicsEngine.hpp"
 

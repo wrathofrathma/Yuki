@@ -2,7 +2,7 @@
 #define MODEL_HPP
 
 #include "../Material.hpp"
-#include "../Drawable.hpp"
+#include "../components/Drawable.hpp"
 
 class Model : public Drawable {
   private:

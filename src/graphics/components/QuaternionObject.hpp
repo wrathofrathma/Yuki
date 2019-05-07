@@ -6,7 +6,7 @@
 #include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "GraphicsDefinitions.hpp"
+#include "../GraphicsDefinitions.hpp"
 #include "SpacialObject.hpp"
 
 /**

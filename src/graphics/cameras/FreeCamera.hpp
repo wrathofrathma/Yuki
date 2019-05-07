@@ -1,7 +1,7 @@
 #ifndef FREE_CAMERA_HPP
 #define FREE_CAMERA_HPP
 
-#include "QuaternionObject.hpp"
+#include "../components/QuaternionObject.hpp"
 #include "Camera.hpp"
 
 class FreeCamera : public QuaternionObject, public Camera {

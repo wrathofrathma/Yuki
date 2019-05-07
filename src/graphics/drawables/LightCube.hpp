@@ -2,7 +2,7 @@
 #define LIGHT_CUBE_HPP
 
 #include "Cube.hpp"
-#include "../Light.hpp"
+#include "../components/Light.hpp"
 
 class LightCube : public Cube, public Light {
   public:
