@@ -2,7 +2,7 @@
 // We need a separate light shader for the things that emit light. So they're not impacted by other lighting changes.
 
 out vec4 FragColor;
-in vec4 color;
+in vec3 icolor;
 in vec2 tex_coord;
 
 uniform sampler2D texture1;
@@ -12,6 +12,6 @@ void main(){
   if(useTexture)
     FragColor =  texture(texture1, tex_coord);
   else
-    FragColor = color;
+    FragColor = vec4(icolor,1);
   FragColor = min(FragColor, vec4(1.0));
 }

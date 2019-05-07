@@ -6,7 +6,6 @@ Drawable::Drawable(AssetManager *am){
   vNormal = 1;
   vColor = 2;
   vTexture = 3;
-
   init();
 }
 
@@ -154,4 +153,27 @@ void Drawable::setShader(Shader *s){
   shader->bind();
   uModel = shader->getUniformLocation("model");
   init();
+}
+
+void Drawable::loadMaterial(){
+  shader->bind();
+  glm::vec4 amb = material.getAmbient();
+  glm::vec4 diff = material.getDiffuse();
+  glm::vec4 spec = material.getSpecular();
+  shader->setVec4("material.ambient",amb);
+  shader->setVec4("material.diffuse", diff);
+  shader->setVec4("material.specular",spec);
+  shader->setFloat("material.shininess",material.getShininess());
+}
+
+void Drawable::initDraw(){
+  shader->bind();
+  generateModelMatrix();
+  shader->setMat4(uModel, model_matrix);
+  setUseTexture(useTexture);
+  loadMaterial();
+  if(update){
+    updateGraphicsCard();
+  }
+
 }

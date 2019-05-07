@@ -53,6 +53,12 @@ void stateProcessing(Yuki *yu){
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 			yu->ge->lights[0]->translate(glm::vec3(m*2,0,0));
 		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+			yu->ge->lights[0]->translate(glm::vec3(0,m,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+			yu->ge->lights[0]->translate(glm::vec3(0,-m,0));
+		}
 	}
 	else{
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
@@ -67,6 +73,12 @@ void stateProcessing(Yuki *yu){
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 			yu->ge->getCamera()->translate(glm::vec3(m,0,0));
 		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+			yu->ge->getCamera()->translate(glm::vec3(0,m,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+			yu->ge->getCamera()->translate(glm::vec3(0,-m,0));
+		}
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 		yu->ge->getCamera()->rotate(glm::vec3(0,m,0));
@@ -80,12 +92,7 @@ void stateProcessing(Yuki *yu){
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
 		yu->ge->getCamera()->rotate(glm::vec3(m,0,0));
 	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-		yu->ge->getCamera()->translate(glm::vec3(0,m,0));
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-		yu->ge->getCamera()->translate(glm::vec3(0,-m,0));
-	}
+
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L)){
 		yu->ge->objects[0]->scale(glm::vec3(2.0));
 	}
@@ -102,18 +109,20 @@ void stateProcessing(Yuki *yu){
 
 void setScene(Yuki &yu){
 	Cube *cube = new Cube(yu.am);
-	Quad *quad = new Quad(yu.am);
-	quad->setTexture("doge");
+	Quad *plane = new Quad(yu.am);
+	plane->setTexture("doge");
+	plane->scale(glm::vec3(20.0f));
+	plane->rotate(glm::vec3(0,1.57,0));
 	cube->scale(glm::vec3(3.0f));
 	yu.ge->objects.push_back(cube);
-	yu.ge->objects.push_back(quad);
+	yu.ge->objects.push_back(plane);
 
-	LightCube *light = new LightCube(yu.am);
-//	light->scale(glm::vec3(0.2f));
-	yu.ge->objects.push_back(light);
-
-	yu.ge->lights.push_back(light);
-
+	for(int i = 0; i<1; i++){
+		LightCube *light = new LightCube(yu.am);
+		light->setPosition(glm::vec3(i,i,i));
+		yu.ge->lights.push_back(light);
+		yu.ge->objects.push_back(light);
+	}
 }
 
 

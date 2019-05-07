@@ -2,7 +2,7 @@
 
 Polygon::Polygon(AssetManager *am) : Drawable(am){
 
-  shader = am->getShader("2DBasic");
+  shader = am->getShader("Default");
   orientation = glm::vec3(0,0,0);
   setUseTexture(false);
   update = true;
@@ -75,16 +75,7 @@ void Polygon::setColor(std::vector<float> c){
 }
 
 void Polygon::draw(){
-  //Every model has its own model matrix. So we should upload before every draw.
-  shader->bind();
-  generateModelMatrix();
-  shader->setMat4(uModel, model_matrix);
-  setUseTexture(useTexture);
-  if(update){
-    updateGraphicsCard();
-  }
-
-
+  initDraw();
   if(useTexture){
     if(textures.size()>0){
       glActiveTexture(GL_TEXTURE0); //Activate texture unit

@@ -1,7 +1,7 @@
 #include "Light.hpp"
 
 Light::Light(){
-  setLight(on, glm::vec3(3.0), glm::vec3(0), glm::vec4(1), glm::vec4(1), glm::vec4(1));
+  setLight(on, glm::vec3(0.0), glm::vec3(0), glm::vec4(1), glm::vec4(1), glm::vec4(1));
 }
 
 Light::Light(bool onoff, glm::vec3 pos, glm::vec3 facing, glm::vec4 a, glm::vec4 d, glm::vec4 s){

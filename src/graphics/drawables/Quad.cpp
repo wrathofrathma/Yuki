@@ -2,6 +2,7 @@
 
 Quad::Quad(AssetManager *am, float x, float y, float z, float w) : Polygon(am){
   setDimensions(glm::vec4(x,y,z,w));
+
 }
 
 Quad::~Quad(){
@@ -23,6 +24,7 @@ void Quad::generateQuad(){
   vvn.push_back(glm::vec3(-dimensions.z/2.0f, -dimensions.w/2.0f, 0.0f));
   vvn.push_back(glm::vec3(-dimensions.x/2.0f, dimensions.w/2.0f, 0.0f));
   glm::vec3 norms = calcSurfaceNormal(vvn);
+
   float vn[] = {
     norms.x, norms.y, norms.z,
     norms.x, norms.y, norms.z,

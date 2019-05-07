@@ -1,5 +1,10 @@
 #include "Material.hpp"
-
+Material::Material(){
+  setAmbient(glm::vec4(1,1,1,1));
+  setDiffuse(glm::vec4(1,1,1,1));
+  setSpecular(glm::vec4(0.1,0.1,0.1,1));
+  setShininess(0);
+}
 Material::Material(glm::vec4 a, glm::vec4 d, glm::vec4 s, glm::vec4 e, float sh){
   ambient = a;
   diffuse = d;
