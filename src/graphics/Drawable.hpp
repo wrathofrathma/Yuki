@@ -83,9 +83,8 @@ class Drawable : virtual public QuaternionObject {
     void setNormals(float* norms, unsigned int count);
     void setColors(float* c, unsigned int count);
 
-    void addTexture(std::vector<Texture*> texts);
-    void addTexture(Texture* text);
-
+    virtual void addTexture(std::vector<Texture*> texts);
+    virtual void addTexture(Texture* text);
     void setMaterial(Material mat);
 
     void setShader(const std::string &name);

@@ -41,26 +41,11 @@ void mouseButtonEvent(sf::Event::MouseButtonEvent event, Yuki *yu){
 void stateProcessing(Yuki *yu){
 	float m = 0.04;
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-			yu->ge->pLights[0]->translate(glm::vec3(0,0,-m*2));
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+			yu->ge->getCamera()->rotate(glm::vec3(0,0,-m));
 		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-			yu->ge->pLights[0]->translate(glm::vec3(-m*2,0,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-			yu->ge->pLights[0]->translate(glm::vec3(0,0,m*2));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-			yu->ge->pLights[0]->translate(glm::vec3(m*2,0,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-			yu->ge->pLights[0]->translate(glm::vec3(0,m,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-			yu->ge->pLights[0]->translate(glm::vec3(0,-m,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){
-			yu->ge->screenshot();
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+			yu->ge->getCamera()->rotate(glm::vec3(0,0,m));
 		}
 	}
 	else{
@@ -82,19 +67,20 @@ void stateProcessing(Yuki *yu){
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
 			yu->ge->getCamera()->translate(glm::vec3(0,-m,0));
 		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+			yu->ge->getCamera()->rotate(glm::vec3(0,-m,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+			yu->ge->getCamera()->rotate(glm::vec3(0,m,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+			yu->ge->getCamera()->rotate(glm::vec3(-m,0,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+			yu->ge->getCamera()->rotate(glm::vec3(m,0,0));
+		}
 	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-		yu->ge->getCamera()->rotate(glm::vec3(0,m,0));
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-		yu->ge->getCamera()->rotate(glm::vec3(0,-m,0));
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-		yu->ge->getCamera()->rotate(glm::vec3(m,0,0));
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-		yu->ge->getCamera()->rotate(glm::vec3(m,0,0));
-	}
+
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L)){
 		yu->ge->objects[0]->scale(glm::vec3(2.0));
@@ -124,10 +110,12 @@ void setScene(Yuki &yu){
 	}
 
 	Quad *plane = new Quad(yu.am);
+	plane->setShader(yu.am->getShader("Rotate"));
 	plane->setTexture("doge");
 	plane->scale(glm::vec3(20.0f));
 	plane->rotate(glm::vec3(0,1.57,0));
 	plane->setMaterial(Materials::Default);
+
 	yu.ge->objects.push_back(plane);
 	LightCube *lc = new LightCube(yu.am);
 	lc->setPosition(glm::vec3(0,20,-0));

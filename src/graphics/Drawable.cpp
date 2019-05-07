@@ -175,5 +175,4 @@ void Drawable::initDraw(){
   if(update){
     updateGraphicsCard();
   }
-
 }

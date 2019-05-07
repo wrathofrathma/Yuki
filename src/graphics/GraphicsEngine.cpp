@@ -1,5 +1,4 @@
 #include "GraphicsEngine.hpp"
-
 GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, GLint MinorVersion, int width, int height) :
 	sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Default, sf::ContextSettings(24,8,4,MajorVersion, MinorVersion, sf::ContextSettings::Core)) {
 
@@ -68,22 +67,29 @@ void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+
 	cameras[active_camera]->update(); //Generate camera updates.
 
 	//We need to let every shader know the current view and projection matrices.
 	for(auto const& [key, val] : yuki->am->getShaders()){
 		cameras[active_camera]->applyUpdate(val);
 	}
+	yuki->am->getShader("Rotate")->setFloat("time",clock.getElapsedTime().asSeconds()/2.0);
 
 	//Update directional light information
 	for(unsigned int i=0; i<10; i++){
-		if(i < dLights.size())
+		if(i < dLights.size()){
 			dLights[i]->loadToShader(yuki->am->getShader("Default"),i);
+			dLights[i]->loadToShader(yuki->am->getShader("Rotate"),i);
+		}
 	}
 	//Update point light information
 	for(unsigned int i=0; i<10; i++){
-		if(i < pLights.size())
+		if(i < pLights.size()){
 			pLights[i]->loadToShader(yuki->am->getShader("Default"),i);
+			pLights[i]->loadToShader(yuki->am->getShader("Rotate"),i);
+		}
 	}
 	//Temporary draw loop until we get a better world/scene class working.
 	for(Drawable *object : objects){

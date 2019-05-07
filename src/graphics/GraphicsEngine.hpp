@@ -46,6 +46,7 @@ class GraphicsEngine : public sf::RenderWindow {
 		Yuki *yuki;
 		std::map<std::string, Camera*> cameras;
 		std::string active_camera;
+		sf::Clock clock;
 	public:
 		GraphicsEngine(Yuki* yu, std::string title="", GLint MajorVersion = 3, GLint MinorVersion = 3, int width=800, int height = 600);
 		~GraphicsEngine();
