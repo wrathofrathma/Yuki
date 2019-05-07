@@ -82,6 +82,7 @@ void GraphicsEngine::display(){
 		if(i < dLights.size()){
 			dLights[i]->loadToShader(yuki->am->getShader("Default"),i);
 			dLights[i]->loadToShader(yuki->am->getShader("Rotate"),i);
+			dLights[i]->loadToShader(yuki->am->getShader("CubeMap"),i);
 		}
 	}
 	//Update point light information
@@ -89,6 +90,7 @@ void GraphicsEngine::display(){
 		if(i < pLights.size()){
 			pLights[i]->loadToShader(yuki->am->getShader("Default"),i);
 			pLights[i]->loadToShader(yuki->am->getShader("Rotate"),i);
+			pLights[i]->loadToShader(yuki->am->getShader("CubeMap"),i);
 		}
 	}
 	//Temporary draw loop until we get a better world/scene class working.

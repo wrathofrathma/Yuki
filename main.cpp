@@ -102,8 +102,10 @@ void setScene(Yuki &yu){
 		for(int j=1; j<5; j++){
 			for(int k=1; k<6; k++){
 				Cube* cube = new Cube(yu.am);
+				cube->setShader("CubeMap");
 				cube->setPosition(glm::vec3(2*i,2*j,2*k));
-				cube->setMaterial(Materials::bluePlastic);
+				cube->setMaterial(Materials::Default);
+				cube->setTexture(yu.am->getTexture("blue_space_box"));
 				yu.ge->objects.push_back(cube);
 			}
 		}

@@ -44,6 +44,8 @@ class Camera : public QuaternionObject {
     void setFOV(float fov);
     void setClipping(float near, float far);
     void applyUpdate(Shader *shader);
+    glm::mat4 getView();
+    glm::mat4 getProjection();
 };
 
 #endif

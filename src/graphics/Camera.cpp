@@ -32,6 +32,13 @@ void Camera::updateView(){
   translation = glm::translate(translation,-position);
   view = rotation * translation;
 }
+glm::mat4 Camera::getView(){
+  return view;
+}
+
+glm::mat4 Camera::getProjection(){
+  return projection;
+}
 
 void Camera::update(){
   updateView();

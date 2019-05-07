@@ -6,5 +6,5 @@
 
 Default Default.vs Default.fs
 Light Default.vs Light.fs
-CubeMap Default.vs Default.fs
+CubeMap CubeMap.vs CubeMap.fs
 Rotate RotatingTexture.vs Default.fs
