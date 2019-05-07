@@ -128,7 +128,7 @@ void setScene(Yuki &yu){
 	yu.ge->objects.push_back(wall1);
 
 	LightCube *lc = new LightCube(yu.am);
-	lc->setPosition(glm::vec3(0,20,-0));
+	lc->setPosition(glm::vec3(0,10,-0));
 	lc->setAmbient(glm::vec4(1));
 	lc->setSpecular(glm::vec4(1));
 	lc->setDiffuse(glm::vec4(0));
@@ -137,8 +137,8 @@ void setScene(Yuki &yu){
 	yu.ge->pLights.push_back(lc);
 	Light* light = new Light(DIRECTIONAL);
 	light->setAmbient(glm::vec4(0.1));
-	light->setDiffuse(glm::vec4(0.4));
-	light->setSpecular(glm::vec4(0));
+	light->setDiffuse(glm::vec4(0.3));
+	light->setSpecular(glm::vec4(0.1));
 	light->setOrientation(glm::vec3(-1,-1,-1));
 	yu.ge->dLights.push_back(light);
 }

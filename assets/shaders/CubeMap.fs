@@ -144,5 +144,5 @@ void main()
     if(spotLights[i].on)
       result+=CalcSpotLight(spotLights[i], norm,frag_pos,viewDirection);
   }
-  FragColor = texture(cubeMap, tex_coord);
+  FragColor = texture(cubeMap, tex_coord) * result;
 }

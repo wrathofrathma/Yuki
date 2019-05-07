@@ -8,3 +8,6 @@
 s doge doge.jpg
 c blue_space_box bkg1_right.png bkg1_left.png bkg1_top.png bkg1_bot.png bkg1_back.png bkg1_front.png
 c totality totality_rt.tga totality_lf.tga totality_up.tga totality_dn.tga totality_bk.tga totality_ft.tga
+s cat1 cat1.jpg
+s cat2 cat2.jpg
+s cat3 cat3.jpg

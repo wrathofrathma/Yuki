@@ -63,36 +63,34 @@ void GraphicsEngine::toggleWireframe(){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 }
+
+void GraphicsEngine::updateShaders(){
+
+	for(auto const& [key, val] : yuki->am->getShaders()){
+		cameras[active_camera]->applyUpdate(val);
+		for(unsigned int i=0; i<10; i++){
+			if(i < dLights.size()){
+				dLights[i]->loadToShader(val,i);
+				dLights[i]->loadToShader(val,i);
+				dLights[i]->loadToShader(val,i);
+			}
+			if(i < pLights.size()){
+				pLights[i]->loadToShader(val,i);
+				pLights[i]->loadToShader(val,i);
+				pLights[i]->loadToShader(val,i);
+			}
+		}
+	}
+	yuki->am->getShader("Rotate")->setFloat("time",clock.getElapsedTime().asSeconds()/2.0);
+
+}
 void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
 	cameras[active_camera]->update(); //Generate camera updates.
+	updateShaders();
 
-	//We need to let every shader know the current view and projection matrices.
-	for(auto const& [key, val] : yuki->am->getShaders()){
-		cameras[active_camera]->applyUpdate(val);
-	}
-	yuki->am->getShader("Rotate")->setFloat("time",clock.getElapsedTime().asSeconds()/2.0);
-
-	//Update directional light information
-	for(unsigned int i=0; i<10; i++){
-		if(i < dLights.size()){
-			dLights[i]->loadToShader(yuki->am->getShader("Default"),i);
-			dLights[i]->loadToShader(yuki->am->getShader("Rotate"),i);
-			dLights[i]->loadToShader(yuki->am->getShader("CubeMap"),i);
-		}
-	}
-	//Update point light information
-	for(unsigned int i=0; i<10; i++){
-		if(i < pLights.size()){
-			pLights[i]->loadToShader(yuki->am->getShader("Default"),i);
-			pLights[i]->loadToShader(yuki->am->getShader("Rotate"),i);
-			pLights[i]->loadToShader(yuki->am->getShader("CubeMap"),i);
-		}
-	}
 	//Temporary draw loop until we get a better world/scene class working.
 	for(Drawable *object : objects){
 		object->draw();
