@@ -38,7 +38,7 @@ class Camera : virtual public SpacialObject {
     glm::mat4 projection; ///< Our projection matrix. We don't want to calculate this more than once a frame.
   public:
     Camera(unsigned int width, unsigned int height, float FoV);
-    ~Camera();
+    virtual ~Camera();
     void setFOV(float fov);
     void setClipping(float near, float far);
     void applyUpdate(Shader *shader);
