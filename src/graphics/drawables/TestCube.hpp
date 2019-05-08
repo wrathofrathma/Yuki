@@ -5,12 +5,14 @@
 #include <ctime>
 #include <string>
 #include <vector>
-#include "Quad.hpp"
-#include "../../AssetManager.hpp"
-#include "../components/QuaternionObject.hpp"
+#include "../components/Drawable.hpp"
 #include "../GraphicsDefinitions.hpp"
+
+class Quad;
+class AssetManager;
+
 // This class will double as a cube map when we use it on a giant scale.
-class TestCube : QuaternionObject {
+class TestCube : public Drawable {
   protected:
     bool update;
     AssetManager *asset_manager;

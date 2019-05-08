@@ -97,7 +97,7 @@ void Yuki::init(){
 void Yuki::run(){
 	while(ge->isOpen()){
 		Scene *s = getActiveScene();
-		s->update();
+		s->tick();
 		if(ui!=nullptr)
 			ui->processInput(s);
 		ge->display(s);

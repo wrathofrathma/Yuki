@@ -37,15 +37,14 @@ void UI::processInput(Scene *scene){
 			for(void (*cb)(sf::Event::KeyEvent event, Yuki *yu) : keyPressedEvents){
 				cb(event.key, yuki);
 			}
-			for(void (*cb)(sf::Event::KeyEvent event, Yuki *yu) : scene->getKeyPressedEvents()){
-				cb(event.key, yuki);
-			}
+			if(scene!=nullptr)
+				scene->keyPressedEventHandler(event.key);
 		}
 		else if(event.type == sf::Event::MouseMoved){
 			for(void (*cb)(sf::Event::MouseMoveEvent event, Yuki *yu) : mouseMovedEvents)
 				cb(event.mouseMove, yuki);
-			for(void (*cb)(sf::Event::MouseMoveEvent event, Yuki *yu) : scene->getMouseMovedEvents())
-				cb(event.mouseMove, yuki);
+			if(scene!=nullptr)
+				scene->mouseMoveEventHandler(event.mouseMove);
 		}
 		else if(event.type == sf::Event::MouseButtonPressed){
 			if(event.mouseButton.button == sf::Mouse::Left)
@@ -53,9 +52,8 @@ void UI::processInput(Scene *scene){
 			for(void (*cb)(sf::Event::MouseButtonEvent event, Yuki *yu) : mouseButtonEvents){
 				cb(event.mouseButton, yuki);
 			}
-			for(void (*cb)(sf::Event::MouseButtonEvent event, Yuki *yu) : scene->getMouseButtonEvents()){
-				cb(event.mouseButton, yuki);
-			}
+			if(scene!=nullptr)
+				scene->mouseButtonEventHandler(event.mouseButton);
 		}
 		else if(event.type == sf::Event::Resized){
 			yuki->ge->resize();
@@ -68,9 +66,8 @@ void UI::processInput(Scene *scene){
 	for(void (*cb)(Yuki *yu) : keyStateEvents){
 		cb(yuki);
 	}
-	for(void (*cb)(Yuki *yu) : scene->getKeyStateEvents()){
-		cb(yuki);
-	}
+	if(scene!=nullptr)
+		scene->keyStateEventHandler();
 }
 
 void UI::setMousePos(sf::Vector2i pos){

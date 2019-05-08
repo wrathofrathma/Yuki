@@ -3,9 +3,11 @@
 #include "cameras/Camera.hpp"
 #include "components/Light.hpp"
 #include "components/Drawable.hpp"
+#include"../AssetManager.hpp"
 
 Scene::Scene(Yuki* yuki) {
   this->yuki = yuki;
+  this->asset_manager = yuki->am;
 }
 
 Scene::~Scene(){
@@ -30,7 +32,22 @@ Scene::~Scene(){
     }
   }
 }
+void Scene::tick(){
+  //Generate delta
+  sf::Time curr_time = clock.getElapsedTime();
+  sf::Time delta = curr_time - last_time;
+  float dt = delta.asSeconds();
+  last_time = curr_time;
+  //Generate camera updates
+  Camera *c = getCamera();
+  if(c!=nullptr)
+    c->update();
+  update();
+}
 
+void Scene::update(){
+    //Default update function does nothing.
+}
 void Scene::draw(){
   for(Drawable* d : drawables)
     d->draw();
@@ -78,22 +95,6 @@ Camera* Scene::getCamera(){
   }
 	return cameras[active_camera];
 }
-
-void Scene::update(){
-  //Generate delta
-  sf::Time curr_time = clock.getElapsedTime();
-  sf::Time delta = curr_time - last_time;
-  float dt = delta.asSeconds();
-  last_time = curr_time;
-
-  //Generate camera updates
-  Camera *c = getCamera();
-  if(c!=nullptr)
-    c->update();
-  for(void (*cb)(Yuki *yu, Scene* scene, float delta) : update_events)
-    cb(yuki, this, dt);
-}
-
 void Scene::addLight(Light* l){
   lights.push_back(l);
 }
@@ -117,28 +118,19 @@ void Scene::setGlobalAmbient(float a){
 float Scene::getGlobalAmbient(){
   return global_ambient;
 }
-void Scene::addKeyPressedEvent(void (*callback)(sf::Event::KeyEvent event, Yuki *yu)){
-	keyPressedEvents.push_back(callback);
-}
-void Scene::addKeyStateEvent(void (*callback)(Yuki *yu)){
-	keyStateEvents.push_back(callback);
-}
-void Scene::addMouseButtonEvent(void (*callback)(sf::Event::MouseButtonEvent event, Yuki *yu)){
-	mouseButtonEvents.push_back(callback);
-}
-void Scene::addMouseMovedEvent(void (*callback)(sf::Event::MouseMoveEvent event, Yuki *yu)){
-	mouseMovedEvents.push_back(callback);
+
+void Scene::keyPressedEventHandler(sf::Event::KeyEvent event){
+
 }
 
-std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> Scene::getKeyPressedEvents(){
-  return keyPressedEvents;
+void Scene::keyStateEventHandler(){
+
 }
-std::vector<void (*)(Yuki *yu)> Scene::getKeyStateEvents(){
-  return keyStateEvents;
+
+void Scene::mouseButtonEventHandler(sf::Event::MouseButtonEvent event){
+
 }
-std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> Scene::getMouseMovedEvents(){
-  return mouseMovedEvents;
-}
-std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> Scene::getMouseButtonEvents(){
-  return mouseButtonEvents;
+
+void Scene::mouseMoveEventHandler(sf::Event::MouseMoveEvent event){
+
 }

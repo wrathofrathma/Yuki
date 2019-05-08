@@ -1,5 +1,8 @@
 #include "TestCube.hpp"
-TestCube::TestCube(AssetManager *am){
+#include "../../AssetManager.hpp"
+#include "Quad.hpp"
+
+TestCube::TestCube(AssetManager *am) : Drawable(am){
   asset_manager = am;
   for(int i=0; i<6; i++){
     Quad* q = new Quad(am);
@@ -17,6 +20,9 @@ TestCube::TestCube(AssetManager *am){
   faces[4]->translate(glm::vec3(0.5,0,0),false);
   faces[5]->rotate(glm::vec3(deg*90,0,0));
   faces[5]->translate(glm::vec3(-0.5,0,0),false);
+
+  //We don't need our opengl stuff for this class specifically. The inherited classes take care of the drawing.
+  cleanup();
 }
 
 TestCube::~TestCube(){

@@ -11,6 +11,7 @@ class Yuki;
 class Camera;
 class Light;
 class Drawable;
+class AssetManager;
 
 /**
 \file Scene.hpp
@@ -31,41 +32,40 @@ For now these are opaque to make things simple.
 */
 
 class Scene {
-  private:
+  protected:
     Yuki* yuki; ///< Our link back up to the rest of our resources.
+    AssetManager* asset_manager; ///< Having a direct link to our asset manager is handy.
     //Camera stuff
     std::map<std::string, Camera*> cameras;
     std::string active_camera;
+
     //Update stuff
-    sf::Clock clock;
     sf::Time last_time; ///< Time variable containing our last measured time for delta calculations.
-    std::vector<void (*)(Yuki*,Scene*,float)> update_events; ///< Vector containing registered events that need to update each cycle for this scene. Such as model animation.
+    sf::Clock clock;
 
     std::vector<Drawable*> drawables; ///< Vector containing all of the drawable objects in our scene.
     std::vector<Light*> lights; ///< Vector containing all of the light objects in our scene.
 
     float global_ambient; ///< A float containing our global ambient for the scene. It'll be used in our lighting updates later.
 
-    std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> keyPressedEvents;
-		std::vector<void (*)(Yuki *yu)> keyStateEvents;
-		std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> mouseButtonEvents;
-		std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> mouseMovedEvents;
-
-
   public:
     Scene(Yuki* yuki);
-    ~Scene();
-
-    //Runs any registered functions that need to update with the delta between updates.
-    void update();
-    void addUpdateFunction(void (*callback)(Yuki *yu, Scene* scene, float delta));
-
-    void draw();
+    virtual ~Scene();
+    void tick(); //Handles pre-update events such as calcing delta time and updating camera matrices.
+    //Scene logic function.
+    virtual void update();
+    //Scene draw function.
+    virtual void draw();
+    //Functions that will determine how our scene handles input.
+    virtual void keyPressedEventHandler(sf::Event::KeyEvent event);
+    virtual void keyStateEventHandler();
+    virtual void mouseButtonEventHandler(sf::Event::MouseButtonEvent event);
+    virtual void mouseMoveEventHandler(sf::Event::MouseMoveEvent event);
 
     void setGlobalAmbient(float a);
     float getGlobalAmbient();
 
-    //Actual stuff we draw to our scene.
+    //Actual stuff we draw to our scene. This is subject to change later.
     void addLight(Light* l);
     void addDrawables(Drawable* d);
     std::vector<Light*> getLights();
@@ -77,16 +77,6 @@ class Scene {
     void removeCamera(std::string s);
 		Camera* getCamera();
 
-    //Adding things to our input-event loop check.
-		void addKeyPressedEvent(void (*callback)(sf::Event::KeyEvent event, Yuki *yu));
-		void addKeyStateEvent(void (*callback)(Yuki *yu));
-		void addMouseButtonEvent(void (*callback)(sf::Event::MouseButtonEvent event, Yuki *yu));
-		void addMouseMovedEvent(void (*callback)(sf::Event::MouseMoveEvent event, Yuki *yu));
-
-    std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> getKeyPressedEvents();
-    std::vector<void (*)(Yuki *yu)> getKeyStateEvents();
-    std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> getMouseMovedEvents();
-    std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> getMouseButtonEvents();
 };
 
 #endif
