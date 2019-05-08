@@ -41,8 +41,10 @@
 
 //Premade Lights
 #include "graphics/lights/OrbitalLight.hpp"
+#include "graphics/Scene.hpp"
 
 #include "graphics/GraphicsEngine.hpp"
+
 
 
 #endif

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "Quad.hpp"
-#include "../../AssetManager.hpp";
+#include "../../AssetManager.hpp"
 #include "../components/QuaternionObject.hpp"
 #include "../GraphicsDefinitions.hpp"
 // This class will double as a cube map when we use it on a giant scale.

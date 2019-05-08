@@ -15,11 +15,10 @@
 #include <string>
 #include <vector>
 #include <map>
-
-#include "../Graphics.hpp" //I know this is weird but realistically we need all of this stuff.
-#include "../Yuki.hpp" // If this errors, put ti back in the .cpp and rely on forward declaration.
+#include <stack>
 
 class Yuki;
+class Scene;
 
 /**
 \file GraphicsEngine.hpp
@@ -34,7 +33,7 @@ class Yuki;
 /**
 \class GraphicsEngine
 
-\brief The Graphics class is an extension of sf::RenderWindow which manages our window and all of the graphics rendering.
+\brief The Graphics class is an extension of sf::RenderWindow which manages our window and renders our scene.
 
 */
 
@@ -44,28 +43,20 @@ class GraphicsEngine : public sf::RenderWindow {
 		int sscount;
 		bool wireframe;
 		Yuki *yuki;
-		std::map<std::string, Camera*> cameras;
-		std::string active_camera;
 		sf::Clock clock;
 	public:
 		GraphicsEngine(Yuki* yu, std::string title="", GLint MajorVersion = 3, GLint MinorVersion = 3, int width=800, int height = 600);
 		~GraphicsEngine();
 		void setResizeFlag();
-		void display();
+		void display(Scene *s);
 		void screenshot();
 		void resize();
 		void setSize(unsigned int w, unsigned int h);
 		void toggleWireframe();
 		bool getWireframe();
 		void setWireframe(bool v);
-		void setActiveCamera(std::string c);
-		void updateShaders();
-		void toggleCamera();
-		Camera* getCamera();
-		std::vector<Drawable*> objects; //Temporary object housing until we get worlds and scenes setup.
-		std::vector<Light*> dLights; //temporary housing for directional lights
-		std::vector<Light*> pLights; //temporary object for housing point lights
-		std::vector<TestCube*> cubes; ///< Temporary object to hold test cubes.
+		void updateShaders(Scene *scene);
+
 };
 
 #endif

@@ -7,15 +7,14 @@
 #include <SFML/System.hpp>
 #include <iostream>
 #include <string>
-#include <thread>
+#include <map>
 
-//Forward declaration before all of the includes.
+//Forward declaration hell
 class UI;
 class GraphicsEngine;
+class AssetManager;
+class Scene;
 
-#include "AssetManager.hpp"
-#include "Graphics.hpp"
-#include "UserInput.hpp"
 /**
 \file Yuki.hpp
 \brief Header file for Yuki.cpp
@@ -45,15 +44,24 @@ class Yuki {
 
 		inline static const std::string VERSION = "0.1"; ///< Version number
 
+		std::map<std::string, Scene*> scenes; ///< A map of the scenes registered to our game engine.
+		std::string active_scene; ///< String containing the ID of our active scene.
 
 	public:
 		Yuki(bool debug=false);
 		~Yuki();
 		void run();
 		void close();
+
 		AssetManager *am;	///< Pointer to our Asset Manager
 		GraphicsEngine *ge;	///< Pointer to our Graphics Engine
 		UI *ui; ///< Pointer to our input class.
+
+		//Scene management functions.
+		void addScene(std::string s, Scene* scene);
+		void setActiveScene(std::string s);
+		void removeScene(std::string s);
+		Scene* getActiveScene();
 };
 
 #endif

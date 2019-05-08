@@ -1,4 +1,10 @@
 #include "GraphicsEngine.hpp"
+#include "../Yuki.hpp"
+#include "Scene.hpp"
+#include "cameras/Camera.hpp"
+#include "../AssetManager.hpp"
+#include "components/Light.hpp"
+
 GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, GLint MinorVersion, int width, int height) :
 	sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Default, sf::ContextSettings(24,8,4,MajorVersion, MinorVersion, sf::ContextSettings::Core)) {
 
@@ -10,9 +16,9 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	yuki->am->loadTextureIndex(); //We also need an active context for this too.
 
 	//Generate an active camera labeled "default"
-	cameras.insert(std::pair<std::string, Camera*>("Sphere", new SphericalCamera(getSize().x, getSize().y, 50.0f)));
-	cameras.insert(std::pair<std::string, Camera*>("Free", new FreeCamera(getSize().x, getSize().y, 50.0f)));
-	setActiveCamera("Free");
+	//cameras.insert(std::pair<std::string, Camera*>("Sphere", new SphericalCamera(getSize().x, getSize().y, 50.0f)));
+	//cameras.insert(std::pair<std::string, Camera*>("Free", new FreeCamera(getSize().x, getSize().y, 50.0f)));
+	//setActiveCamera("Free");
 
 
 	wireframe = false;
@@ -22,41 +28,12 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 }
 
 GraphicsEngine::~GraphicsEngine(){
-	std::map<std::string, Camera*>::iterator it = cameras.begin();
-	for( ; it!=cameras.end(); it++){
-		if(it->second->getType() == FREE)
-			delete ((FreeCamera*)it->second);
-		else
-			delete ((SphericalCamera*)it->second);
-	}
-	cameras.clear();
-	//Ghetto cleanup of objects.
-	for(unsigned int i=0; i<objects.size(); i++){
-		if(objects[i]!=nullptr){
-			delete objects[i];
-			objects[i]=nullptr;
-		}
-	}
-	for(unsigned int i=0; i<dLights.size(); i++){
-		if(dLights[i]!=nullptr){
-			delete dLights[i];
-			dLights[i]=nullptr;
-		}
-	}
-	for(unsigned int i=0; i<cubes.size(); i++){
-		if(cubes[i]!=nullptr){
-			delete cubes[i];
-			cubes[i]=nullptr;
-		}
-	}
+
 }
 bool GraphicsEngine::getWireframe(){
 	return wireframe;
 }
-void GraphicsEngine::setActiveCamera(std::string c){
-	if(cameras.count(c) > 0)
-		active_camera = c;
-}
+
 
 void GraphicsEngine::setWireframe(bool v){
 	if(wireframe != v)
@@ -74,42 +51,42 @@ void GraphicsEngine::toggleWireframe(){
 	}
 }
 
-void GraphicsEngine::updateShaders(){
-	for(auto const& [key, val] : yuki->am->getShaders()){
-		cameras[active_camera]->applyUpdate(val);
-		for(unsigned int i=0; i<10; i++){
-			if(i < dLights.size()){
-				dLights[i]->loadToShader(val,i);
-				dLights[i]->loadToShader(val,i);
-				dLights[i]->loadToShader(val,i);
-			}
-			if(i < pLights.size()){
-				pLights[i]->loadToShader(val,i);
-				pLights[i]->loadToShader(val,i);
-				pLights[i]->loadToShader(val,i);
-			}
+void GraphicsEngine::updateShaders(Scene *scene){
+	Camera* camera = scene->getCamera();
+	for(auto const& [key, val] : yuki->am->getShaders()) {
+		if(camera!=nullptr){
+			camera->applyUpdate(val);
+		}
+		unsigned int ds = 0;
+	  unsigned int ss = 0;
+		unsigned int ps = 0;
+		std::vector<Light*> lights = scene->getLights();
+		for(unsigned int i=0; i<lights.size(); i++){
+			switch(lights[i]->getType()){
+				case POINT:
+					lights[i]->loadToShader(val,ps);
+					ps++;
+					break;
+				case SPOT:
+					lights[i]->loadToShader(val,ss);
+					ss++;
+					break;
+				case DIRECTIONAL:
+					lights[i]->loadToShader(val,ds);
+					ds++;
+				break;
+			};
 		}
 	}
-	yuki->am->getShader("Rotate")->setFloat("time",clock.getElapsedTime().asSeconds()/2.0);
 }
-void GraphicsEngine::display(){
+
+void GraphicsEngine::display(Scene *scene){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	for(unsigned int i=0; i<3; i++){
-		((OrbitalLight*)pLights[i])->addTheta(1);
+	if(scene!=nullptr){
+		updateShaders(scene);
+		scene->draw();
 	}
-
-	cameras[active_camera]->update(); //Generate camera updates.
-	updateShaders();
-
-	for(TestCube* c : cubes)
-		c->draw();
-	//Temporary draw loop until we get a better world/scene class working.
-	for(Drawable *object : objects){
-		object->draw();
-	}
-
 	sf::RenderWindow::display();
 	printOpenGLErrors();
 }
@@ -138,16 +115,4 @@ void GraphicsEngine::screenshot()
     sf::Image img = texture.copyToImage();
     img.saveToFile(ssfilename);
     sscount++;
-}
-
-Camera* GraphicsEngine::getCamera(){
-	return cameras[active_camera];
-}
-
-void GraphicsEngine::toggleCamera(){
-	if(active_camera.compare("Free")==0)
-		setActiveCamera("Sphere");
-	else{
-		setActiveCamera("Free");
-	}
 }

@@ -1,5 +1,8 @@
 #include "Yuki.hpp"
 #include "UserInput.hpp"
+#include "graphics/GraphicsEngine.hpp"
+#include "graphics/Scene.hpp"
+#include "AssetManager.hpp"
 
 Yuki::Yuki(bool debug){
 	DEBUG = debug;
@@ -13,6 +16,16 @@ Yuki::Yuki(bool debug){
 }
 
 Yuki::~Yuki(){
+	//Cleanup our scenes.
+	while(scenes.size()>0){
+		std::map<std::string, Scene*>::iterator it = scenes.begin();
+		if(it->second!=nullptr){
+			delete it->second;
+			it->second = nullptr;
+		}
+		scenes.erase(it);
+	}
+
 	if(ui!=nullptr)
 		delete ui;
 	if(ge!=nullptr)
@@ -85,6 +98,65 @@ void Yuki::run(){
 	while(ge->isOpen()){
 		if(ui!=nullptr)
 			ui->processInput();
-		ge->display();
+		Scene *s = getActiveScene();
+		if(s!=nullptr)
+			s->processInput();
+		ge->display(s);
 	}
+}
+
+void Yuki::addScene(std::string id, Scene* scene){
+	if(scenes.count(id)>0){
+		std::cerr << "Scene by this ID already exists. Overwriting old scene." << std::endl;
+		removeScene(id);
+	}
+	scenes.insert(std::pair<std::string, Scene*>(id,scene));
+}
+
+void Yuki::setActiveScene(std::string s){
+	if(scenes.size()==0){
+		std::cerr << "Can't set active scene, no registered scenes." << std::endl;
+		return;
+	}
+	if(scenes.count(s)==0){
+		std::cerr << "Can't set active scene. Scene ID not found." << std::endl;
+		return;
+	}
+	active_scene = s;
+}
+
+void Yuki::removeScene(std::string s){
+	if(scenes.size()==0)
+		return;
+	if(scenes.count(s)==0)
+		return;
+	//The actual deletion
+	if(scenes[s]!=nullptr){
+		delete scenes[s];
+		scenes[s] = nullptr;
+	}
+	scenes.erase(s);
+	//If our deleted scene was our primary scene, then we should pick the scene at the bottom of the map. If one doesn't exist then we just set to "".
+	if(active_scene.compare(s)==0){
+		if(scenes.size()>0)
+			active_scene = scenes.begin()->first;
+		else
+			active_scene.clear();
+	}
+}
+
+Scene* Yuki::getActiveScene(){
+	if(scenes.size()==0){
+		std::cerr << "Can't retrieve active scene, no registered scenes." << std::endl;
+		return nullptr;
+	}
+	if(active_scene.size()==0){
+		std::cerr << "Can't retrieve active scene. Active scene ID not set." << std::endl;
+		return nullptr;
+	}
+	if(scenes.count(active_scene)==0){
+		std::cerr << "Can't retrieve active scene. Scene ID not found." << std::endl;
+		return nullptr;
+	}
+	return scenes[active_scene];
 }

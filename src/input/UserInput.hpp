@@ -9,7 +9,6 @@
 #include <vector>
 #include <thread>
 //Forward declaration for later.
-#include "../Yuki.hpp"
 
 class Yuki;
 /**
@@ -29,7 +28,7 @@ class Yuki;
 */
 
 class UI {
-	private:
+	protected:
 		sf::Vector2i last_position; ///< Last position of the mouse on screen.
 		Yuki* yuki; ///< Our link back up to the rest of our resources.
 
@@ -58,4 +57,5 @@ class UI {
 		void setMouseSensitivity(sf::Vector2f sensitivity);
 		sf::Vector2f getMouseSensitivity();
 };
+
 #endif
