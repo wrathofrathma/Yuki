@@ -31,6 +31,8 @@ class OrbitalObject : virtual public SpacialObject{
     float getR();
     float getTheta();
     float getPsi();
+
+    glm::mat4 getFacing();
 };
 
 #endif

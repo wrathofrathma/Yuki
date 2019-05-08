@@ -65,6 +65,7 @@ class GraphicsEngine : public sf::RenderWindow {
 		std::vector<Drawable*> objects; //Temporary object housing until we get worlds and scenes setup.
 		std::vector<Light*> dLights; //temporary housing for directional lights
 		std::vector<Light*> pLights; //temporary object for housing point lights
+		std::vector<TestCube*> cubes; ///< Temporary object to hold test cubes.
 };
 
 #endif

@@ -31,10 +31,7 @@ SphericalCamera::SphericalCamera(unsigned int width, unsigned int height, float 
 */
 
 void SphericalCamera::updateView() {
-    glm::vec3 eye = glm::vec3(r*cos(psi*deg)*cos(theta*deg),r*sin(psi*deg),r*cos(psi*deg)*sin(theta*deg));
-    glm::vec3 center = glm::vec3(0, 0, 0);
-    glm::vec3 up = glm::vec3(0, 1, 0);
-    view = glm::lookAt(eye, center, up);
+    view = getFacing();
 }
 
 /**

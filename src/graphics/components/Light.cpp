@@ -9,8 +9,10 @@ Light::Light(){
   setDiffuse(glm::vec4(0.5));
   setSpecular(glm::vec4(0.5));
   constant = 1.0f;
-  linear = 0.045f;
-  quadratic = 0.0075f;
+  linear = 0;
+  quadratic = 0;
+  // linear = 0.045f;
+  // quadratic = 0.0075f;
 }
 Light::Light(LIGHT_TYPE t){
   setType(t);

@@ -32,9 +32,9 @@ class QuaternionObject : virtual public SpacialObject {
   public:
     QuaternionObject();
     ~QuaternionObject();
-    void rotate(glm::vec3 rotation);
-    void translate(glm::vec3 offset, bool relative=true);
-    void scale(glm::vec3 delta);
+    virtual void rotate(glm::vec3 rotation);
+    virtual void translate(glm::vec3 offset, bool relative=true);
+    virtual void scale(glm::vec3 delta);
     glm::mat4 getRotationMatrix();
     glm::quat getRotationQuat();
     glm::mat4 generateModelMatrix();

@@ -120,21 +120,26 @@ void stateProcessing(Yuki *yu){
 	}
 }
 
-void setScene(Yuki &yu){
+void setSchoolScene(Yuki &yu){
 	yu.ge->getCamera()->setPosition(glm::vec3(4,4,4));
-	for(int i=0; i<4; i++){
-		for(int j=1; j<5; j++){
-			for(int k=1; k<6; k++){
-				Cube* cube = new Cube(yu.am);
-				cube->setShader("CubeMap");
-				cube->setPosition(glm::vec3(2*i,2*j,2*k));
-				cube->setMaterial(Materials::Default);
-				cube->setTexture(yu.am->getTexture("blue_space_box"));
-				yu.ge->objects.push_back(cube);
+	std::vector<Texture*> texts;
+	texts.push_back(yu.am->getTexture("cat1"));
+	texts.push_back(yu.am->getTexture("cat2"));
+	texts.push_back(yu.am->getTexture("cat3"));
+	texts.push_back(yu.am->getTexture("doge"));
+	texts.push_back(yu.am->getTexture("doge"));
+	texts.push_back(yu.am->getTexture("doge"));
+	for(int i=2; i<6; i++){
+		for(int j=1; j<6; j++){
+			for(int k=2; k<6; k++){
+				TestCube* t = new TestCube(yu.am);
+				t->setTexture(texts);
+				t->translate(glm::vec3(2*i,2*j,2*k),false);
+				yu.ge->cubes.push_back(t);
+
 			}
 		}
 	}
-
 	Quad *plane = new Quad(yu.am);
 	plane->setShader(yu.am->getShader("Rotate"));
 	plane->setTexture("doge");
@@ -150,6 +155,30 @@ void setScene(Yuki &yu){
 	wall1->setPosition(glm::vec3(0,10,-20));
 	wall1->setMaterial(Materials::Default);
 	yu.ge->objects.push_back(wall1);
+
+	float a = 0.3;
+	float d = 0.2;
+	float s = 0.3;
+	OrbitalLight* ol = new OrbitalLight();
+	ol->setAmbient(glm::vec4(a));
+	ol->setSpecular(glm::vec4(s));
+	ol->setDiffuse(glm::vec4(d));
+	ol->setPosition(50,45,45);
+	yu.ge->pLights.push_back(ol);
+	OrbitalLight* ol1 = new OrbitalLight();
+	ol1->setAmbient(glm::vec4(a));
+	ol1->setSpecular(glm::vec4(s));
+	ol1->setDiffuse(glm::vec4(d));
+	ol1->setPosition(50,-45,100);
+	yu.ge->pLights.push_back(ol1);
+	OrbitalLight* ol2 = new OrbitalLight();
+	ol2->setAmbient(glm::vec4(a));
+	ol2->setSpecular(glm::vec4(s));
+	ol2->setDiffuse(glm::vec4(d));
+	ol2->setPosition(50,-100,60);
+	yu.ge->pLights.push_back(ol2);
+}
+void setScene(Yuki &yu){
 
 	LightCube *lc = new LightCube(yu.am);
 	lc->setPosition(glm::vec3(6,6,4));

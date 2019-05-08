@@ -43,6 +43,12 @@ GraphicsEngine::~GraphicsEngine(){
 			dLights[i]=nullptr;
 		}
 	}
+	for(unsigned int i=0; i<cubes.size(); i++){
+		if(cubes[i]!=nullptr){
+			delete cubes[i];
+			cubes[i]=nullptr;
+		}
+	}
 }
 bool GraphicsEngine::getWireframe(){
 	return wireframe;
@@ -90,9 +96,15 @@ void GraphicsEngine::display(){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	for(unsigned int i=0; i<3; i++){
+		((OrbitalLight*)pLights[i])->addTheta(1);
+	}
+
 	cameras[active_camera]->update(); //Generate camera updates.
 	updateShaders();
 
+	for(TestCube* c : cubes)
+		c->draw();
 	//Temporary draw loop until we get a better world/scene class working.
 	for(Drawable *object : objects){
 		object->draw();

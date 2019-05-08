@@ -37,6 +37,10 @@
 #include "graphics/drawables/Cube.hpp"
 #include "graphics/drawables/Model.hpp"
 #include "graphics/drawables/LightCube.hpp"
+#include "graphics/drawables/TestCube.hpp"
+
+//Premade Lights
+#include "graphics/lights/OrbitalLight.hpp"
 
 #include "graphics/GraphicsEngine.hpp"
 
