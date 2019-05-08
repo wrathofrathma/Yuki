@@ -4,8 +4,8 @@
 #include "components/Light.hpp"
 #include "components/Drawable.hpp"
 
-Scene::Scene(Yuki* yuki) : UI(yuki){
-
+Scene::Scene(Yuki* yuki) {
+  this->yuki = yuki;
 }
 
 Scene::~Scene(){
@@ -30,7 +30,10 @@ Scene::~Scene(){
     }
   }
 }
+
 void Scene::draw(){
+  for(Drawable* d : drawables)
+    d->draw();
 
 }
 void Scene::addCamera(std::string s, Camera* c){
@@ -61,7 +64,7 @@ void Scene::removeCamera(std::string s){
 	}
 }
 void Scene::setActiveCamera(std::string s){
-  if(cameras.count(s)>0){
+  if(cameras.count(s)==0){
     std::cerr << "Couldn't set active camera. ID not found." << std::endl;
     return;
   }
@@ -113,4 +116,29 @@ void Scene::setGlobalAmbient(float a){
 
 float Scene::getGlobalAmbient(){
   return global_ambient;
+}
+void Scene::addKeyPressedEvent(void (*callback)(sf::Event::KeyEvent event, Yuki *yu)){
+	keyPressedEvents.push_back(callback);
+}
+void Scene::addKeyStateEvent(void (*callback)(Yuki *yu)){
+	keyStateEvents.push_back(callback);
+}
+void Scene::addMouseButtonEvent(void (*callback)(sf::Event::MouseButtonEvent event, Yuki *yu)){
+	mouseButtonEvents.push_back(callback);
+}
+void Scene::addMouseMovedEvent(void (*callback)(sf::Event::MouseMoveEvent event, Yuki *yu)){
+	mouseMovedEvents.push_back(callback);
+}
+
+std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> Scene::getKeyPressedEvents(){
+  return keyPressedEvents;
+}
+std::vector<void (*)(Yuki *yu)> Scene::getKeyStateEvents(){
+  return keyStateEvents;
+}
+std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> Scene::getMouseMovedEvents(){
+  return mouseMovedEvents;
+}
+std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> Scene::getMouseButtonEvents(){
+  return mouseButtonEvents;
 }

@@ -11,6 +11,7 @@
 //Forward declaration for later.
 
 class Yuki;
+class Scene;
 /**
 \file UserInput.hpp
 \brief Header file for UserInput.cpp
@@ -43,11 +44,11 @@ class UI {
 		UI(Yuki *yu);
 		~UI();
 
-		void processInput();
+		void processInput(Scene *scene);
 
 		//Adding things to our input-event loop check.
 		void addKeyPressedEvent(void (*callback)(sf::Event::KeyEvent event, Yuki *yu));
-		void addKeyStateProcessingEvent(void (*callback)(Yuki *yu));
+		void addKeyStateEvent(void (*callback)(Yuki *yu));
 		void addMouseButtonEvent(void (*callback)(sf::Event::MouseButtonEvent event, Yuki *yu));
 		void addMouseMovedEvent(void (*callback)(sf::Event::MouseMoveEvent event, Yuki *yu));
 		void setMouseDown(bool);

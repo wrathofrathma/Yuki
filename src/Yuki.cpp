@@ -96,11 +96,10 @@ void Yuki::init(){
 
 void Yuki::run(){
 	while(ge->isOpen()){
-		if(ui!=nullptr)
-			ui->processInput();
 		Scene *s = getActiveScene();
-		if(s!=nullptr)
-			s->processInput();
+		s->update();
+		if(ui!=nullptr)
+			ui->processInput(s);
 		ge->display(s);
 	}
 }

@@ -4,13 +4,13 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <SFML/Graphics.hpp>
+
 #include <SFML/System.hpp>
 class Yuki;
 class Camera;
 class Light;
 class Drawable;
-
-#include "../input/UserInput.hpp"
 
 /**
 \file Scene.hpp
@@ -30,8 +30,9 @@ Things such as UI input handling methods, drawable objects, lighting objects, up
 For now these are opaque to make things simple.
 */
 
-class Scene : public UI {
+class Scene {
   private:
+    Yuki* yuki; ///< Our link back up to the rest of our resources.
     //Camera stuff
     std::map<std::string, Camera*> cameras;
     std::string active_camera;
@@ -44,6 +45,12 @@ class Scene : public UI {
     std::vector<Light*> lights; ///< Vector containing all of the light objects in our scene.
 
     float global_ambient; ///< A float containing our global ambient for the scene. It'll be used in our lighting updates later.
+
+    std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> keyPressedEvents;
+		std::vector<void (*)(Yuki *yu)> keyStateEvents;
+		std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> mouseButtonEvents;
+		std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> mouseMovedEvents;
+
 
   public:
     Scene(Yuki* yuki);
@@ -70,6 +77,16 @@ class Scene : public UI {
     void removeCamera(std::string s);
 		Camera* getCamera();
 
+    //Adding things to our input-event loop check.
+		void addKeyPressedEvent(void (*callback)(sf::Event::KeyEvent event, Yuki *yu));
+		void addKeyStateEvent(void (*callback)(Yuki *yu));
+		void addMouseButtonEvent(void (*callback)(sf::Event::MouseButtonEvent event, Yuki *yu));
+		void addMouseMovedEvent(void (*callback)(sf::Event::MouseMoveEvent event, Yuki *yu));
+
+    std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> getKeyPressedEvents();
+    std::vector<void (*)(Yuki *yu)> getKeyStateEvents();
+    std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> getMouseMovedEvents();
+    std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> getMouseButtonEvents();
 };
 
 #endif
