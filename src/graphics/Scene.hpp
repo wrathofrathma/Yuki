@@ -42,10 +42,8 @@ class Scene {
     sf::Time last_time; ///< Time variable containing our last measured time for delta calculations.
     sf::Clock clock; ///< Clock for determining delta value between updates.
 
-    std::vector<Drawable*> drawables; ///< Vector containing all of the drawable objects in our scene.
-    std::vector<Light*> lights; ///< Vector containing all of the light objects in our scene.
-
     glm::vec4 global_ambient; ///< A vec4 containing our global ambient for the scene. It'll be used in our lighting updates later.
+    void clearCameras();
 
   public:
     Scene(Yuki* yuki);
@@ -56,7 +54,7 @@ class Scene {
     //Shader logic called every tick.
     virtual void updateShaders()=0;
     //Scene draw function.
-    virtual void draw();
+    virtual void draw()=0;
     //Functions that will determine how our scene handles input.
     virtual void keyPressedEventHandler(sf::Event::KeyEvent event);
     virtual void keyStateEventHandler();
@@ -65,12 +63,6 @@ class Scene {
 
     void setGlobalAmbient(glm::vec4 a);
     glm::vec4 getGlobalAmbient();
-
-    //Actual stuff we draw to our scene. This is subject to change later.
-    void addLight(Light* l);
-    void addDrawables(Drawable* d);
-    std::vector<Light*> getLights();
-    std::vector<Drawable*> getDrawables();
 
     //Camera management.
     void setActiveCamera(std::string s);

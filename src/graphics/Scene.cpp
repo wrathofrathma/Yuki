@@ -33,26 +33,7 @@ Scene::Scene(Yuki* yuki) {
 Virtual destructor that cleans up any objects, cameras, and lighting in the scene.
 */
 Scene::~Scene(){
-  while(cameras.size()>0){
-    std::map<std::string, Camera*>::iterator it = cameras.begin();
-    if(it->second!=nullptr){
-      delete it->second;
-      it->second = nullptr;
-    }
-    cameras.erase(it);
-  }
-  for(unsigned int i=0; i<lights.size(); i++){
-    if(lights[i]!=nullptr){
-      delete lights[i];
-      lights[i]=nullptr;
-    }
-  }
-  for(unsigned int i=0; i<drawables.size(); i++){
-    if(drawables[i]!=nullptr){
-      delete drawables[i];
-      drawables[i]=nullptr;
-    }
-  }
+  clearCameras();
 }
 
 /**
@@ -72,16 +53,6 @@ void Scene::tick(){
     c->update();
   updateShaders();
   update(dt);
-}
-
-/**
-\brief Virtual draw function for drawing the scene.
-
-By default we just draw all drawable objects. This is probably going to change in the future when we have more complex needs.
-*/
-void Scene::draw(){
-  for(Drawable* d : drawables)
-    d->draw();
 }
 
 /**
@@ -121,6 +92,24 @@ void Scene::removeCamera(std::string id){
 			active_camera.clear();
 	}
 }
+
+/**
+\brief Removes all cameras.
+*/
+void Scene::clearCameras(){
+  while(cameras.size()>0){
+    std::map<std::string, Camera*>::iterator it = cameras.begin();
+    if(it->second!=nullptr){
+      delete it->second;
+      it->second = nullptr;
+    }
+    cameras.erase(it);
+  }
+  cameras.clear();
+  active_camera.clear();
+}
+
+
 /**
 \brief Sets the active camera in the scene.
 \param id --- ID of the camera to set as active.
@@ -142,37 +131,7 @@ Camera* Scene::getCamera(){
   }
 	return cameras[active_camera];
 }
-/**
-\brief Adds a light to the scene.
 
-This is probably going to be switched out later when we have more complex needs.
-\param l --- Light pointer to add to the scene.
-*/
-void Scene::addLight(Light* l){
-  lights.push_back(l);
-}
-
-/**
-\brief Adds a drawable object to the scene.
-
-This will definitely be switched out later or removed when we have more complex scene logic.
-\param d --- Drawable pointer to add to our list of things to draw.
-*/
-void Scene::addDrawables(Drawable* d){
-  drawables.push_back(d);
-}
-/**
-\brief Returns the vector of all lights in the scene.
-*/
-std::vector<Light*> Scene::getLights(){
-  return lights;
-}
-/**
-\brief Returns all of the drawable objects in the scene.
-*/
-std::vector<Drawable*> Scene::getDrawables(){
-  return drawables;
-}
 /**
 \brief Sets the global ambient lighting value of the scene.
 */

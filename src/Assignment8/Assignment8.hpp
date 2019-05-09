@@ -90,6 +90,8 @@ class SchoolScene : public Scene {
     bool cube_rotate; ///< Boolean deciding if our cubes will rotate in place.
     float rot_speed = 0.05; ///< Rotation multiplier so our cubes don't go crazy fast.
 		Cube* skybox; ///< Skybox for the scene.
+		std::vector<Drawable*> drawables; ///< Vector containing all of the drawable objects in our scene.
+		std::vector<Light*> lights; ///< Vector containing all of the light objects in our scene.
   public:
 		SchoolScene(Yuki *yuki);
 		~SchoolScene();
@@ -100,4 +102,9 @@ class SchoolScene : public Scene {
     void keyStateEventHandler();
     void mouseButtonEventHandler(sf::Event::MouseButtonEvent event);
     void mouseMoveEventHandler(sf::Event::MouseMoveEvent event);
+		//Actual stuff we draw to our scene. This is subject to change later.
+		void addLight(Light* l);
+		void addDrawables(Drawable* d);
+		std::vector<Light*> getLights();
+		std::vector<Drawable*> getDrawables();
 };

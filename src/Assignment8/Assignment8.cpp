@@ -111,14 +111,7 @@ SchoolScene::SchoolScene(Yuki *yuki) : Scene(yuki) {
 Releases all memory used by this scene for cameras, cubes, lights, the plane, the wall.
 */
 SchoolScene::~SchoolScene(){
-  while(cameras.size()>0){
-    std::map<std::string, Camera*>::iterator it = cameras.begin();
-    if(it->second!=nullptr){
-      delete it->second;
-      it->second = nullptr;
-    }
-    cameras.erase(it);
-  }
+  clearCameras();
   for(unsigned int i=0; i<lights.size(); i++){
     if(lights[i]!=nullptr){
       delete lights[i];
@@ -307,3 +300,35 @@ Global key pressed events(such as camera movement) can be found in the main.cpp 
 \param event --- The specific sf::Event::MouseMoveEvent that triggered.
 */
 void SchoolScene::mouseMoveEventHandler(sf::Event::MouseMoveEvent event){}
+
+/**
+\brief Adds a light to the scene.
+
+This is probably going to be switched out later when we have more complex needs.
+\param l --- Light pointer to add to the scene.
+*/
+void SchoolScene::addLight(Light* l){
+  lights.push_back(l);
+}
+
+/**
+\brief Adds a drawable object to the scene.
+
+This will definitely be switched out later or removed when we have more complex scene logic.
+\param d --- Drawable pointer to add to our list of things to draw.
+*/
+void SchoolScene::addDrawables(Drawable* d){
+  drawables.push_back(d);
+}
+/**
+\brief Returns the vector of all lights in the scene.
+*/
+std::vector<Light*> SchoolScene::getLights(){
+  return lights;
+}
+/**
+\brief Returns all of the drawable objects in the scene.
+*/
+std::vector<Drawable*> SchoolScene::getDrawables(){
+  return drawables;
+}
