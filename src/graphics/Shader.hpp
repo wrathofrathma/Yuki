@@ -52,7 +52,8 @@ class Shader {
     static std::string loadShader(const std::string& filename);
     bool checkShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
     bool loaded; ///< Boolean marking whether the shader has successfully loaded.
-
+    std::string vfile; ///< Vertex shader filename.
+    std::string ffile; ///< Fragment shader filename
   public:
     Shader();
     Shader(const std::string &filename);
@@ -60,23 +61,24 @@ class Shader {
     ~Shader();
     void bind();
     bool isLoaded();
-    void setBool(const std::string &name, bool value) const;
-    void setInt(const std::string &name, int value) const;
-    void setFloat(const std::string &name, float value) const;
-    void setVec3(const std::string &name, glm::vec3 &value) const;
-    void setVec4(const std::string &name, glm::vec4 &value) const;
-    void setMat4(const std::string &name, glm::mat4 &value) const;
+    void setBool(const std::string &name, bool value);
+    void setInt(const std::string &name, int value);
+    void setFloat(const std::string &name, float value);
+    void setVec3(const std::string &name, glm::vec3 &value);
+    void setVec4(const std::string &name, glm::vec4 &value);
+    void setMat4(const std::string &name, glm::mat4 &value);
 
-    static void setBool(GLuint uniformLocation, bool value);
-    static void setInt(GLuint uniformLocation, int value);
-    static void setFloat(GLuint uniformLocation, float value);
-    static void setVec3(GLuint uniformLocation, glm::vec3 &value);
-    static void setVec4(GLuint uniformLocation, glm::vec4 &value);
-    static void setMat4(GLuint uniformLocation, glm::mat4 &value);
+    void setBool(GLuint uniformLocation, bool value);
+    void setInt(GLuint uniformLocation, int value);
+    void setFloat(GLuint uniformLocation, float value);
+    void setVec3(GLuint uniformLocation, glm::vec3 &value);
+    void setVec4(GLuint uniformLocation, glm::vec4 &value);
+    void setMat4(GLuint uniformLocation, glm::mat4 &value);
 
     GLuint loadFromFile(std::string &vert, std::string &frag);
     void loadFromFile(std::string filename);
     GLuint getUniformLocation(const std::string &name);
     GLuint getUniformLocation(UNIFORM_ID type);
+    std::string getFilenames();
 };
 #endif

@@ -85,11 +85,19 @@ GLuint Shader::getUniformLocation(UNIFORM_ID type){
 }
 
 /**
+\brief Returns a concatenated string containing both shader filenames.
+*/
+std::string Shader::getFilenames(){
+  return vfile + " " + ffile;
+}
+/**
 \brief Loads a shader from the vertex and fragment filepaths and returns the program ID.
 \param vert --- File path of the vertex shader.
 \param frag --- File path of the fragment shader.
 */
 GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
+  vfile = vert;
+  ffile = frag;
   m_program = glCreateProgram();
   m_shaders[0] = createShader(loadShader(vert), GL_VERTEX_SHADER);
   m_shaders[1] = createShader(loadShader(frag), GL_FRAGMENT_SHADER);
@@ -205,35 +213,35 @@ bool Shader::isLoaded(){
 \param name --- Name or ID of the uniform in the shader to set.
 \param value --- New value of the uniform.
 */
-void Shader::setBool(const std::string &name, bool value) const
-{
-    glUniform1i(glGetUniformLocation(m_program, name.c_str()), (int)value);
+void Shader::setBool(const std::string &name, bool value) {
+  bind();
+  glUniform1i(glGetUniformLocation(m_program, name.c_str()), (int)value);
 }
 /**
 \brief Sets an integer uniform value in the shader.
 \param name --- Name or ID of the uniform in the shader to set.
 \param value --- New value of the uniform.
 */
-void Shader::setInt(const std::string &name, int value) const
-{
-    glUniform1i(glGetUniformLocation(m_program, name.c_str()), value);
+void Shader::setInt(const std::string &name, int value) {
+  bind();
+  glUniform1i(glGetUniformLocation(m_program, name.c_str()), value);
 }
 /**
 \brief Sets a float uniform value in the shader.
 \param name --- Name or ID of the uniform in the shader to set.
 \param value --- New value of the uniform.
 */
-void Shader::setFloat(const std::string &name, float value) const
-{
-    glUniform1f(glGetUniformLocation(m_program, name.c_str()), value);
+void Shader::setFloat(const std::string &name, float value) {
+  bind();
+  glUniform1f(glGetUniformLocation(m_program, name.c_str()), value);
 }
 /**
 \brief Sets a vec3 uniform value in the shader.
 \param name --- Name or ID of the uniform in the shader to set.
 \param value --- New value of the uniform.
 */
-void Shader::setVec3(const std::string &name, glm::vec3 &value) const
-{
+void Shader::setVec3(const std::string &name, glm::vec3 &value) {
+  bind();
   glUniform3f(glGetUniformLocation(m_program, name.c_str()), value.x, value.y, value.z);
 }
 /**
@@ -241,8 +249,8 @@ void Shader::setVec3(const std::string &name, glm::vec3 &value) const
 \param name --- Name or ID of the uniform in the shader to set.
 \param value --- New value of the uniform.
 */
-void Shader::setVec4(const std::string &name, glm::vec4 &value) const
-{
+void Shader::setVec4(const std::string &name, glm::vec4 &value) {
+  bind();
   glUniform4f(glGetUniformLocation(m_program, name.c_str()), value.x, value.y, value.z, value.w);
 }
 /**
@@ -250,8 +258,8 @@ void Shader::setVec4(const std::string &name, glm::vec4 &value) const
 \param name --- Name or ID of the uniform in the shader to set.
 \param value --- New value of the uniform.
 */
-void Shader::setMat4(const std::string &name, glm::mat4 &value) const
-{
+void Shader::setMat4(const std::string &name, glm::mat4 &value) {
+  bind();
   glUniformMatrix4fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 /**
@@ -260,6 +268,7 @@ void Shader::setMat4(const std::string &name, glm::mat4 &value) const
 \param value --- New value of the uniform.
 */
 void Shader::setBool(GLuint uniformLocation, bool value){
+  bind();
   glUniform1i(uniformLocation, (int)value);
 }
 /**
@@ -268,6 +277,7 @@ void Shader::setBool(GLuint uniformLocation, bool value){
 \param value --- New value of the uniform.
 */
 void Shader::setInt(GLuint uniformLocation, int value){
+  bind();
   glUniform1i(uniformLocation, value);
 }
 /**
@@ -276,6 +286,7 @@ void Shader::setInt(GLuint uniformLocation, int value){
 \param value --- New value of the uniform.
 */
 void Shader::setFloat(GLuint uniformLocation, float value){
+  bind();
   glUniform1f(uniformLocation, value);
 }
 /**
@@ -284,6 +295,7 @@ void Shader::setFloat(GLuint uniformLocation, float value){
 \param value --- New value of the uniform.
 */
 void Shader::setVec3(GLuint uniformLocation, glm::vec3 &value){
+  bind();
   glUniform3f(uniformLocation, value.x, value.y, value.z);
 }
 /**
@@ -292,6 +304,7 @@ void Shader::setVec3(GLuint uniformLocation, glm::vec3 &value){
 \param value --- New value of the uniform.
 */
 void Shader::setVec4(GLuint uniformLocation, glm::vec4 &value){
+  bind();
   glUniform4f(uniformLocation, value.x, value.y, value.z, value.w);
 }
 /**
@@ -300,5 +313,6 @@ void Shader::setVec4(GLuint uniformLocation, glm::vec4 &value){
 \param value --- New value of the uniform.
 */
 void Shader::setMat4(GLuint uniformLocation, glm::mat4 &value){
+  bind();
   glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
 }
