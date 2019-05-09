@@ -66,6 +66,7 @@ SchoolScene::SchoolScene(Yuki *yuki) : Scene(yuki) {
   plane->scale(glm::vec3(200.0f));
   plane->rotate(glm::vec3(0,1.57,0));
   plane->setMaterial(Materials::greenTint);
+  plane->getMaterial().setEmission(glm::vec4(0.3));
   addDrawables(plane);
 
   //I like having a wall of rotating cats.

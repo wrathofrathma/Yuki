@@ -41,6 +41,14 @@ void Drawable::init(){
   glGenBuffers(1, &indicePtr);
 }
 /**
+\brief Returns the material being used by the drawable.
+*/
+Material& Drawable::getMaterial(){
+  return material;
+}
+
+
+/**
 \brief Releases VAO/VBO/EBO data on the graphics card.
 */
 void Drawable::cleanup(){
@@ -259,10 +267,12 @@ void Drawable::loadMaterial(){
   glm::vec4 amb = material.getAmbient();
   glm::vec4 diff = material.getDiffuse();
   glm::vec4 spec = material.getSpecular();
+  glm::vec4 emis = material.getEmission();
   shader->setVec4("material.ambient",amb);
   shader->setVec4("material.diffuse", diff);
   shader->setVec4("material.specular",spec);
   shader->setFloat("material.shininess",material.getShininess());
+  shader->setVec4("material.emission",emis);
 }
 /**
 \brief A pre-draw initialization that many primitives use to a void a long draw function definition.
