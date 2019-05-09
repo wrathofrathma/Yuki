@@ -140,6 +140,35 @@ SchoolScene::~SchoolScene(){
   delete skybox;
 }
 
+void SchoolScene::updateShaders(){
+  Camera* camera = getCamera();
+  for(auto const& [key, val] : yuki->am->getShaders()) {
+    if(camera!=nullptr){
+      camera->applyUpdate(val);
+    }
+    glm::vec4 a = getGlobalAmbient();
+    val->setVec4("global_ambient", a);
+    unsigned int ds = 0;
+    unsigned int ss = 0;
+    unsigned int ps = 0;
+    for(unsigned int i=0; i<lights.size(); i++){
+      switch(lights[i]->getType()){
+        case POINT:
+          lights[i]->loadToShader(val,ps);
+          ps++;
+          break;
+        case SPOT:
+          lights[i]->loadToShader(val,ss);
+          ss++;
+          break;
+        case DIRECTIONAL:
+          lights[i]->loadToShader(val,ds);
+          ds++;
+        break;
+      };
+    }
+  }
+}
 
 /**
 \brief Our update loop function.

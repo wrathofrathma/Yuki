@@ -55,7 +55,6 @@ class GraphicsEngine : public sf::RenderWindow {
 		void toggleWireframe();
 		bool getWireframe();
 		void setWireframe(bool v);
-		void updateShaders(Scene *scene);
 };
 
 #endif

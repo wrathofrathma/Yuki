@@ -53,6 +53,8 @@ class Scene {
     void tick(); //Handles pre-update events such as calcing delta time and updating camera matrices.
     //Scene logic function.
     virtual void update(float delta)=0;
+    //Shader logic called every tick.
+    virtual void updateShaders()=0;
     //Scene draw function.
     virtual void draw();
     //Functions that will determine how our scene handles input.

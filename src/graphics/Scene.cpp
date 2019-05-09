@@ -70,6 +70,7 @@ void Scene::tick(){
   Camera *c = getCamera();
   if(c!=nullptr)
     c->update();
+  updateShaders();
   update(dt);
 }
 

@@ -89,11 +89,11 @@ class SchoolScene : public Scene {
     bool text_rotate; ///< Boolean deciding if the texture will rotate.
     bool cube_rotate; ///< Boolean deciding if our cubes will rotate in place.
     float rot_speed = 0.05; ///< Rotation multiplier so our cubes don't go crazy fast.
-		Cube* skybox; ///< Skybox for the scene. 
+		Cube* skybox; ///< Skybox for the scene.
   public:
 		SchoolScene(Yuki *yuki);
 		~SchoolScene();
-
+		void updateShaders();
     void update(float delta);
     void draw();
     void keyPressedEventHandler(sf::Event::KeyEvent event);

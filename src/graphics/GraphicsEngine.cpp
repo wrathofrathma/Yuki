@@ -77,42 +77,7 @@ void GraphicsEngine::toggleWireframe(){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 }
-/**
-\brief Applies updates of the scene lighting to the shaders.
 
-This is probably going to be removed eventually.
-\param scene --- The scene to apply updates from.
-*/
-void GraphicsEngine::updateShaders(Scene *scene){
-	Camera* camera = scene->getCamera();
-	for(auto const& [key, val] : yuki->am->getShaders()) {
-		if(camera!=nullptr){
-			camera->applyUpdate(val);
-		}
-		glm::vec4 a = scene->getGlobalAmbient();
-		val->setVec4("global_ambient", a);
-		unsigned int ds = 0;
-	  unsigned int ss = 0;
-		unsigned int ps = 0;
-		std::vector<Light*> lights = scene->getLights();
-		for(unsigned int i=0; i<lights.size(); i++){
-			switch(lights[i]->getType()){
-				case POINT:
-					lights[i]->loadToShader(val,ps);
-					ps++;
-					break;
-				case SPOT:
-					lights[i]->loadToShader(val,ss);
-					ss++;
-					break;
-				case DIRECTIONAL:
-					lights[i]->loadToShader(val,ds);
-					ds++;
-				break;
-			};
-		}
-	}
-}
 /**
 \brief Draws the current scene and prints any OpenGL errors.
 \param scene --- Scene to draw.
@@ -121,7 +86,6 @@ void GraphicsEngine::display(Scene *scene){
 	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(scene!=nullptr){
-		updateShaders(scene);
 		scene->draw();
 	}
 	sf::RenderWindow::display();
