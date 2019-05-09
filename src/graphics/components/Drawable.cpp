@@ -289,6 +289,9 @@ void Drawable::initDraw(){
   if(update){
     updateGraphicsCard();
   }
+  //Also let's send a normal matrix.
+  glm::mat3 normal_matrix = glm::mat3(glm::transpose(glm::inverse(model_matrix)));
+  shader->setMat3("normal_matrix", normal_matrix);
 }
 /**
 \brief Sets whether to apply lighting to this object.

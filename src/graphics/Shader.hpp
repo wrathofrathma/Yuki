@@ -67,6 +67,7 @@ class Shader {
     void setVec3(const std::string &name, glm::vec3 &value);
     void setVec4(const std::string &name, glm::vec4 &value);
     void setMat4(const std::string &name, glm::mat4 &value);
+    void setMat3(const std::string &name, glm::mat3 &value);
 
     void setBool(GLuint uniformLocation, bool value);
     void setInt(GLuint uniformLocation, int value);
@@ -74,6 +75,7 @@ class Shader {
     void setVec3(GLuint uniformLocation, glm::vec3 &value);
     void setVec4(GLuint uniformLocation, glm::vec4 &value);
     void setMat4(GLuint uniformLocation, glm::mat4 &value);
+    void setMat3(GLuint uniformLocation, glm::mat3 &value);
 
     GLuint loadFromFile(std::string &vert, std::string &frag);
     void loadFromFile(std::string filename);

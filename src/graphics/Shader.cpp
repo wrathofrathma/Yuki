@@ -263,6 +263,15 @@ void Shader::setMat4(const std::string &name, glm::mat4 &value) {
   glUniformMatrix4fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 /**
+\brief Sets a mat3 uniform value in the shader.
+\param name --- Name or ID of the uniform in the shader to set.
+\param value --- New value of the uniform.
+*/
+void Shader::setMat3(const std::string &name, glm::mat3 &value) {
+  bind();
+  glUniformMatrix3fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+}
+/**
 \brief Sets a boolean uniform value in the shader.
 \param uniformLocation --- ID of the uniform in the shader to set.
 \param value --- New value of the uniform.
@@ -315,4 +324,13 @@ void Shader::setVec4(GLuint uniformLocation, glm::vec4 &value){
 void Shader::setMat4(GLuint uniformLocation, glm::mat4 &value){
   bind();
   glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
+}
+/**
+\brief Sets a mat4 uniform value in the shader.
+\param uniformLocation --- ID of the uniform in the shader to set.
+\param value --- New value of the uniform.
+*/
+void Shader::setMat3(GLuint uniformLocation, glm::mat3 &value){
+  bind();
+  glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
 }
