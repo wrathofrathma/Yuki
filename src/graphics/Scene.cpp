@@ -74,13 +74,6 @@ void Scene::tick(){
 }
 
 /**
-\brief Virtual update function called from tick() every game loop.
-\param delta --- Delta time between update calls.
-*/
-void Scene::update(float delta){
-    //Default update function does nothing.
-}
-/**
 \brief Virtual draw function for drawing the scene.
 
 By default we just draw all drawable objects. This is probably going to change in the future when we have more complex needs.

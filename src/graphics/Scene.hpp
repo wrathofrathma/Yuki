@@ -52,7 +52,7 @@ class Scene {
     virtual ~Scene();
     void tick(); //Handles pre-update events such as calcing delta time and updating camera matrices.
     //Scene logic function.
-    virtual void update(float delta);
+    virtual void update(float delta)=0;
     //Scene draw function.
     virtual void draw();
     //Functions that will determine how our scene handles input.

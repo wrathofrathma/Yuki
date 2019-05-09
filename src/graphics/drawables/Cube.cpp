@@ -196,7 +196,7 @@ void Cube::draw(){
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
   glBindVertexArray(0);
-  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 /**
 \brief Sets either one texture for all faces, or is a cube map.

@@ -60,14 +60,7 @@ TestCube::~TestCube(){
 Inbetween each glDrawElements call, we change the bound indice buffer and bind a new texture.
 */
 void TestCube::draw(){
-  shader->bind();
-  generateModelMatrix();
-  shader->setMat4(uModel, model_matrix);
-  shader->setBool("lighting_on", lighting_on);
-  setUseTexture(useTexture);
-  loadMaterial();
-  if(update)
-    updateGraphicsCard();
+  initDraw();
 
   glBindVertexArray(VAO);
   glBindTexture(GL_TEXTURE_2D, textures[0]->getID());
@@ -93,6 +86,8 @@ void TestCube::draw(){
   glBindTexture(GL_TEXTURE_2D, textures[5]->getID());
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo6);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  glBindVertexArray(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /**
