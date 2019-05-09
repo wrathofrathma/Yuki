@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 #include <SFML/Graphics.hpp>
-
+#include <glm/vec4.hpp> // glm::vec4
 #include <SFML/System.hpp>
 class Yuki;
 class Camera;
@@ -45,7 +45,7 @@ class Scene {
     std::vector<Drawable*> drawables; ///< Vector containing all of the drawable objects in our scene.
     std::vector<Light*> lights; ///< Vector containing all of the light objects in our scene.
 
-    float global_ambient; ///< A float containing our global ambient for the scene. It'll be used in our lighting updates later.
+    glm::vec4 global_ambient; ///< A vec4 containing our global ambient for the scene. It'll be used in our lighting updates later.
 
   public:
     Scene(Yuki* yuki);
@@ -61,8 +61,8 @@ class Scene {
     virtual void mouseButtonEventHandler(sf::Event::MouseButtonEvent event);
     virtual void mouseMoveEventHandler(sf::Event::MouseMoveEvent event);
 
-    void setGlobalAmbient(float a);
-    float getGlobalAmbient();
+    void setGlobalAmbient(glm::vec4 a);
+    glm::vec4 getGlobalAmbient();
 
     //Actual stuff we draw to our scene. This is subject to change later.
     void addLight(Light* l);

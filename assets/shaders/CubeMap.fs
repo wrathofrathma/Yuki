@@ -91,7 +91,7 @@ uniform Material material; ///< Material of the surface.
 uniform PointLight pointLights[NR_POINT_LIGHTS]; ///< C style array of point lights.
 uniform DirectionalLight directionalLights[NR_DIRECTIONAL_LIGHTS]; ///< C style array of directional lights.
 uniform SpotLight spotLights[NR_SPOT_LIGHTS]; ///< C style array of spot lights.
-uniform float global_ambient; ///< Global ambient for the scene.
+uniform vec4 global_ambient; ///< Global ambient for the scene.
 uniform bool lighting_on; ///< Whether we're applying lighting calculation to the scene.
 
 /**

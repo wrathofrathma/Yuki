@@ -18,7 +18,7 @@ This constructor fully sets up the scene. Generating all textures, cubes, coordi
 */
 SchoolScene::SchoolScene(Yuki *yuki) : Scene(yuki) {
   //Well first off we have two cameras.
-  setGlobalAmbient(0.8);
+  setGlobalAmbient(glm::vec4(0.4));
   addCamera("Free", new FreeCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
   addCamera("Sphere", new SphericalCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
   setActiveCamera("Free");

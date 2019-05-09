@@ -24,7 +24,7 @@ Default constructor that just stores our game engine pointer.
 Scene::Scene(Yuki* yuki) {
   this->yuki = yuki;
   this->asset_manager = yuki->am;
-  global_ambient = 0.1;
+  global_ambient = glm::vec4(0.1);
 }
 
 /**
@@ -175,15 +175,16 @@ std::vector<Drawable*> Scene::getDrawables(){
 /**
 \brief Sets the global ambient lighting value of the scene.
 */
-void Scene::setGlobalAmbient(float a){
+void Scene::setGlobalAmbient(glm::vec4 a){
   global_ambient = a;
 }
 /**
 \brief Returns the global ambient lighting value of the scene.
 */
-float Scene::getGlobalAmbient(){
+glm::vec4 Scene::getGlobalAmbient(){
   return global_ambient;
 }
+
 /**
 \brief Virtual function for scene key event logic.
 */
