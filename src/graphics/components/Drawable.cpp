@@ -21,6 +21,7 @@ Drawable::Drawable(AssetManager *asset_manager){
   vNormal = 1;
   vColor = 2;
   vTexture = 3;
+  lighting_on = true;
   init();
 }
 /**
@@ -272,9 +273,23 @@ void Drawable::initDraw(){
   shader->bind();
   generateModelMatrix();
   shader->setMat4(uModel, model_matrix);
+  shader->setBool("lighting_on", lighting_on);
   setUseTexture(useTexture);
   loadMaterial(); //Let's change this later when when we start loading proper meshes. Maybe then we can move texturing to material class.
   if(update){
     updateGraphicsCard();
   }
+}
+/**
+\brief Sets whether to apply lighting to this object.
+\param onoff --- Boolean value to use.
+*/
+void Drawable::setLightingOn(bool onoff){
+  lighting_on = onoff;
+}
+/**
+\brief Returns whether to apply lighting to this object.
+*/
+bool Drawable::getLightingOn(){
+  return lighting_on;
 }

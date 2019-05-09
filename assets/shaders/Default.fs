@@ -64,6 +64,8 @@ uniform Material material; ///< Material of the surface.
 uniform PointLight pointLights[NR_POINT_LIGHTS]; ///< C style array of point lights.
 uniform DirectionalLight directionalLights[NR_DIRECTIONAL_LIGHTS]; ///< C style array of directional lights.
 uniform SpotLight spotLights[NR_SPOT_LIGHTS]; ///< C style array of spot lights.
+uniform float global_ambient; ///< Global ambient for the scene.
+uniform bool lighting_on; ///< Whether we're applying lighting calculation to the scene.
 
 //Takes in a point light structure, vector normal, fragment position, view direction, and color.
 vec4 CalcPointLight(PointLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
@@ -128,27 +130,29 @@ vec4 CalcSpotLight(SpotLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
 
 void main()
 {
-  vec3 norm = normalize(normal);
-  vec3 viewDirection = normalize(camera_pos - frag_pos.xyz);
-  vec4 result = vec4(0.0);
-
-  for(int i=0; i<NR_DIRECTIONAL_LIGHTS; i++){
-    if(directionalLights[i].on)
-      result+=CalcDirectionalLight(directionalLights[i], norm, viewDirection);
-  }
-  for(int i=0; i<NR_POINT_LIGHTS; i++){
-    if(pointLights[i].on)
-      result+=CalcPointLight(pointLights[i],norm,frag_pos,viewDirection);
-  }
-  for(int i=0; i<NR_SPOT_LIGHTS; i++){
-    if(spotLights[i].on)
-      result+=CalcSpotLight(spotLights[i], norm,frag_pos,viewDirection);
-  }
-
   if(useTexture)
-   FragColor =  texture(texture1, tex_coord);
+    FragColor =  texture(texture1, tex_coord);
   else
-     FragColor = vec4(icolor,1);
-  FragColor = FragColor * result;
+    FragColor = vec4(icolor,1);
 
+  if(lighting_on){
+    vec3 norm = normalize(normal);
+    vec3 viewDirection = normalize(camera_pos - frag_pos.xyz);
+    vec4 result = vec4(0.0);
+
+    for(int i=0; i<NR_DIRECTIONAL_LIGHTS; i++){
+      if(directionalLights[i].on)
+        result+=CalcDirectionalLight(directionalLights[i], norm, viewDirection);
+    }
+    for(int i=0; i<NR_POINT_LIGHTS; i++){
+      if(pointLights[i].on)
+        result+=CalcPointLight(pointLights[i],norm,frag_pos,viewDirection);
+    }
+    for(int i=0; i<NR_SPOT_LIGHTS; i++){
+      if(spotLights[i].on)
+        result+=CalcSpotLight(spotLights[i], norm,frag_pos,viewDirection);
+    }
+    result+= material.ambient * global_ambient;
+    FragColor = FragColor * result;
+  }
 }

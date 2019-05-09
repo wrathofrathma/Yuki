@@ -31,6 +31,7 @@ void moveEvent(sf::Event::MouseMoveEvent event, Yuki *yu){
 	}
 	ui->setMousePos(sf::Vector2i(event.x, event.y));
 }
+
 void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 	switch(event.code){
 		case sf::Keyboard::Escape:
@@ -39,11 +40,22 @@ void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 		case sf::Keyboard::M:
 			yu->ge->toggleWireframe();
 			break;
-		case sf::Keyboard::O:
-			yu->getActiveScene()->setActiveCamera("Sphere");
+		case sf::Keyboard::F10:
+			yu->ge->screenshot();
 			break;
-		case sf::Keyboard::P:
-			yu->getActiveScene()->setActiveCamera("Free");
+		case sf::Keyboard::F11:
+			{
+			Scene* s = yu->getActiveScene();
+			if(s!=nullptr)
+				s->setActiveCamera("Sphere");
+			}
+			break;
+		case sf::Keyboard::F12:
+			{
+			Scene* s = yu->getActiveScene();
+			if(s!=nullptr)
+				s->setActiveCamera("Free");
+			}
 			break;
 	  default:
 			break;
@@ -121,10 +133,12 @@ class SchoolScene : public Scene {
   public:
 		SchoolScene(Yuki *yuki) : Scene(yuki) {
 			//Well first off we have two cameras.
+			setGlobalAmbient(0.3);
 			addCamera("Free", new FreeCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
 			addCamera("Sphere", new SphericalCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
 			setActiveCamera("Free");
-			getCamera()->setPosition(glm::vec3(4,4,4));
+			getCamera()->setPosition(glm::vec3(0,10,-10));
+			((FreeCamera *)getCamera())->rotate(glm::vec3(2.7,0,0));
 			//We have roughly 50 face cubes.
 			std::vector<Texture*> texts;
 			texts.push_back(asset_manager->getTexture("cat1"));
@@ -139,16 +153,17 @@ class SchoolScene : public Scene {
 						TestCube* t = new TestCube(asset_manager);
 						t->setTexture(texts);
 						t->translate(glm::vec3(2*i,2*j,2*k),false);
+						t->setMaterial(Materials::Default);
 						cubes.push_back(t);
 					}
 				}
 			}
 			//We also have a flat ground plane.
 			Quad *plane = new Quad(asset_manager);
-			plane->setTexture("doge");
+			plane->setTexture("stone");
 			plane->scale(glm::vec3(20.0f));
 			plane->rotate(glm::vec3(0,1.57,0));
-			plane->setMaterial(Materials::Default);
+			plane->setMaterial(Materials::greenTint);
 			addDrawables(plane);
 
 			//I like having a wall of rotating cats.
@@ -262,6 +277,46 @@ class SchoolScene : public Scene {
 							c->setRotateVector(rot_vector);
 						}
 					}
+					}
+					break;
+				case sf::Keyboard::F1:
+					//Toggle ground lights on
+					drawables[0]->setLightingOn(true);
+					break;
+				case sf::Keyboard::F2:
+					//Toggle ground lights off
+					drawables[0]->setLightingOn(false);
+					break;
+				case sf::Keyboard::F3:
+					//Toggle ground texture on
+					drawables[0]->setUseTexture(true);
+					break;
+				case sf::Keyboard::F4:
+					//toggle ground texture off.
+					drawables[0]->setUseTexture(false);
+					break;
+				case sf::Keyboard::F5:
+					//Turn on cube lights
+					for(TestCube *c : cubes){
+						c->setLightingOn(true);
+					}
+					break;
+				case sf::Keyboard::F6:
+					//turn off cube lights
+					for(TestCube *c : cubes){
+						c->setLightingOn(false);
+					}
+					break;
+				case sf::Keyboard::F7:
+					//Turn on cube texture.
+					for(TestCube* c : cubes){
+						c->setUseTexture(true);
+					}
+					break;
+				case sf::Keyboard::F8:
+					//Turn off cube textures.
+					for(TestCube* c : cubes){
+						c->setUseTexture(false);
 					}
 					break;
 				default:

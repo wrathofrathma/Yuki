@@ -31,7 +31,8 @@ glm::vec3 calcSurfaceNormal(std::vector<glm::vec3> vertices);
 
 \brief The Materials namespace is simply a collection of statically
 defined material attributes.
-
+- Material::Default --- Default
+- Material::greenTint --- Green tint.
 - Material::redPlastic --- Red Plastic
 - Material::greenPlastic --- Green Plastic
 - Material::bluePlastic --- Blue Plastic
@@ -57,11 +58,19 @@ defined material attributes.
 
 namespace Materials
 {
+  static Material greenTint(
+    glm::vec4(0.0, 0.1, 0.0, 1.0),
+    glm::vec4(0.0, 0.1, 0.0, 1.0),
+    glm::vec4(0.1, 0.1, 0.1, 1.0),
+    glm::vec4(0.0, 0.0, 0.0, 1.0),
+    32.0
+  );
+
   static Material Default(
-      glm::vec4(1),
-      glm::vec4(1),
-      glm::vec4(1),
-      glm::vec4(1),
+      glm::vec4(0.4),
+      glm::vec4(0.4),
+      glm::vec4(0.4),
+      glm::vec4(0.4),
       32.0
   );
 

@@ -54,7 +54,7 @@ class Drawable : virtual public QuaternionObject {
     GLuint uModel; ///< Shader uniform position of model matrix.
 
     bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.
-
+    bool lighting_on; ///< Determines if we apply lighting to this drawable.
     bool update; ///< Signals that we need to update the graphics card.
   public:
     Drawable(AssetManager *am);
@@ -86,7 +86,8 @@ class Drawable : virtual public QuaternionObject {
     virtual void addTexture(std::vector<Texture*> texts);
     virtual void addTexture(Texture* text);
     void setMaterial(Material mat);
-
+    void setLightingOn(bool onoff);
+    bool getLightingOn();
     void setShader(const std::string &name);
     void setShader(Shader *s);
     void init();

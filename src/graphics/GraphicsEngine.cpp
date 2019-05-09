@@ -89,6 +89,7 @@ void GraphicsEngine::updateShaders(Scene *scene){
 		if(camera!=nullptr){
 			camera->applyUpdate(val);
 		}
+		val->setFloat("global_ambient", scene->getGlobalAmbient());
 		unsigned int ds = 0;
 	  unsigned int ss = 0;
 		unsigned int ps = 0;

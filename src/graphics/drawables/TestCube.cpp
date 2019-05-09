@@ -63,6 +63,7 @@ void TestCube::draw(){
   shader->bind();
   generateModelMatrix();
   shader->setMat4(uModel, model_matrix);
+  shader->setBool("lighting_on", lighting_on);
   setUseTexture(useTexture);
   loadMaterial();
   if(update)

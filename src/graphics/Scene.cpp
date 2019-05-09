@@ -24,6 +24,7 @@ Default constructor that just stores our game engine pointer.
 Scene::Scene(Yuki* yuki) {
   this->yuki = yuki;
   this->asset_manager = yuki->am;
+  global_ambient = 0.1;
 }
 
 /**
