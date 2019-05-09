@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 #include <thread>
-//Forward declaration for later.
 
 class Yuki;
 class Scene;
@@ -33,13 +32,13 @@ class UI {
 		sf::Vector2i last_position; ///< Last position of the mouse on screen.
 		Yuki* yuki; ///< Our link back up to the rest of our resources.
 
-		std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> keyPressedEvents;
-		std::vector<void (*)(Yuki *yu)> keyStateEvents;
-		std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> mouseButtonEvents;
-		std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> mouseMovedEvents;
-		sf::Vector2i last_mouse_pos;
-		bool mouseDown;
-		sf::Vector2f mouse_sensitivity;
+		std::vector<void (*)(sf::Event::KeyEvent event, Yuki *yu)> keyPressedEvents; ///< Vector of registered global keybinding functions.
+		std::vector<void (*)(Yuki *yu)> keyStateEvents; ///< Vector of registered global keystate functions.
+		std::vector<void (*)(sf::Event::MouseButtonEvent event, Yuki *yu)> mouseButtonEvents; ///< Vector of registered global mouse button functions.
+		std::vector<void (*)(sf::Event::MouseMoveEvent event, Yuki *yu)> mouseMovedEvents; ///< Vector of registered global move event functions.
+		sf::Vector2i last_mouse_pos; ///< The last recorded mouse position.
+		bool mouseDown; ///< Boolean for whether the mouse is currently down or not.
+		sf::Vector2f mouse_sensitivity; ///< Variable for our current mouse sensitivity.
 	public:
 		UI(Yuki *yu);
 		~UI();

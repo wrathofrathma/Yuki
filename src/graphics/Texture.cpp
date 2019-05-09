@@ -1,7 +1,23 @@
 #include "Texture.hpp"
 
 using namespace std;
+/**
+\file Texture.cpp
+\brief Implementation of the Texture class.
 
+\author    Christopher Arausa
+\version   0.1
+\date      05/8/2019
+
+*/
+
+
+/**
+\brief Constructor
+
+Loads a single image texture from file into an OpenGL texture ID.
+\param filename --- File path of the texture to load.
+*/
 Texture::Texture(std::string filename){
   type = Single;
   texture_images.emplace_back(sf::Image());
@@ -24,7 +40,13 @@ Texture::Texture(std::string filename){
     width = texture_images[0].getSize().x;
   }
 }
+/**
+\brief Constructor
 
+Loads a vector of filenames into a cubemap. If there aren't 6 images, then it sets the loaded bool to false and returns.
+If it successfully loads all 6, then they're stored in a CubeMap texture ID.
+\param filenames --- A vector of 6 filepaths.
+*/
 Texture::Texture(std::vector<std::string> filenames){
   type = CubeMap;
   loaded = false;
@@ -51,21 +73,37 @@ Texture::Texture(std::vector<std::string> filenames){
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
+
+/**
+\brief Returns the type of texture.
+*/
 TextureType Texture::getType(){
   return type;
 }
+/**
+\brief Destructor
+
+Releases texture data on the graphics card.
+*/
 Texture::~Texture(){
-
+  if(loaded)
+    glDeleteTextures(1, &texID);
 }
-
+/**
+\brief Returns whether the texture has successfully loaded or not.
+*/
 bool Texture::isLoaded(){
   return loaded;
 }
-
+/**
+\brief Returns the texture's OpenGL texture ID.
+*/
 GLuint Texture::getID(){
   return texID;
 }
-
+/**
+\brief Returns the filename of the texture.
+*/
 std::string Texture::getFilename(){
   return _filename;
 }

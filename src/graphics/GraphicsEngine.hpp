@@ -39,11 +39,11 @@ class Scene;
 
 class GraphicsEngine : public sf::RenderWindow {
 	private:
-		bool resize_flag;
-		int sscount;
-		bool wireframe;
-		Yuki *yuki;
-		sf::Clock clock;
+		bool resize_flag; ///< A flag to resize our window. Currently unused.
+		int sscount; ///< Current screenshot count of the current run iteration.
+		bool wireframe; ///< Boolean value toggle for if we fill our OpenGL objects or only draw the wireframe.
+		Yuki *yuki; ///< Yuki game engine pointer.
+		sf::Clock clock; ///< Graphics engine clock.
 	public:
 		GraphicsEngine(Yuki* yu, std::string title="", GLint MajorVersion = 3, GLint MinorVersion = 3, int width=800, int height = 600);
 		~GraphicsEngine();
@@ -56,7 +56,6 @@ class GraphicsEngine : public sf::RenderWindow {
 		bool getWireframe();
 		void setWireframe(bool v);
 		void updateShaders(Scene *scene);
-
 };
 
 #endif

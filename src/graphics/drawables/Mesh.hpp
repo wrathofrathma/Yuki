@@ -15,7 +15,7 @@
 /**
 \class Mesh
 
-\brief The Mesh class is the base object for any drawable. It contains all of the VAO, VBO, EBO, vertices, indices, textures/material data.
+\brief The Mesh class right now is a skeleton class preparing to start loading objects from file.
 
 */
 
@@ -26,7 +26,7 @@ class Mesh {
     GLint vNormal; ///< Shader position of vertex normal.
 
     GLfloat* vertex_data;  ///< Pointer to the vertex data.
-    
+
     unsigned int vertex_count; ///< Total number of vertices in the object.
     void bindVAO();
     void unbindVAO();

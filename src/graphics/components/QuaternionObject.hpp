@@ -21,17 +21,17 @@
 
 /**
 \class QuaternionObject
-\brief The QuaternionObject class repesents any object in 2D or 3D space. And a utility function for generating a model matrix.
+\brief The QuaternionObject class repesents any object in 2D or 3D space that uses quaternions for rotation and translation calculation.
 */
 
 class QuaternionObject : virtual public SpacialObject {
 
   protected:
-    glm::vec3 current_scale;
-    glm::mat4 model_matrix;
+    glm::vec3 current_scale; ///< The current accumulated scale of the object.
+    glm::mat4 model_matrix; ///< The current model matrix of the object.
   public:
     QuaternionObject();
-    ~QuaternionObject();
+    virtual ~QuaternionObject();
     virtual void rotate(glm::vec3 rotation);
     virtual void translate(glm::vec3 offset, bool relative=true);
     virtual void scale(glm::vec3 delta);

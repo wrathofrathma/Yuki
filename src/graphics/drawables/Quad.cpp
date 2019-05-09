@@ -1,13 +1,41 @@
 #include "Quad.hpp"
+/**
+\file Quad.cpp
+\brief Implementation of the Quad class.
 
+\author    Christopher Arausa
+\version   0.1
+\date      05/8/2019
+
+*/
+
+/**
+\brief Constructor
+
+Sets the dimensions of our quad with default values of a unit square.
+\param am --- AssetManager class pointer.
+\param x --- Top length of the quad.
+\param y --- Right length of the quad.
+\param z --- Bottom length of the quad.
+\param w --- Left length of the quad.
+*/
 Quad::Quad(AssetManager *am, float x, float y, float z, float w) : Polygon(am){
   setDimensions(glm::vec4(x,y,z,w));
 
 }
 
+/**
+\brief Destructor
+
+Default empty destructor.
+*/
 Quad::~Quad(){
 
 }
+
+/**
+\brief Generates our quad's vertices, normals, and sets a default color of (1,1,1).
+*/
 void Quad::generateQuad(){
   //Vertices
   float vv[] = {
@@ -41,6 +69,10 @@ void Quad::generateQuad(){
   //Set to white as a default texture.
   setColor(1,1,1);
 }
+/**
+\brief Sets the dimensions of the quad.
+\param dims --- glm::vec4 containing the length of each side of the quad.
+*/
 void Quad::setDimensions(glm::vec4 dims){
   dimensions = dims;
   generateQuad();

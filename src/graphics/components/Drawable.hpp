@@ -26,7 +26,7 @@
 
 /**
 \class Drawable
-\brief The Drawable class is base class for anything that wants to be drawn in our primary draw loop.
+\brief The Drawable is a component class for anything that wants to be drawn in our primary draw loop.
 */
 
 class Drawable : virtual public QuaternionObject {
@@ -45,12 +45,12 @@ class Drawable : virtual public QuaternionObject {
     Material material; ///< Our object's material.
     Shader *shader; ///< Pointer to whatever shader we end up using.
 
-    std::vector<Texture*> textures;
+    std::vector<Texture*> textures; ///< Vector containing texture pointers to any texture associated with our object.
     GLuint VAO; ///< VAO
     GLuint indicePtr; ///< VBO
     GLuint dataPtr; ///< EBO
 
-    AssetManager *asset_manager;
+    AssetManager *asset_manager; ///< AssetManager pointer for loading things if we must.
     GLuint uModel; ///< Shader uniform position of model matrix.
 
     bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.

@@ -1,97 +1,178 @@
 #include "Drawable.hpp"
+/**
+\file Drawable.cpp
+\brief Implementation of the Drawable class.
 
-Drawable::Drawable(AssetManager *am){
-  asset_manager = am;
+\author Christopher Arausa
+\version 0.1 Alpha
+\date 4/20/2019
+
+*/
+
+/**
+\brief Constructor
+
+Sets default shader position IDs and calls init() to generate buffers.
+\param am --- Asset manager.
+*/
+Drawable::Drawable(AssetManager *asset_manager){
+  this->asset_manager = asset_manager;
   vPosition = 0;
   vNormal = 1;
   vColor = 2;
   vTexture = 3;
   init();
 }
+/**
+\brief Destructor
 
+Virtual method that defaults to calling cleanup() to release VAO/EBO/VBO data on teh graphics card.
+*/
 Drawable::~Drawable(){
   cleanup();
 }
+/**
+\brief Initializes our object by generating vertex arrays and buffers.
+*/
 void Drawable::init(){
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
 }
+/**
+\brief Releases VAO/VBO/EBO data on the graphics card.
+*/
 void Drawable::cleanup(){
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &dataPtr);
   glDeleteBuffers(1, &indicePtr);
 }
+/**
+\brief Tells the class to bind a texture on the draw loop and sets the uniform on our shader for if we're using a texture.
+\param use --- The boolean value to set for if we're using a texture.
+*/
 void Drawable::setUseTexture(bool use){
   shader->bind();
   shader->setBool("useTexture", use);
   useTexture = use;
 }
+/**
+\brief Returns the associated asset manager.
+*/
 AssetManager *Drawable::getAssetManager(){
   return asset_manager;
 }
-
+/**
+\brief Sets our vertice data for the object and marks our update flag.
+\param v --- Vertice data vector to use.
+*/
 void Drawable::setVertices(std::vector<float> v){
   vertices = v;
   update = true;
 }
+/**
+\brief Sets our indice data for the object and marks our update flag.
+\param ind --- Indice data vector to use.
+*/
 void Drawable::setIndices(std::vector<unsigned int> ind){
   indices = ind;
   update = true;
 }
+/**
+\brief Sets our texture uv data for the object and marks our update flag.
+\param uvs --- Texture UV data vector to use.
+*/
 void Drawable::setTextureUVs(std::vector<float> uvs){
   texture_uvs = uvs;
   update = true;
 }
+/**
+\brief Sets our normal data for the object and marks our update flag.
+\param norms --- Normal data vector to use.
+*/
 void Drawable::setNormals(std::vector<float> norms){
   normals = norms;
   update = true;
-
 }
+/**
+\brief Sets our color data for the object and marks our update flag.
+\param c --- Color data vector to use.
+*/
 void Drawable::setColors(std::vector<float> c){
   colors = c;
   update = true;
 }
-
+/**
+\brief Sets our vertice data for the object and marks our update flag.
+\param v --- Vertex array data to use.
+\param count --- Number of elements in the array.
+*/
 void Drawable::setVertices(float* v, unsigned int count){
   vertices.clear();
   vertices = std::vector<float>(v, v+count);
   update = true;
 }
-
+/**
+\brief Sets our indice data for the object and marks our update flag.
+\param ind --- Indice array data to use.
+\param count --- Number of elements in the array.
+*/
 void Drawable::setIndices(unsigned int* ind, unsigned int count){
   indices.clear();
   indices = std::vector<unsigned int>(ind, ind+count);
   update = true;
 }
-
+/**
+\brief Sets our texture uv data for the object and marks our update flag.
+\param uvs --- Texture UV array data to use.
+\param count --- Number of elements in the array.
+*/
 void Drawable::setTextureUVs(float* uvs, unsigned int count){
   texture_uvs.clear();
   texture_uvs = std::vector<float>(uvs, uvs+count);
   update = true;
 }
-
+/**
+\brief Sets our normal data for the object and marks our update flag.
+\param norms --- Normal array data to use.
+\param count --- Number of elements in the array.
+*/
 void Drawable::setNormals(float* norms, unsigned int count){
   normals.clear();
   normals = std::vector<float>(norms, norms+count);
   update = true;
 }
-
+/**
+\brief Sets our color data for the object and marks our update flag.
+\param c --- Color array data to use.
+\param count --- Number of elements in the array.
+*/
 void Drawable::setColors(float* c, unsigned int count){
   colors.clear();
   colors = std::vector<float>(c, c+count);
   update = true;
 }
 
-
+/**
+\brief Adds textures to our texture vector.
+\param texts --- Vector of textures to add.
+*/
 void Drawable::addTexture(std::vector<Texture*> texts){
   for(Texture *t : texts)
     textures.push_back(t);
 }
+/**
+\brief Adds a single texture to our texture vector.
+\param text --- Texture to add.
+*/
 void Drawable::addTexture(Texture* text){
     textures.push_back(text);
 }
+/**
+\brief Loads all vertice, color, texture, indice, and normal data to the graphics card.
 
+This is a virtual function that is overloaded in more complex shapes.
+*/
 void Drawable::updateGraphicsCard(){
   unsigned int vertice_size = vertices.size() * sizeof(float);
   unsigned int color_size = colors.size() * sizeof(float);
@@ -134,10 +215,20 @@ void Drawable::updateGraphicsCard(){
   update = false;
 }
 
+/**
+\brief Sets the material type of our object.
+
+This is kind of primitive and I'm not sure if we'll be able to use this for more complex shapes.
+\param mat --- Material to use.
+*/
 void Drawable::setMaterial(Material mat){
   material = mat;
   update = true;
 }
+/**
+\brief Sets the shader to use by name.
+\param name --- String of the shader id to ask the asset manager for.
+*/
 void Drawable::setShader(const std::string &name){
   cleanup();
   shader = asset_manager->getShader(name);
@@ -146,6 +237,10 @@ void Drawable::setShader(const std::string &name){
   uModel = shader->getUniformLocation("model");
   init();
 }
+/**
+\brief Sets the shader to use directly by setting the shader.
+\param s --- Pointer to the shader to use.
+*/
 void Drawable::setShader(Shader *s){
   cleanup();
   shader = s;
@@ -155,6 +250,9 @@ void Drawable::setShader(Shader *s){
   init();
 }
 
+/**
+\brief Loads the material data to the shader.
+*/
 void Drawable::loadMaterial(){
   shader->bind();
   glm::vec4 amb = material.getAmbient();
@@ -165,7 +263,11 @@ void Drawable::loadMaterial(){
   shader->setVec4("material.specular",spec);
   shader->setFloat("material.shininess",material.getShininess());
 }
+/**
+\brief A pre-draw initialization that many primitives use to a void a long draw function definition.
 
+Binds the shader, Generates and updates the model matrix, tells the shader if we're using a texture, loads the material, and then calls updateGraphicsCard() if needed.
+*/
 void Drawable::initDraw(){
   shader->bind();
   generateModelMatrix();

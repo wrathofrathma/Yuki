@@ -1,15 +1,27 @@
 #ifndef YUKI_MATERIAL_HPP
 #define YUKI_MATERIAL_HPP
 #include <glm/glm.hpp>
+/**
+\file Material.hpp
+\brief Header file for Material.cpp
 
+\author Christopher Arausa
+\version 0.1 Alpha
+\date 5/8/2019
+
+*/
+
+/**
+\class Material
+\brief The material class represents how an object reacts to lighting.
+*/
 class Material {
   private:
-    glm::vec4 ambient;
-    glm::vec4 diffuse;
-    glm::vec4 specular;
-    glm::vec4 emission;
-    float shininess;
-
+    glm::vec4 ambient; ///< Ambient color of the material.
+    glm::vec4 diffuse; ///< Diffuse color of the material.
+    glm::vec4 specular; ///< Specular color of the material.
+    glm::vec4 emission; ///< Emission color of the material - Not yet implemented.
+    float shininess; ///< Shininess of the material. 
   public:
     Material(glm::vec4 a, glm::vec4 d, glm::vec4 s, glm::vec4 e, float shininess);
     Material();

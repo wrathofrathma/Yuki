@@ -21,6 +21,10 @@
 */
 
 
+/**
+\enum UNIFORM_ID
+\brief Contains the location of common shader uniform values in our uniform array.
+*/
 enum UNIFORM_ID{
   MODEL,
   VIEW,
@@ -42,12 +46,12 @@ class Shader {
     static const unsigned int NUM_SHADER = 2;
     GLuint m_program; ///< Shader program ID.
     GLuint m_shaders[NUM_SHADER]; ///< Array containing our vertex & fragment shaders.
-    GLuint m_uniforms[NUM_UNIFORMS]; ///< Array containing our uniform values so we don't have to search it every frame.
+    GLuint m_uniforms[NUM_UNIFORMS]; ///< Array containing our uniform values so we don't have probe the graphics card every frame.
     GLuint createShader(const std::string &text, GLenum type);
     std::string getShaderString(GLenum);
     static std::string loadShader(const std::string& filename);
     bool checkShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
-    bool loaded;
+    bool loaded; ///< Boolean marking whether the shader has successfully loaded.
 
   public:
     Shader();

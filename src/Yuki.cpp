@@ -3,7 +3,22 @@
 #include "graphics/GraphicsEngine.hpp"
 #include "graphics/Scene.hpp"
 #include "AssetManager.hpp"
+/**
+\file Yuki.cpp
+\brief Implementation of the top level game engine class Yuki.
 
+\author Christopher Arausa
+\version 0.1 Alpha
+\date 4/20/2019
+
+*/
+
+/**
+\brief Constructor
+
+Sets the program title, debug values, and initializes things to null.
+\param debug -- boolean used to set whether the program will have verbose output.
+*/
 Yuki::Yuki(bool debug){
 	DEBUG = debug;
 	program_title = "Yuki ";
@@ -15,6 +30,11 @@ Yuki::Yuki(bool debug){
 	init();
 }
 
+/**
+\brief Destructor
+Deletes all scenes and frees the memory allocated to them.
+Also deletes the UI, Graphics Engine, and Asset Manager.
+*/
 Yuki::~Yuki(){
 	//Cleanup our scenes.
 	while(scenes.size()>0){
@@ -34,10 +54,15 @@ Yuki::~Yuki(){
 		delete am;
 }
 
+/**
+\brief Closes the window and terminates the program.
+*/
 void Yuki::close(){
 	ge->close();
 }
-
+/**
+\brief Checks the OpenGL version on the computer to verify we can run on it.
+*/
 void Yuki::checkOpenGL(){
 	//Straight up yoinked most of this from my graphics professor's code. It seems useful.
 	GLint MinMajor = 3;
@@ -81,6 +106,12 @@ void Yuki::checkOpenGL(){
     }
     window.close();
 }
+
+/**
+\brief Allocates resources and initializes other components of the game engine.
+
+Initializes the Graphics Engine, Asset Manager, and UI.
+*/
 void Yuki::init(){
 	//First check to see if our computer supports our OpenGL version
 	checkOpenGL();
@@ -94,6 +125,11 @@ void Yuki::init(){
 
 }
 
+/**
+\brief Main game engine event loop.
+
+Calls the active scene's tick() function to update game logic, and processes input before calling the graphics engine to render everything.
+*/
 void Yuki::run(){
 	while(ge->isOpen()){
 		Scene *s = getActiveScene();
@@ -103,7 +139,11 @@ void Yuki::run(){
 		ge->display(s);
 	}
 }
-
+/**
+\brief Adds a scene to our map of scenes.
+\param id --- The ID of the scene to use as a key in the scene map.
+\param scene --- A pointer to the scene to add.
+*/
 void Yuki::addScene(std::string id, Scene* scene){
 	if(scenes.count(id)>0){
 		std::cerr << "Scene by this ID already exists. Overwriting old scene." << std::endl;
@@ -111,39 +151,50 @@ void Yuki::addScene(std::string id, Scene* scene){
 	}
 	scenes.insert(std::pair<std::string, Scene*>(id,scene));
 }
-
-void Yuki::setActiveScene(std::string s){
+/**
+\brief Sets the active scene by ID.
+\param id --- The ID to look up in our scene map.
+*/
+void Yuki::setActiveScene(std::string id){
 	if(scenes.size()==0){
 		std::cerr << "Can't set active scene, no registered scenes." << std::endl;
 		return;
 	}
-	if(scenes.count(s)==0){
+	if(scenes.count(id)==0){
 		std::cerr << "Can't set active scene. Scene ID not found." << std::endl;
 		return;
 	}
-	active_scene = s;
+	active_scene = id;
 }
 
-void Yuki::removeScene(std::string s){
+/**
+\brief Removes the scene id from our scene map.
+\param id --- ID of the scene to remove.
+*/
+void Yuki::removeScene(std::string id){
 	if(scenes.size()==0)
 		return;
-	if(scenes.count(s)==0)
+	if(scenes.count(id)==0)
 		return;
 	//The actual deletion
-	if(scenes[s]!=nullptr){
-		delete scenes[s];
-		scenes[s] = nullptr;
+	if(scenes[id]!=nullptr){
+		delete scenes[id];
+		scenes[id] = nullptr;
 	}
-	scenes.erase(s);
+	scenes.erase(id);
 	//If our deleted scene was our primary scene, then we should pick the scene at the bottom of the map. If one doesn't exist then we just set to "".
-	if(active_scene.compare(s)==0){
+	if(active_scene.compare(id)==0){
 		if(scenes.size()>0)
 			active_scene = scenes.begin()->first;
 		else
 			active_scene.clear();
 	}
 }
+/**
+\brief Returns the current active scene.
 
+Returns nullptr if the scene isn't found.
+*/
 Scene* Yuki::getActiveScene(){
 	if(scenes.size()==0){
 		std::cerr << "Can't retrieve active scene, no registered scenes." << std::endl;

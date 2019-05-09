@@ -1,4 +1,20 @@
 #include "Cube.hpp"
+/**
+\file Cube.cpp
+\brief Implementation of the Cube class.
+
+\author    Christopher Arausa
+\version   0.1
+\date      05/8/2019
+
+*/
+
+/**
+\brief Constructor
+
+Sets the default shader, orientation, model matrix location, and generates the cube.
+\param am --- AssetManager class pointer.
+*/
 Cube::Cube(AssetManager *am) : Drawable(am){
 
   shader = am->getShader("Default");
@@ -10,10 +26,18 @@ Cube::Cube(AssetManager *am) : Drawable(am){
   update = true;
 }
 
+/**
+\brief Destructor
+
+Default empty destructor.
+*/
 Cube::~Cube(){
 
 }
 
+/**
+\brief Generates a cube's vertices, indices, normals, and colors.
+*/
 void Cube::generateCube(){
 
   float vv[] = {
@@ -130,6 +154,9 @@ void Cube::generateCube(){
   setNormals(vn, 24*6);
 }
 
+/**
+\brief Draws the cube.
+*/
 void Cube::draw(){
   initDraw();
 
@@ -144,7 +171,11 @@ void Cube::draw(){
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);
 }
-//Sets either one texture for all faces, or is a cube map.
+/**
+\brief Sets either one texture for all faces, or is a cube map.
+
+Changes the shader based on the type of texture.
+*/
 void Cube::setTexture(Texture* text){
   //Set our shader first.
   if(text->getType()==CubeMap){
@@ -157,12 +188,5 @@ void Cube::setTexture(Texture* text){
     textures.clear();
     textures.push_back(text);
   }
-
   setUseTexture(true);
-}
-
-//Sets a texture to every face in the order of
-//Right Left Top Bottom Back Front
-void Cube::setTexture(std::vector<Texture*> texts){
-
 }

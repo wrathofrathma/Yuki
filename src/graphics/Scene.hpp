@@ -28,7 +28,6 @@ class AssetManager;
 
 \brief The scene class is a top level container to hold all relevant objects and functions relative to a scene or area.
 Things such as UI input handling methods, drawable objects, lighting objects, update logic threads. Etc.
-For now these are opaque to make things simple.
 */
 
 class Scene {
@@ -36,12 +35,12 @@ class Scene {
     Yuki* yuki; ///< Our link back up to the rest of our resources.
     AssetManager* asset_manager; ///< Having a direct link to our asset manager is handy.
     //Camera stuff
-    std::map<std::string, Camera*> cameras;
-    std::string active_camera;
+    std::map<std::string, Camera*> cameras; ///< Map containing any cameras associated with this scene.
+    std::string active_camera; ///< String containing the active camera in the scene.
 
     //Update stuff
     sf::Time last_time; ///< Time variable containing our last measured time for delta calculations.
-    sf::Clock clock;
+    sf::Clock clock; ///< Clock for determining delta value between updates.
 
     std::vector<Drawable*> drawables; ///< Vector containing all of the drawable objects in our scene.
     std::vector<Light*> lights; ///< Vector containing all of the light objects in our scene.
@@ -53,7 +52,7 @@ class Scene {
     virtual ~Scene();
     void tick(); //Handles pre-update events such as calcing delta time and updating camera matrices.
     //Scene logic function.
-    virtual void update();
+    virtual void update(float delta);
     //Scene draw function.
     virtual void draw();
     //Functions that will determine how our scene handles input.

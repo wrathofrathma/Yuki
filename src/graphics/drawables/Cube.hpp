@@ -4,24 +4,28 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
-enum CubeTextureType {
-  CUBE_MAP,
-  TEXTURED,
-  COLORED
-};
+/**
+\file Cube.hpp
+\brief Header file for Cube.cpp
 
-// This class will double as a cube map when we use it on a giant scale.
+\author Christopher Arausa
+\version 0.1 Alpha
+\date 5/8/2019
+
+*/
+
+/**
+\class Cube
+\brief The cube class inherits the drawable component and has convenience methods for generating cubes.
+*/
 class Cube : public Drawable {
   protected:
     void generateCube();
-
-    bool update;
   public:
     Cube(AssetManager *am);
     ~Cube();
     void draw();
     void setTexture(Texture* text);
-    void setTexture(std::vector<Texture*> texts);
 };
 
 #endif

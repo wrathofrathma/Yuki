@@ -1,9 +1,18 @@
 #include "OrbitalObject.hpp"
 /**
+\file OrbitalObject.cpp
+\brief Implementation of the OrbitalObject class.
+
+\author    Christopher Arausa
+\version   0.1
+\date      05/8/2019
+
+*/
+
+/**
 \brief Constructor
 
 Position is at (1, 0, 0) pointing toward the origin.
-
 */
 
 OrbitalObject::OrbitalObject() {

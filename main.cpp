@@ -116,6 +116,8 @@ void stateProcessing(Yuki *yu){
 // }
 
 class SchoolScene : public Scene {
+	private:
+		std::vector<TestCube*> cubes;
   public:
 		SchoolScene(Yuki *yuki) : Scene(yuki) {
 			//Well first off we have two cameras.
@@ -123,7 +125,6 @@ class SchoolScene : public Scene {
 			addCamera("Sphere", new SphericalCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
 			setActiveCamera("Free");
 			getCamera()->setPosition(glm::vec3(4,4,4));
-
 			//We have roughly 50 face cubes.
 			std::vector<Texture*> texts;
 			texts.push_back(asset_manager->getTexture("cat1"));
@@ -138,7 +139,7 @@ class SchoolScene : public Scene {
 						TestCube* t = new TestCube(asset_manager);
 						t->setTexture(texts);
 						t->translate(glm::vec3(2*i,2*j,2*k),false);
-						addDrawables(t);
+						cubes.push_back(t);
 					}
 				}
 			}
@@ -206,17 +207,25 @@ class SchoolScene : public Scene {
 					drawables[i]=nullptr;
 				}
 			}
+			for(unsigned int i=0; i<cubes.size(); i++){
+				if(cubes[i]!=nullptr){
+					delete cubes[i];
+					cubes[i]=nullptr;
+				}
+			}
 		}
 
 		bool text_rotate;
 		bool cube_rotate;
 		glm::vec3 rot_vector;
-    void update(){
+		float rot_speed = 0.05;
+
+    void update(float delta){
 			if(text_rotate)
 				asset_manager->getShader("Rotate")->setFloat("time",clock.getElapsedTime().asSeconds()/2.0);
 			if(cube_rotate){
-				for(Drawable* d : drawables){
-					d->rotate(rot_vector, false);
+				for(TestCube* c : cubes){
+					c->rotate();
 				}
 			}
 		}
@@ -224,6 +233,9 @@ class SchoolScene : public Scene {
     void draw(){
 			for(Drawable* d : drawables)
 				d->draw();
+
+			for(TestCube* c : cubes)
+				c->draw();
 		}
     //Functions that will determine how our scene handles input.
     void keyPressedEventHandler(sf::Event::KeyEvent event){
@@ -235,14 +247,20 @@ class SchoolScene : public Scene {
 						text_rotate = false;
 					break;
 				case sf::Keyboard::R: {
-					if(cube_rotate==true)
+					if(cube_rotate==true){
+						for(TestCube *c : cubes)
+							c->setRotateVector(glm::vec3(0));
 							cube_rotate=false;
+						}
 					else {
 						cube_rotate = true;
 						srand(time(nullptr));
-						rot_vector.x = (rand() % 100) /100.0;
-						rot_vector.y = (rand() % 100) /100.0;
-						rot_vector.z = (rand() % 100) /100.0;
+						for(TestCube *c : cubes){
+							rot_vector.x = (rand()% 100)/1000.0;
+							rot_vector.y = (rand()% 100)/1000.0;
+							rot_vector.z = (rand()% 100)/1000.0;
+							c->setRotateVector(rot_vector);
+						}
 					}
 					}
 					break;
@@ -257,13 +275,11 @@ class SchoolScene : public Scene {
 
 int main(){
 	Yuki yuki;
-	cout << "Adding inputs" << endl;
 	yuki.ui->addKeyPressedEvent(keyPressedEvent);
 	yuki.ui->addMouseMovedEvent(moveEvent);
 	yuki.ui->addKeyStateEvent(stateProcessing);
-	cout << "Creating" << endl;
 	SchoolScene *ss = new SchoolScene(&yuki);
-	cout << "Created" << endl;
+
 	yuki.addScene("school", ss);
 	yuki.setActiveScene("school");
 	yuki.run();

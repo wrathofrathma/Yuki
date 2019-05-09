@@ -9,7 +9,20 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../GraphicsDefinitions.hpp"
 #include "SpacialObject.hpp"
+/**
+\file OrbitalObject.hpp
+\brief Header file for OrbitalObject.cpp
 
+\author Christopher Arausa
+\version 0.1 Alpha
+\date 5/8/2019
+
+*/
+
+/**
+\class OrbitalObject
+\brief The OrbitalObect class is a component class for any spacial object that moves by rotating around the origin, changing its radius from the origin. It is always oriented towards the origin.
+*/
 class OrbitalObject : virtual public SpacialObject{
   protected:
     float r;      ///< Radius of camera to origin.

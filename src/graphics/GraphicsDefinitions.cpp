@@ -1,4 +1,15 @@
 #include "GraphicsDefinitions.hpp"
+
+/**
+\file GraphicsDefinitions.cpp
+\brief Implementation functions in the GraphicsDefintion.cpp file.
+
+\author    Christopher Arausa
+\version   0.1
+\date      05/8/2019
+
+*/
+
 /**
 \brief Prints all OpenGL errors to stderr.
 
@@ -16,6 +27,13 @@ void printOpenGLErrors()
         fprintf(stderr, "OpenGL Error: %s\n", errString);
     }
 }
+
+/**
+\brief Utility function to calculate surface normals on basic polygons.
+
+Returns a vector containing the normal of the surface.
+\param vertices --- Vector containing all of the vertices on the polygon. 
+*/
 glm::vec3 calcSurfaceNormal(std::vector<glm::vec3> vertices){
   glm::vec3 normal = glm::vec3(0.0f);
 

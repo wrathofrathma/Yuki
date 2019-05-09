@@ -14,22 +14,15 @@
 /**
 \brief Constructor
 
-Position is at (1, 0, 0) pointing toward the origin.
-
 */
-
 SphericalCamera::SphericalCamera(unsigned int width, unsigned int height, float FoV) : Camera(width,height,FoV) {
     type = SPHERICAL;
-
     updateView();
 }
-
-
 
 /**
 \brief Updates the view matrix for the current position and line of sight to the origin.
 */
-
 void SphericalCamera::updateView() {
     view = getFacing();
 }
@@ -37,7 +30,6 @@ void SphericalCamera::updateView() {
 /**
 \brief Function called every draw cycle to update the camera values
 */
-
 void SphericalCamera::update() {
   updateView();
 }

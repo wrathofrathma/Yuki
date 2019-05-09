@@ -26,15 +26,17 @@
 
 \brief The AssetManager class handles loading and distributing all shared resources.
 
+It handles loading shaders and textures, as well as frontloading them on startup using shader and texture index files in our asset directory.
+
 */
 
 class AssetManager {
   private:
-    std::map<std::string, Texture*> textures;
-    std::map<std::string, Shader*> shaders;
-    std::string asset_dir;
-    std::string shaders_dir;
-    std::string textures_dir;
+    std::map<std::string, Texture*> textures; ///< A map of our loaded textures and their key value used throughout the engine.
+    std::map<std::string, Shader*> shaders; ///< A map of our loaded shaders and their key value used throughout the engine.
+    std::string asset_dir; ///< Our asset directory.
+    std::string shaders_dir; ///< Our shaders directory
+    std::string textures_dir; ///< Our textures directory
   public:
     AssetManager();
     ~AssetManager();

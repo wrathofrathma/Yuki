@@ -1,5 +1,19 @@
 #include "Polygon.hpp"
+/**
+\file Polygon.cpp
+\brief Implementation of the Polygon class.
 
+\author    Christopher Arausa
+\version   0.1
+\date      05/8/2019
+
+*/
+
+/**
+\brief Constructor
+
+Calls the superclass drawable constructor and sets the default shader, orientation, and model matrix uniform.
+*/
 Polygon::Polygon(AssetManager *am) : Drawable(am){
 
   shader = am->getShader("Default");
@@ -10,21 +24,47 @@ Polygon::Polygon(AssetManager *am) : Drawable(am){
   shader->bind();
   uModel = shader->getUniformLocation("model");
 }
+/**
+\brief Destructor
 
+Default empty destructor.
+*/
 Polygon::~Polygon(){
 
 }
+/**
+\brief Returns the VAO of the polygon.
 
+This should probably be moved to the drawable class.
+*/
 GLuint const Polygon::getVAO(){
   return VAO;
 }
+/**
+\brief Sets the texture of the polygon by texture name.
+
+Requests the texture from the asset manager and sets it if it doesn't come back null.
+\param tex --- String id of the texture to request from the asset manager.
+*/
 void Polygon::setTexture(std::string tex){
-  setTexture(asset_manager->getTexture(tex));
+  Texture* text = asset_manager->getTexture(tex);
+  if(text!=nullptr)
+    setTexture(text);
 }
 
+/**
+\brief Returns the total vertex count of the polygon.
+
+This might need to be changed in the future since I think we're storing vertices as floats, so it'd be3x the size. Also this should be moved probably.
+*/
 unsigned int Polygon::getVertexCount(){
   return vertices.size();
 }
+
+/**
+\brief Sets the texture of the polygon to the texture pointer passed and generates texture_uvs.
+\param tex --- Texture pointer of the texture to use.
+*/
 void Polygon::setTexture(Texture *tex){
   textures.push_back(tex);
   shader->bind();
@@ -45,6 +85,12 @@ void Polygon::setTexture(Texture *tex){
   update = true;
 }
 
+/**
+\brief Sets the color of the polygon to one uniform color.
+\param r --- Red component.
+\param g --- Green component.
+\param b --- Blue component.
+*/
 void Polygon::setColor(float r, float g, float b){
   colors.clear();
   for(unsigned int i=0; i<vertices.size()/4; i++){
@@ -55,7 +101,10 @@ void Polygon::setColor(float r, float g, float b){
   setUseTexture(false);
   update = true;
 }
-
+/**
+\brief Sets the color of the polygon vertices.
+\param c --- A vector containing colors for each vertex.
+*/
 void Polygon::setColor(std::vector<float> c){
   colors.clear();
   if(c.size() < 3)
@@ -74,6 +123,9 @@ void Polygon::setColor(std::vector<float> c){
   update = true;
 }
 
+/**
+\brief Draws the polygon.
+*/
 void Polygon::draw(){
   initDraw();
   if(useTexture){

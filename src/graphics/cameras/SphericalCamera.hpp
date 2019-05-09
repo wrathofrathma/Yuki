@@ -16,7 +16,7 @@
 \brief Header file for SphericalCamera.cpp
 
 \author    Christopher Arausa
-\version   1.2
+\version   0.1
 \date      05/07/2019
 
 */
@@ -24,9 +24,8 @@
 /**
 \class SphericalCamera
 
-\brief Creates a spherical camera, that is, one that sits on a sphere of radius r and always
-points to the origin.
-
+\brief Creates a camera that inherits the orbital object property. Meaning it sits on a sphere of radius r and always
+points to the origin. 
 */
 
 class SphericalCamera : public Camera, public OrbitalObject {

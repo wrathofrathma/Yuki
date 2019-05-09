@@ -11,7 +11,7 @@
 
 /**
 \file GraphicsDefinitions.hpp
-\brief Basic material properties for normal surfaces, texture struct, vertex struct, and some other miscelleneous definitions.
+\brief Basic material properties for normal surfaces and some other miscelleneous definitions.
 
 \author Christopher Arausa
 \version 0.1

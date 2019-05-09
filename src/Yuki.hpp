@@ -28,7 +28,9 @@ class Scene;
 
 /**
 \class Yuki
-\brief The top level class of the game engine. It contains and directs IO between all other sub-classes and functions.
+\brief The top level class of the game engine. It is the direct IO link between the various components of the game engine.
+
+It also manages adding, removing, and setting the the active scene.
 */
 
 class Yuki {
@@ -37,10 +39,10 @@ class Yuki {
 		void init();
 		void checkOpenGL();
 
-		bool DEBUG;
+		bool DEBUG; ///< Boolean to flag whether we're debugging or not. Typically this enables more verbose printing.
 		std::string program_title; ///< The title of our game.
-		GLint opengl_major;
-		GLint opengl_minor;
+		GLint opengl_major; ///< The OpenGL major version detected.
+		GLint opengl_minor; ///< The OpenGL minor version detected.
 
 		inline static const std::string VERSION = "0.1"; ///< Version number
 

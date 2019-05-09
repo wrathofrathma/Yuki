@@ -12,7 +12,20 @@
 #include <iostream>
 
 using namespace std;
+/**
+\file Polygon.hpp
+\brief Header file for Polygon.cpp
 
+\author Christopher Arausa
+\version 0.1 Alpha
+\date 5/8/2019
+
+*/
+
+/**
+\class Polygon
+\brief The polygon class contains conveience methods for managing and drawing any 2D polygon.
+*/
 class Polygon : public Drawable {
   protected:
 

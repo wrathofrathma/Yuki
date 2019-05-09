@@ -1,6 +1,20 @@
 #include "AssetManager.hpp"
 
+/**
+\file AssetManager.cpp
+\brief Implementation of AssetManager class for loading and distributing shared resources.
+
+\author Christopher Arausa
+\version 0.1
+\date 5/8/2019
+*/
 using namespace std;
+
+/**
+\brief Constructor
+
+Base constructor, it just sets our asset, texture, and shaders directory. Later on we'll probably load this from a config file.
+*/
 AssetManager::AssetManager(){
 
   asset_dir = "assets/";
@@ -8,7 +22,11 @@ AssetManager::AssetManager(){
   shaders_dir = asset_dir + "shaders/";
 }
 
+
 //Loads all textures in the texture index file in ./textures/
+/**
+\brief Loads all of the textures in our texture index file.
+*/
 void AssetManager::loadTextureIndex(){
   map<std::string, std::vector<std::string>> index_map;
   //Loading our index file.
@@ -60,7 +78,9 @@ void AssetManager::loadTextureIndex(){
   cout << "Loaded " << textures.size() << " textures." << endl;
 }
 
-//Loads all textures in the index index file in ./shaders/
+/**
+\brief Loads all of the shaders in our shader index file.
+*/
 void AssetManager::loadShaderIndex(){
   map<std::string, std::string> index_map;
   //Loading our index file.
@@ -96,6 +116,11 @@ void AssetManager::loadShaderIndex(){
   file.close();
   cout << "Loaded " << shaders.size() << " shaders." << endl;
 }
+
+/** Destructor
+
+Deletes all stored textures and shaders and releases the memory used for them.
+*/
 AssetManager::~AssetManager(){
   // Clean up textures
   while(!textures.empty()){
@@ -113,6 +138,12 @@ AssetManager::~AssetManager(){
   }
 }
 
+/**
+\brief Loads textures passed by filename and stores them based on the passed key.
+
+\param filenames --- Vector of filenames to load and associate with this texture.
+\param key --- Key string to use as a key in our map index of textures.
+*/
 bool AssetManager::loadTexture(std::vector<std::string> filenames, std::string key){
   //Check if already loaded.
   if(textures.count(key) > 0)
@@ -136,6 +167,10 @@ bool AssetManager::loadTexture(std::vector<std::string> filenames, std::string k
   }
 }
 
+/**
+\brief Returns the texture associated with the key passed.
+\param key --- Key to lookup in our texture map.
+*/
 Texture* AssetManager::getTexture(std::string key){
   std::map<std::string, Texture*>::iterator it = textures.find(key);
   if(it!=textures.end())
@@ -144,7 +179,10 @@ Texture* AssetManager::getTexture(std::string key){
     return textures[0];
   return nullptr;
 }
-
+/**
+\brief Returns the Shader associated with the key passed.
+\param key --- Key to lookup in our Shader map.
+*/
 Shader* AssetManager::getShader(std::string key){
   if(shaders.count(key)==0){
     Shader *s = new Shader(key);
@@ -157,6 +195,10 @@ Shader* AssetManager::getShader(std::string key){
   }
   return shaders[key];
 }
+
+  /**
+  \brief Returns the current shader map.
+  */
 std::map<std::string, Shader*> AssetManager::getShaders(){
   return shaders;
 }

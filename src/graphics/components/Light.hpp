@@ -3,12 +3,30 @@
 
 #include "SpacialObject.hpp"
 #include "../Shader.hpp"
+/**
+\file Light.hpp
+\brief Header file for Light.cpp
 
+\author Christopher Arausa
+\version 0.1 Alpha
+\date 5/8/2019
+
+*/
+
+/**
+\enum LIGHT_TYPE
+\brief Enum describing whether the light is point, directional, or a spot light.
+*/
 enum LIGHT_TYPE {
   POINT,
   DIRECTIONAL,
   SPOT
 };
+
+/**
+\class Light
+\brief Component class for anything that emits light in the program.
+*/
 
 class Light : virtual public SpacialObject {
   protected:
@@ -16,12 +34,12 @@ class Light : virtual public SpacialObject {
     glm::vec4 ambient; ///< Ambient color of the light.
     glm::vec4 diffuse; ///< Diffuse color of the light.
     glm::vec4 specular; ///< Specular color of the light.
-    float constant;
-    float linear;
-    float quadratic;
-    float cutOff;
-    float outerCutOff;
-    LIGHT_TYPE type;
+    float constant; ///< Attenuation constant value
+    float linear; ///< Attenuation linear value
+    float quadratic; ///< Attenuation quadratic value
+    float cutOff; ///< Spotlight cutoff value
+    float outerCutOff; ///< Spotlight outer cutoff value.
+    LIGHT_TYPE type; ///< The type of light, point, directional, or spot light.
   public:
 
     Light();
