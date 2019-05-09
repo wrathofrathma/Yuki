@@ -21,8 +21,11 @@
 class Cube : public Drawable {
   protected:
     void generateCube();
+    bool skybox; ///< Boolean for whether this cube is a skybox. This means we're going to cut the translation out of the view matrix.
   public:
     Cube(AssetManager *am);
+    void setSkybox(bool sb);
+    bool isSkybox();
     ~Cube();
     void draw();
     void setTexture(Texture* text);

@@ -1,5 +1,5 @@
 #include "AssetManager.hpp"
-
+#include "Yuki.hpp"
 /**
 \file AssetManager.cpp
 \brief Implementation of AssetManager class for loading and distributing shared resources.
@@ -15,13 +15,19 @@ using namespace std;
 
 Base constructor, it just sets our asset, texture, and shaders directory. Later on we'll probably load this from a config file.
 */
-AssetManager::AssetManager(){
-
+AssetManager::AssetManager(Yuki* yuki){
+  this->yuki = yuki;
   asset_dir = "assets/";
   textures_dir = asset_dir + "textures/";
   shaders_dir = asset_dir + "shaders/";
 }
 
+/**
+\brief Returns the yuki game engine pointer.
+*/
+Yuki* AssetManager::getYuki(){
+  return yuki;
+}
 
 //Loads all textures in the texture index file in ./textures/
 /**

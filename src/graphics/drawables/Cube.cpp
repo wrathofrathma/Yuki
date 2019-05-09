@@ -1,4 +1,7 @@
 #include "Cube.hpp"
+#include "../../Yuki.hpp"
+#include "../Scene.hpp"
+#include "../cameras/Camera.hpp"
 /**
 \file Cube.cpp
 \brief Implementation of the Cube class.
@@ -21,7 +24,7 @@ Cube::Cube(AssetManager *am) : Drawable(am){
   orientation = glm::vec3(0,0,0);
   setUseTexture(false);
   uModel = shader->getUniformLocation("model");
-
+  skybox = false;
   generateCube();
   update = true;
 }
@@ -33,6 +36,19 @@ Default empty destructor.
 */
 Cube::~Cube(){
 
+}
+
+/**
+\brief Returns whether the cube is a skybox.
+*/
+bool Cube::isSkybox(){
+  return skybox;
+}
+/**
+\brief Sets whether this cube is a skybox.
+*/
+void Cube::setSkybox(bool sb){
+  skybox = sb;
 }
 
 /**
@@ -159,7 +175,18 @@ void Cube::generateCube(){
 */
 void Cube::draw(){
   initDraw();
-
+  if(isSkybox()){
+    //Clip the view matrix if it's a skybox.
+    shader->bind();
+    Scene* s = asset_manager->getYuki()->getActiveScene();
+    if(s!=nullptr){
+      Camera* c = s->getCamera();
+      if(c!=nullptr){
+        glm::mat4 viewMat = glm::mat4(glm::mat3(c->getView()));
+        shader->setMat4("view", viewMat);
+      }
+    }
+  }
   glBindVertexArray(VAO);
   if(useTexture && textures[0]->getType()==CubeMap){
     glBindTexture(GL_TEXTURE_CUBE_MAP, textures[0]->getID());

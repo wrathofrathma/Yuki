@@ -116,7 +116,7 @@ void Yuki::init(){
 	//First check to see if our computer supports our OpenGL version
 	checkOpenGL();
 	//If everything didn't explode by now, we can load our assets
-	am = new AssetManager();
+	am = new AssetManager(this);
 	//If things load decently, we can then create our window
 	ge = new GraphicsEngine(this, program_title, opengl_major, opengl_minor);
 
@@ -195,6 +195,7 @@ void Yuki::removeScene(std::string id){
 
 Returns nullptr if the scene isn't found.
 */
+using namespace std;
 Scene* Yuki::getActiveScene(){
 	if(scenes.size()==0){
 		std::cerr << "Can't retrieve active scene, no registered scenes." << std::endl;

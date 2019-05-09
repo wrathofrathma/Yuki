@@ -11,6 +11,7 @@
 #include "graphics/Shader.hpp"
 #include "graphics/GraphicsDefinitions.hpp"
 
+class Yuki;
 /**
 \file AssetManager.hpp
 \brief header file for AssetManager.cpp
@@ -37,10 +38,11 @@ class AssetManager {
     std::string asset_dir; ///< Our asset directory.
     std::string shaders_dir; ///< Our shaders directory
     std::string textures_dir; ///< Our textures directory
+    Yuki *yuki; ///< Yuki game engine pointer.
   public:
-    AssetManager();
+    AssetManager(Yuki *yuki);
     ~AssetManager();
-
+    Yuki* getYuki();
     Texture* getTexture(std::string key);
     bool loadTexture(std::vector<std::string> filenames, std::string key);
     void loadTextureIndex();

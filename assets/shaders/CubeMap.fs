@@ -131,7 +131,6 @@ vec4 CalcSpotLight(SpotLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
 void main()
 {
   FragColor = texture(cubeMap, tex_coord);
-  if(lighting_on){
     vec3 norm = normalize(normal);
     vec3 viewDirection = normalize(camera_pos - frag_pos.xyz);
     vec4 result = vec4(0.0);
@@ -150,5 +149,4 @@ void main()
     }
     result += material.ambient * global_ambient;
     FragColor *= result;
-  }
 }

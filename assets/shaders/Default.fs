@@ -152,7 +152,7 @@ void main()
       if(spotLights[i].on)
         result+=CalcSpotLight(spotLights[i], norm,frag_pos,viewDirection);
     }
-    result+= material.ambient * global_ambient;
+    result += material.ambient * global_ambient;
     FragColor = FragColor * result;
   }
 }
