@@ -5,6 +5,5 @@
 # Let's avoid spaces because I'm lazy.
 
 Default Default.vs Default.fs
-Light Default.vs Light.fs
 CubeMap CubeMap.vs CubeMap.fs
 Rotate RotatingTexture.vs Default.fs

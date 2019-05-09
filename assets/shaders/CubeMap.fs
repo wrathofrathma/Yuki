@@ -1,5 +1,32 @@
 #version 330 core
+/**
+\file CubeMap.fs
 
+\brief Fragment shader for cube maps.
+
+\param [in] frag_pos --- vec4 fragmentx position.
+
+\param [in] color --- vec3 vertex color.
+
+\param [in] normal --- vec3 normal vector.
+
+\param [in] tex_coord --- vec3 texture coordinates.
+
+\param [out] FragColor --- vec4 output color to the frame buffer.
+
+\param [uniform] pointLights --- PointLight struct array, each indice containing a single point light attribute set
+
+\param [uniform] directionalLights --- DirectionalLight struct array, each indice containing a single directional  light attribute set
+
+\param [uniform] spotLights --- SpotLight struct array, each indice containing a single spot light attribute set
+
+\param [uniform] material --- Material struct containing a single material attribute set.
+
+\param [uniform] camera_pos --- vec3 position of the viewer/camera.
+
+\param [uniform] global_ambient --- vec4 global ambient color vector.
+
+*/
 //Point lights have a position in the world and radiate light in all directions.
 struct PointLight {
     bool on;             ///< Light on or off.
@@ -24,14 +51,14 @@ struct DirectionalLight {
 
 //Spot lights have both a position in the world, and a direction.
 struct SpotLight{
-  bool on;
+  bool on; ///< Light on or off?
   vec4 direction; ///< Direction the light is shining.
   vec4 position; ///< Position of the light.
   vec4 ambient; ///< Ambient color of the light.
   vec4 diffuse; ///< Diffuse color of the light.
   vec4 specular; ///< Specular color of the light.
   float cutOff; ///< Cutoff angle used to determine if our fragment is inside of our lit area.
-  float outerCutOff;
+  float outerCutOff; ///< outerCutOff angle.
   float constant; ///< Attenuation constant
   float linear; ///< Attenuation linear term
   float quadratic; ///< Attenuation quadratic term
@@ -67,7 +94,14 @@ uniform SpotLight spotLights[NR_SPOT_LIGHTS]; ///< C style array of spot lights.
 uniform float global_ambient; ///< Global ambient for the scene.
 uniform bool lighting_on; ///< Whether we're applying lighting calculation to the scene.
 
-//Takes in a point light structure, vector normal, fragment position, view direction, and color.
+/**
+\brief Calculates a single point light's contribution to lighting the fragment.
+
+\param light --- PointLight struct
+\param norm --- vec3 normal vector
+\param fragPos --- vec4 fragment position
+\param viewDir --- vec3 containing the view direction.
+*/
 vec4 CalcPointLight(PointLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
   vec3 lightDirection = normalize(light.position.xyz - fragPos.xyz);
   //Diffuse
@@ -88,6 +122,13 @@ vec4 CalcPointLight(PointLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
   return (ambient + diffuse + specular);
 }
 
+/**
+\brief Calculates a single directional light's contribution to lighting the fragment.
+
+\param light --- DirectionalLight struct
+\param norm --- vec3 normal vector
+\param viewDir --- vec3 containing the view direction.
+*/
 vec4 CalcDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDir){
   vec3 lightDirection = normalize(-light.direction.xyz);
   //Diffuse
@@ -101,7 +142,14 @@ vec4 CalcDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDir){
   vec4 specular = light.specular * spec * material.specular;
   return (ambient + diffuse + specular);
 }
+/**
+\brief Calculates a single spot light's contribution to lighting the fragment.
 
+\param light --- SpotLight struct
+\param norm --- vec3 normal vector
+\param fragPos --- vec4 fragment position
+\param viewDir --- vec3 containing the view direction.
+*/
 vec4 CalcSpotLight(SpotLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
   vec3 lightDirection = normalize(light.position.xyz - fragPos.xyz);
   //Diffuse
@@ -128,9 +176,12 @@ vec4 CalcSpotLight(SpotLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
   return (ambient + diffuse + specular);
 }
 
+
 void main()
 {
   FragColor = texture(cubeMap, tex_coord);
+  //For some reason this if statement breaks everything.
+  //if(lighting_on){
     vec3 norm = normalize(normal);
     vec3 viewDirection = normalize(camera_pos - frag_pos.xyz);
     vec4 result = vec4(0.0);
@@ -148,5 +199,7 @@ void main()
         result+=CalcSpotLight(spotLights[i], norm,frag_pos,viewDirection);
     }
     result += material.ambient * global_ambient;
+
     FragColor *= result;
+  //}
 }

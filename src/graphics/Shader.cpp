@@ -215,7 +215,7 @@ bool Shader::isLoaded(){
 */
 void Shader::setBool(const std::string &name, bool value) {
   bind();
-  glUniform1i(glGetUniformLocation(m_program, name.c_str()), (int)value);
+  glUniform1i(glGetUniformLocation(m_program, name.c_str()), value);
 }
 /**
 \brief Sets an integer uniform value in the shader.

@@ -26,14 +26,13 @@ SchoolScene::SchoolScene(Yuki *yuki) : Scene(yuki) {
   ((FreeCamera *)getCamera())->rotate(glm::vec3(2.7,0,0));
 
   //Let's generate our skybox.
-
   skybox = new Cube(yuki->am);
-  //skybox->setTexture(yuki->am->getTexture("totality"));
   skybox->setTexture(yuki->am->getTexture("totality"));
-//  skybox->setLightingOn(false);
+  skybox->setLightingOn(false);
   skybox->setMaterial(Materials::bluePlastic);
   skybox->scale(glm::vec3(200));
   skybox->setSkybox(true);
+
   //Let's grab the cube textures.
   std::vector<Texture*> texts;
   texts.push_back(asset_manager->getTexture("cat1"));
@@ -64,7 +63,7 @@ SchoolScene::SchoolScene(Yuki *yuki) : Scene(yuki) {
   //We also have a flat ground plane.
   Quad *plane = new Quad(asset_manager);
   plane->setTexture("stone");
-  plane->scale(glm::vec3(20.0f));
+  plane->scale(glm::vec3(200.0f));
   plane->rotate(glm::vec3(0,1.57,0));
   plane->setMaterial(Materials::greenTint);
   addDrawables(plane);
@@ -74,7 +73,7 @@ SchoolScene::SchoolScene(Yuki *yuki) : Scene(yuki) {
   wall1->setShader("Rotate");
   wall1->setTexture("cat1");
   wall1->scale(glm::vec3(20.f));
-  wall1->setPosition(glm::vec3(0,10,-20));
+  wall1->setPosition(glm::vec3(0,10,-50));
   wall1->setMaterial(Materials::Default);
   addDrawables(wall1);
 
@@ -87,18 +86,19 @@ SchoolScene::SchoolScene(Yuki *yuki) : Scene(yuki) {
   ol->setSpecular(glm::vec4(s));
   ol->setDiffuse(glm::vec4(d));
   ol->setPosition(50,45,45);
-  addLight(ol);
   OrbitalLight* ol1 = new OrbitalLight();
   ol1->setAmbient(glm::vec4(a));
   ol1->setSpecular(glm::vec4(s));
   ol1->setDiffuse(glm::vec4(d));
   ol1->setPosition(50,-45,100);
-  addLight(ol1);
   OrbitalLight* ol2 = new OrbitalLight();
   ol2->setAmbient(glm::vec4(a));
   ol2->setSpecular(glm::vec4(s));
   ol2->setDiffuse(glm::vec4(d));
   ol2->setPosition(50,-100,60);
+
+  addLight(ol);
+  addLight(ol1);
   addLight(ol2);
 
   cube_rotate = false;
@@ -148,8 +148,10 @@ It updates the shader's texture translation and rotates the cubes both according
 \param delta --- Delta time between calls.
 */
 void SchoolScene::update(float delta){
-  if(text_rotate)
+   if(text_rotate){
+    //asset_manager->getShader("Rotate")->bind();
     asset_manager->getShader("Rotate")->setFloat("time",clock.getElapsedTime().asSeconds()/2.0);
+  }
   if(cube_rotate){
     for(TestCube* c : cubes){
       c->rotate();
@@ -161,16 +163,21 @@ void SchoolScene::update(float delta){
 \brief This draws our scene. Nothing fancy, just drawing our cubes & drawables.
 */
 void SchoolScene::draw(){
+  skybox->draw();
 
   for(Drawable* d : drawables)
     d->draw();
 
-  // for(TestCube* c : cubes)
-  //   c->draw();
+  for(TestCube* c : cubes){
+    c->draw();
+  }
+
+  // skybox->draw();
+
   // glDepthMask(GL_FALSE);
   // glDepthFunc(GL_LEQUAL);
   // glDisable(GL_DEPTH_TEST);
-  skybox->draw();
+ // skybox->draw();
   // glEnable(GL_DEPTH_TEST);
   // glDepthMask(GL_TRUE);
   // glDepthFunc(GL_LESS);

@@ -16,7 +16,7 @@ Sets the shader to a light shader and calls the cube superclass constructor.
 \param am --- AssetManager pointer.
 */
 LightCube::LightCube(AssetManager *am) : Cube(am) {
-  setShader("Light");
+  setLightingOn(false);
   update = true;
 }
 /**

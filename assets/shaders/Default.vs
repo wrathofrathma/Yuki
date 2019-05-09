@@ -1,5 +1,31 @@
 #version 330 core
+/**
+\file Default.vs
 
+\brief Default vertex shader. 
+
+\param [in] vpos --- vec4 vertex position.
+
+\param [in] vcolor --- vec3 vertex color.
+
+\param [in] vnormal --- vec3 normal vector.
+
+\param [in] text_uv --- vec2 texture coordinates.
+
+\param [in] model --- mat4 Model matrix.
+
+\param [in] view --- mat4 View matrix.
+
+\param [in] proj --- mat4 Projection matrix.
+
+\param [in] time --- float containing the time used to offset our texture.
+
+\param [out] frag_pos --- vec4 containing the fragment position.
+
+\param [out] normal --- normal vector that's been modified with the model matrix.
+
+\param [out] tex_coord --- vec2 texture coordinates.
+*/
 layout(location = 0) in vec4 vpos;
 layout(location = 1) in vec3 vnormal;
 layout(location = 2) in vec3 vcolor;
