@@ -14,13 +14,12 @@ I like snow and my only other real hobby is studying japanese, so I'm trying to 
 * Quaternion based rotations
 * Unlocked camera.
 * Cubes!
+* Spherical Camera
+* Materials
+* CubeMaps
 
 #### TODO List
-* Spherical Camera
-* Model generation(Cube, spheres, and planes)
-* Materials
-* Lighting
-* Cubemaps
+* Model generation(spheres)
 * Model Loading
 * Terrain objects
 * Terrain Generation & Perlin noise
