@@ -5,7 +5,7 @@
 
 #include <cstdlib>
 #include <ctime>
-TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed){
+TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed, unsigned int chunk_size, unsigned int side_vertices){
   if(seed!=0)
     this->seed = seed;
   else{
@@ -20,8 +20,12 @@ TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed){
   cx = x;
   cz = z;
 
-  mesh.setPosition(glm::vec3(x*32,0,z*32));
+  mesh.setPosition(glm::vec3(x*chunk_size,0,z*chunk_size));
+  //mesh.scale(glm::vec3(1.03,0,1.03));
   is_ready = false;
+  this->side_vertices = side_vertices;
+  this->chunk_size = chunk_size;
+  //this->chunk_size=800;
 }
 
 TerrainChunk::~TerrainChunk(){
@@ -32,13 +36,11 @@ TerrainChunk::~TerrainChunk(){
 void TerrainChunk::draw(){
   if(!is_ready){
     if(!gen_thread.joinable()){
-      cout << "Generating chunk generation thread" << endl;
       gen_thread = std::thread(generateChunk,this);
     }
   }
   else{
     if(gen_thread.joinable()){
-      cout << "Joining chunk generation thread" << endl;
       gen_thread.join();
     }
     mesh.draw();
@@ -54,32 +56,66 @@ Mesh& TerrainChunk::getMesh(){
 \param t --- Terrain chunk pointer.
 */
 void TerrainChunk::generateChunk(TerrainChunk* t){
-  std::mt19937_64 g1(38383);
-  std::uniform_real_distribution<float> dis(0.0,1.0);
+  float rgbc = 1/255.0;
+  glm::vec3 grass = glm::vec3(0.3764,0.73725, 0.545);
+  glm::vec3 snow = glm::vec3(212, 230, 221)*rgbc;
+  glm::vec3 water = glm::vec3(96.0/255,130.0/255, 204.0/255);
+  glm::vec3 dirt = glm::vec3(83, 56, 45) *rgbc;
+  glm::vec3 stone = glm::vec3(164, 164, 163) * rgbc;
+
+  int snow_thresh = 20;
+  int grass_thresh = 2;
+  int dirt_thresh = -6;
+  int water_thresh = -6;
+
+
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
   HeightGenerator hg;
   hg.setSeed(t->getSeed());
-  hg.setRoughness(0.2);
-  hg.setAmplitude(10);
+  hg.setRoughness(0.15);
+  hg.setOctaves(4);
+  float amp = 40;
+  hg.setAmplitude(amp);
 
-  for(int i = 0; i<=32 ; i++){
-    for(int j = 0; j<=32 ; j++){
+  //Copy all of our variables out of our class.
+  int cx = t->cx;
+  int cz = t->cz;
+  unsigned int side_vertices = t->side_vertices;
+  unsigned int chunk_size = t->chunk_size;
+  int sv = side_vertices+4;
+  for(int i = 0; i<sv; i++){
+    for(int j = 0; j<sv; j++){
       Vertex vertex;
-      float height = hg.generateHeight((t->cx*32)+i,(t->cz*32)+j);
-      vertex.position = glm::vec4(i,height,j,1.0);
-      vertex.color = glm::vec3(dis(g1),dis(g1),dis(g1));
-      if(t->cx==0 || t->cz==0)
-        vertex.color*=0.0;
+      //We need a ratio for side vertices and chunk size.
+      float ratio = chunk_size/(side_vertices-1);
+      float vx = float(j)*ratio;
+      float vz = float(i)*ratio;
+      float height = hg.generateHeight(j+(cx*chunk_size),i+(cz*chunk_size));
+
+      vertex.position = glm::vec4(vx,height,vz,1);
+
+      if(height>snow_thresh)
+        vertex.color = snow;
+      else if(height > grass_thresh)
+        vertex.color = grass;
+      else if(height > dirt_thresh)
+        vertex.color = dirt;
+      else if(height < water_thresh){
+        vertex.color = water;
+      }
+      else{
+        vertex.color = glm::vec3(0);
+      }
       vertex.normal = glm::vec3(0,1,0);
       vertices.push_back(vertex);
     }
   }
-  for(unsigned int i=0; i<32; i++){
-    for(unsigned int j=0; j<32; j++){
-      int tl = i*33 + j;
+  for(unsigned int i=0; i<sv-1; i++){
+    for(unsigned int j=0; j<sv-1; j++){
+      int tl = i*(sv) + j;
       int tr = tl+1;
-      int bl = (i+1)*33 + j;
+      int bl = (i+1)*(sv) + j;
       int br = bl+1;
       indices.push_back(tl);
       indices.push_back(bl);

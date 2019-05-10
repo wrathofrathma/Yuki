@@ -24,7 +24,7 @@ Camera::Camera(unsigned int width, unsigned int height, float FoV = 50.0f){
 
 
   clip_near = 0.1f;
-  clip_far = 200.0f;
+  clip_far = 300.0f;
 
   updateProjection();
 }

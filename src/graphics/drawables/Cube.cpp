@@ -186,6 +186,7 @@ void Cube::draw(){
         shader->setMat4("view", viewMat);
       }
     }
+    glDepthMask(GL_FALSE);
   }
   glBindVertexArray(VAO);
   if(useTexture && textures[0]->getType()==CubeMap){
@@ -197,6 +198,8 @@ void Cube::draw(){
 
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+  glDepthMask(GL_TRUE);
+
 }
 /**
 \brief Sets either one texture for all faces, or is a cube map.

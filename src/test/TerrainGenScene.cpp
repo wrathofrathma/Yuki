@@ -17,13 +17,13 @@ TGenScene::TGenScene(Yuki *yuki) : Scene(yuki){
   addCamera("Free", new FreeCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
   addCamera("Sphere", new SphericalCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
   setActiveCamera("Free");
-  getCamera()->setPosition(glm::vec3(0,10,-10));
+  getCamera()->setPosition(glm::vec3(4000,10,4000));
   ((FreeCamera*)getCamera())->rotate(glm::vec3(3.2,0,0));
   skybox = new Cube(yuki->am);
   skybox->setTexture(yuki->am->getTexture("totality"));
   skybox->setLightingOn(false);
   skybox->setMaterial(Materials::Default);
-  skybox->scale(glm::vec3(200));
+  skybox->scale(glm::vec3(250));
   skybox->setSkybox(true);
 
   float a = 0.3;
@@ -47,7 +47,9 @@ TGenScene::TGenScene(Yuki *yuki) : Scene(yuki){
   lights.push_back(ol);
   lights.push_back(ol1);
   lights.push_back(ol2);
-  seed = 38383;
+
+  seed = std::chrono::system_clock::now().time_since_epoch().count();
+  chunk_size = 32;
 }
 
 TGenScene::~TGenScene(){
@@ -64,17 +66,17 @@ TGenScene::~TGenScene(){
 }
 
 void TGenScene::draw(){
+  skybox->draw();
+
   for(auto const& [key, val] : chunks) {
     val->draw();
   }
-  skybox->draw();
 
 }
 
 
 void TGenScene::update(float delta){
-  int chunk_size = 32;
-  int viewDis = 200/chunk_size;
+  int viewDis = 128/chunk_size;
   //Camera position
   glm::vec3 cpos = getCamera()->getPosition();
   //Converted to chunk coordinates.
@@ -92,7 +94,7 @@ void TGenScene::update(float delta){
       std::pair<int,int> p = std::make_pair(i,j);
       //If the chunk doesn't exist let's make it
       if(chunks.count(p)==0){
-        chunks.insert(std::make_pair(p,new TerrainChunk(asset_manager, i, j, seed)));
+        chunks.insert(std::make_pair(p,new TerrainChunk(asset_manager, i, j,seed, chunk_size,chunk_size)));
       }
     }
   }

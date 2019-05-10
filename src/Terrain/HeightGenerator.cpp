@@ -19,7 +19,7 @@ HeightGenerator::~HeightGenerator(){
 */
 float HeightGenerator::generateHeight(int x, int z){
   float total = 0;
-  float d = pow(2,octaves-1);
+  float d = pow(2,octaves);
   float freq=0;
   float amp=0;
   for(int i =0; i<octaves; i++){

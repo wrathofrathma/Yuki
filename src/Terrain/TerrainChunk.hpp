@@ -14,15 +14,17 @@ We inherit the drawable class because there are too many good utility functions 
 */
 class TerrainChunk {
   private:
-    int cx;
-    int cz;
+    int cx; //The chunk's location in the world.
+    int cz; //The chunk's location in the world.
+    unsigned int chunk_size; ///< Units on each size of the chunk
+    unsigned int side_vertices; ///< This will control the number of vertices on the sides. This is ratioed with chunk_size for varying levels of detail.
     unsigned int seed;
     AssetManager* asset_manager;
     Mesh mesh;
     bool is_ready; ///< Is the chunk ready to be loaded?
     std::thread gen_thread;
   public:
-    TerrainChunk(AssetManager* am, int x, int z, unsigned int seed=0);
+    TerrainChunk(AssetManager* am, int x, int z, unsigned int seed=0,  unsigned int chunk_size = 32, unsigned int side_vertices=32);
     ~TerrainChunk();
     static void generateChunk(TerrainChunk* t);
     void draw();

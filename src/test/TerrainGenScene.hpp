@@ -4,6 +4,7 @@
 #include <vector>
 #include <thread>
 #include <map>
+#include <chrono>
 #include "../graphics/Scene.hpp"
 #include "../graphics/drawables/Mesh.hpp"
 using namespace std;
@@ -17,11 +18,12 @@ class TGenScene : public Scene {
     Cube* skybox;
     std::map<std::pair<int,int>, TerrainChunk*> chunks;
     std::vector<Light*> lights;
+
   public:
     TGenScene(Yuki *yuki);
     ~TGenScene();
     unsigned int seed;
-
+    unsigned int chunk_size;
     void draw();
     void update(float delta);
     void updateShaders();
