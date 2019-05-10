@@ -13,17 +13,14 @@ TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed){
     seed = rand() % 100000 + 1;
   }
   this->asset_manager = am;
-  setShader(asset_manager->getShader("Default"));
+  mesh.setShader(asset_manager->getShader("Default"));
 
-  material = Materials::Default;
+  mesh.setMaterial(Materials::Default);
   //Chunk x & z coordinates.
   cx = x;
   cz = z;
-  hg.setSeed(seed);
-  hg.setRoughness(0.2);
-  hg.setAmplitude(10);
-  generateChunk();
-  setPosition(glm::vec3(x*32,0,z*32));
+
+  mesh.setPosition(glm::vec3(x*32,0,z*32));
 }
 
 TerrainChunk::~TerrainChunk(){
@@ -31,19 +28,45 @@ TerrainChunk::~TerrainChunk(){
 }
 
 
+void TerrainChunk::draw(){
+  if(!is_ready){
+    if(!gen_thread.joinable()){
+      cout << "Generating chunk generation thread" << endl;
+      gen_thread = std::thread(generateChunk,this);
+    }
+  }
+  else{
+    if(gen_thread.joinable()){
+      cout << "Joining chunk generation thread" << endl;
+      gen_thread.join();
+    }
+    mesh.draw();
+  }
+}
 
+Mesh& TerrainChunk::getMesh(){
+  return mesh;
+}
 
-void TerrainChunk::generateChunk(){
+/**
+\brief static threaded chunk generator. It has no interaction with OpenGL so it should be threadsafe
+\param t --- Terrain chunk pointer.
+*/
+void TerrainChunk::generateChunk(TerrainChunk* t){
   int vcount = 32*32;
   std::mt19937_64 g1(38383);
   std::uniform_real_distribution<float> dis(0.0,1.0);
+  std::vector<Vertex> vertices;
+  std::vector<unsigned int> indices;
+  HeightGenerator hg;
+  hg.setSeed(t->getSeed());
+  hg.setRoughness(0.2);
+  hg.setAmplitude(10);
 
-  // for(int i = cx*32; i<(cx*32)+32 ; i++){
-  //   for(int j = cz*32; j<(cz*32)+32 ; j++){
   for(int i = 0; i<32 ; i++){
     for(int j = 0; j<32 ; j++){
       Vertex vertex;
-      float height = hg.generateHeight((cx*32)+i,(cz*32)+j);
+      float height = hg.generateHeight((t->cx*32)+i,(t->cz*32)+j);
       vertex.position = glm::vec4(i,height,j,1.0);
       vertex.color = glm::vec3(dis(g1),dis(g1),dis(g1));
       vertex.normal = glm::vec3(0,1,0);
@@ -64,6 +87,7 @@ void TerrainChunk::generateChunk(){
       indices.push_back(br);
     }
   }
-
-  update = true;
+  t->mesh.setVertices(vertices);
+  t->mesh.setIndices(indices);
+  t->setReady(true);
 }

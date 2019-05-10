@@ -29,7 +29,8 @@ class TGenScene : public Scene {
     void keyStateEventHandler();
     void mouseButtonEventHandler(sf::Event::MouseButtonEvent event);
     void mouseMoveEventHandler(sf::Event::MouseMoveEvent event);
-    Mesh tm;
+
+    static void tChunkGen(TGenScene* tgs, int x, int z, int seed);
 };
 
 #endif

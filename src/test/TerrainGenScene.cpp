@@ -71,6 +71,7 @@ void TGenScene::draw(){
 
 }
 
+
 void TGenScene::update(float delta){
   int chunk_size = 32;
   int viewDis = 64/chunk_size;
@@ -89,9 +90,9 @@ void TGenScene::update(float delta){
     for(int j=lower_z; j<upper_z; j++){
       //Our pair key
       std::pair<int,int> p = std::make_pair(i,j);
-      //If the chunk doesn't exist, generate it.
+      //If the chunk doesn't exist let's make it
       if(chunks.count(p)==0){
-        chunks.insert(std::make_pair(p,new TerrainChunk(asset_manager, i,j,seed)));
+        chunks.insert(std::make_pair(p,new TerrainChunk(asset_manager, i, j, seed)));
       }
     }
   }
