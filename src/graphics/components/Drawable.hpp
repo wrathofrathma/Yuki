@@ -93,7 +93,7 @@ class Drawable : virtual public QuaternionObject {
     void setShader(Shader *s);
     void init();
     void cleanup();
-    void initDraw();
+    virtual void initDraw();
     void loadMaterial();
 };
 
