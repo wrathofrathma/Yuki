@@ -3,9 +3,8 @@
 #include "src/graphics/Scene.hpp"
 #include "src/Graphics.hpp"
 #include "src/UserInput.hpp"
+#include "src/test/TerrainGenScene.hpp"
 #include <random>
-
-#include "src/Assignment8/Assignment8.hpp"
 
 using namespace std;
 
@@ -153,11 +152,9 @@ int main(){
 	yuki.ui->addKeyPressedEvent(keyPressedEvent);
 	yuki.ui->addMouseMovedEvent(moveEvent);
 	yuki.ui->addKeyStateEvent(stateProcessing);
-	
-	SchoolScene *ss = new SchoolScene(&yuki);
-
-	yuki.addScene("school", ss);
-	yuki.setActiveScene("school");
+	TGenScene *tg = new TGenScene(&yuki);
+	yuki.addScene("tgen", tg);
+	yuki.setActiveScene("tgen");
 	yuki.run();
 	return 0;
 }

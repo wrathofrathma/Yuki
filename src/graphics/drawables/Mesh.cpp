@@ -168,3 +168,7 @@ void Mesh::setLightingOn(bool onoff){
 bool Mesh::getLightingOn(){
   return lighting_on;
 }
+
+void Mesh::setMaterial(Material mat){
+  material = mat;
+}

@@ -40,7 +40,7 @@ struct Vertex {
 */
 
 class Mesh : public QuaternionObject {
-  private:
+  protected:
     //GLSL stuff
     GLint vPosition; ///< Shader position of vertex data.
     GLint vNormal; ///< Shader position of vertex normal.
@@ -76,6 +76,7 @@ class Mesh : public QuaternionObject {
     void setVertices(std::vector<Vertex> vertices);
     void setShader(Shader* shader);
     void setLightingOn(bool l);
+    void setMaterial(Material mat);
     unsigned int getVertexCount();
     bool getLightingOn();
     void loadMaterial();
