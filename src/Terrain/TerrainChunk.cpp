@@ -21,6 +21,7 @@ TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed){
   cz = z;
 
   mesh.setPosition(glm::vec3(x*32,0,z*32));
+  is_ready = false;
 }
 
 TerrainChunk::~TerrainChunk(){
