@@ -47,6 +47,7 @@ void OrbitalObject::setPosition(float R, float Theta, float Psi) {
 void OrbitalObject::addR(float num) {
     r += num;
     if (r < 0.000001f) r = 0.000001f;
+    setPosition(r,theta,psi);
 }
 
 /**
@@ -60,6 +61,7 @@ void OrbitalObject::addTheta(float num) {
     theta += num;
     if (theta > 360) theta -= 360;
     if (theta < 0) theta += 360;
+    setPosition(r,theta,psi);
 }
 
 /**
@@ -73,6 +75,7 @@ void OrbitalObject::addPsi(float num) {
     psi += num;
     if (psi > 90) psi = 90;
     if (psi < -90) psi = -90;
+    setPosition(r,theta,psi);
 }
 
 /**
@@ -85,6 +88,7 @@ void OrbitalObject::addPsi(float num) {
 void OrbitalObject::setR(float num) {
     r = num;
     if (r < 0.000001f) r = 0.000001f;
+    setPosition(r,theta,psi);
 }
 
 /**
@@ -98,6 +102,7 @@ void OrbitalObject::setTheta(float num) {
     theta = num;
     while (theta > 360) theta -= 360;
     while (theta < 0) theta += 360;
+    setPosition(r,theta,psi);
 }
 
 /**
@@ -111,6 +116,7 @@ void OrbitalObject::setPsi(float num) {
     psi = num;
     if (psi > 90) psi = 90;
     if (psi < -90) psi = -90;
+    setPosition(r,theta,psi);
 }
 
 /**
