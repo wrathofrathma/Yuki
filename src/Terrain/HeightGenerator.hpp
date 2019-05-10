@@ -11,7 +11,7 @@ class HeightGenerator {
     float amplitude;
     int octaves;
     float roughness;
-    mt19937 random_generator;
+    mt19937_64 random_generator;
     unsigned int seed;
   public:
     HeightGenerator();
@@ -21,7 +21,7 @@ class HeightGenerator {
     float getSmoothNoise(int x, int z);
     float getInterpolatedNoise(float x, float z);
     float interpolate(float a, float b, float blend);
-    
+
     //Setters and getters for the generator.
     unsigned int getSeed();
     float getAmplitude();

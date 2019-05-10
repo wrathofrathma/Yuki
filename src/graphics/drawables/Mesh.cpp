@@ -14,19 +14,29 @@
 */
 
 Mesh::Mesh(){
+  vPosition = 0;
+  vNormal = 1;
+  vColor = 2;
+  vTexture = 3;
   shader = nullptr;
   lighting_on = true;
   useTexture = false;
+
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures){
   this->vertices = vertices;
   this->indices = indices;
   this->textures = textures;
+  vPosition = 0;
+  vNormal = 1;
+  vColor = 2;
+  vTexture = 3;
   update = true;
   shader = nullptr;
   lighting_on = true;
   useTexture = false;
+
 }
 
 Mesh::~Mesh(){
@@ -46,11 +56,13 @@ void Mesh::loadMaterial(){
   shader->setVec4("material.specular",spec);
   shader->setFloat("material.shininess",material.getShininess());
   shader->setVec4("material.emission",emis);
+
 }
 /**
 \brief Calculates model matrix, sets shader uniforms and then draws the mesh.
 */
 void Mesh::draw(){
+
   //If we didn't set the shader then we don't need to really do anything.
   if(shader==nullptr)
     return;
@@ -82,14 +94,14 @@ void Mesh::draw(){
 void Mesh::updateMesh(){
   //This function should only get called if the update flag is set and the shader has been set.
   //Which means we'll have VAO/VBO/EBO space already.
-
   glBindVertexArray(VAO);
-  //Load indices
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicePtr);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
   //Load in data.
   glBindBuffer(GL_ARRAY_BUFFER, dataPtr);
   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+  //Load indices
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicePtr);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+
 
   //Tell the shader how to find the data.
   //index - size - type - normalized - stride - pointer to the data.
@@ -102,8 +114,6 @@ void Mesh::updateMesh(){
   glEnableVertexAttribArray(vColor);
   glEnableVertexAttribArray(vNormal);
   glEnableVertexAttribArray(vTexture);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
   update = false;
 }
 
@@ -148,7 +158,7 @@ void Mesh::setShader(Shader* shader){
     glGenBuffers(1, &dataPtr);
     glGenBuffers(1, &indicePtr);
   }
-//  update = true;
+  update = true;
 }
 
 unsigned int Mesh::getVertexCount(){

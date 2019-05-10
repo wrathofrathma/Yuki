@@ -5,7 +5,6 @@
 #include "src/UserInput.hpp"
 #include "src/test/TerrainGenScene.hpp"
 #include <random>
-
 using namespace std;
 
 
@@ -63,7 +62,7 @@ void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 }
 
 void stateProcessing(Yuki *yu){
-	float m = 0.04; //Move sensitivity.
+	float m = 0.5; //Move sensitivity.
 	float r = 0.02; //Rotation sensitivity.
 
 	Scene* scene = yu->getActiveScene();

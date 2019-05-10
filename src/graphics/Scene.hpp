@@ -63,7 +63,7 @@ class Scene {
 
     void setGlobalAmbient(glm::vec4 a);
     glm::vec4 getGlobalAmbient();
-
+    AssetManager* getAssetManager(){return asset_manager;}
     //Camera management.
     void setActiveCamera(std::string s);
     void addCamera(std::string s, Camera* c);
