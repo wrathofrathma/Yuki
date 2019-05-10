@@ -74,7 +74,7 @@ void TGenScene::draw(){
 
 void TGenScene::update(float delta){
   int chunk_size = 32;
-  int viewDis = 64/chunk_size;
+  int viewDis = 200/chunk_size;
   //Camera position
   glm::vec3 cpos = getCamera()->getPosition();
   //Converted to chunk coordinates.

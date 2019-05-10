@@ -53,7 +53,6 @@ Mesh& TerrainChunk::getMesh(){
 \param t --- Terrain chunk pointer.
 */
 void TerrainChunk::generateChunk(TerrainChunk* t){
-  int vcount = 32*32;
   std::mt19937_64 g1(38383);
   std::uniform_real_distribution<float> dis(0.0,1.0);
   std::vector<Vertex> vertices;
@@ -63,21 +62,23 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
   hg.setRoughness(0.2);
   hg.setAmplitude(10);
 
-  for(int i = 0; i<32 ; i++){
-    for(int j = 0; j<32 ; j++){
+  for(int i = 0; i<=32 ; i++){
+    for(int j = 0; j<=32 ; j++){
       Vertex vertex;
       float height = hg.generateHeight((t->cx*32)+i,(t->cz*32)+j);
       vertex.position = glm::vec4(i,height,j,1.0);
       vertex.color = glm::vec3(dis(g1),dis(g1),dis(g1));
+      if(t->cx==0 || t->cz==0)
+        vertex.color*=0.0;
       vertex.normal = glm::vec3(0,1,0);
       vertices.push_back(vertex);
     }
   }
-  for(unsigned int i=0; i<31; i++){
-    for(unsigned int j=0; j<31; j++){
-      int tl = i*32 + j;
+  for(unsigned int i=0; i<32; i++){
+    for(unsigned int j=0; j<32; j++){
+      int tl = i*33 + j;
       int tr = tl+1;
-      int bl = (i+1)*32 + j;
+      int bl = (i+1)*33 + j;
       int br = bl+1;
       indices.push_back(tl);
       indices.push_back(bl);
