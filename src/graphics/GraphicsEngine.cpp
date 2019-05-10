@@ -96,7 +96,9 @@ void GraphicsEngine::display(Scene *scene){
 */
 void GraphicsEngine::resize(){
 	glViewport(0,0,getSize().x,getSize().y);
-
+	Scene *active_scene = yuki->getActiveScene();
+	if(active_scene!=nullptr)
+		active_scene->resize(getSize().x, getSize().y);
 }
 void GraphicsEngine::setSize(unsigned int w, unsigned int h){
 	sf::RenderWindow::setSize(sf::Vector2u(w,h));

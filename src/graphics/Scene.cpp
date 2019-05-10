@@ -131,7 +131,15 @@ Camera* Scene::getCamera(){
   }
 	return cameras[active_camera];
 }
-
+/**
+\brief Applies resize updates to the projection matrix by updating the cameras.
+*/
+void Scene::resize(unsigned int w, unsigned int h){
+  for(auto const& [key, val] : cameras) {
+    if(val!=nullptr)
+      val->resize(w,h);
+  }
+}
 /**
 \brief Sets the global ambient lighting value of the scene.
 */
