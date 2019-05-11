@@ -7,3 +7,6 @@
 Default Default.vs Default.fs
 CubeMap CubeMap.vs CubeMap.fs
 Rotate RotatingTexture.vs Default.fs
+Terrain Default.vs Terrain.fs
+# Grass Default.vs Default.fs Default.gs
+# Default Default.vs Default.fs

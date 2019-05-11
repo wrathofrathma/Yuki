@@ -80,7 +80,6 @@ float HeightGenerator::getNoise(int x, int z){
   random_generator.seed(seed + z * 11503 + x * 87337);
   uniform_real_distribution<float> dis(-1, 1);
   float n = dis(random_generator);
-  random_generator.seed(seed);
   return n;
 }
 

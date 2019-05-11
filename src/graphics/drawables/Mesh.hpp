@@ -24,13 +24,13 @@ class Material;
 
 */
 
-
 struct Vertex {
   glm::vec4 position;
   glm::vec3 normal;
   glm::vec3 color;
   glm::vec2 texture;
 };
+
 
 /**
 \class Mesh
@@ -46,15 +46,22 @@ class Mesh : public QuaternionObject {
     GLint vNormal; ///< Shader position of vertex normal.
     GLint vColor; ///< Shader position of vertex color.
     GLint vTexture; ///< Shader position of texture
+
     GLuint VAO; ///< VAO
     GLuint indicePtr; ///< VBO
     GLuint dataPtr; ///< EBO
+
     GLuint uModel; ///< Shader uniform position of model matrix.
     bool lighting_on; ///< Determines if we apply lighting to this drawable.
     bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.
+    GLint gl_textures[10]; ///< Locations of our shader texture uniforms.
 
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
+    std::vector<float> vertices; ///< Vector containing all of the vertices in our object.
+    std::vector<unsigned int> indices; ///< Vector containing vertex indices.
+    std::vector<float> normals; ///< Vector containing vertex normals.
+    std::vector<float> colors; ///< Vector containing the (r,g,b) color values for each vertice.
+    std::vector<float> texture_uvs; ///< Vector containing our texture coordinates.
+
     std::vector<Texture*> textures; ///< Textures associated with this mesh.
 
     //Our game engine object and flags..
@@ -66,21 +73,46 @@ class Mesh : public QuaternionObject {
 
   public:
     Mesh();
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures);
+    Mesh(Mesh &m1);
     ~Mesh();
-    void draw();
+    virtual void draw();
 
-    void setUseTexture(bool use);
+    void loadMaterial();
+    void loadTextures();
+
+    void cleanup();
+
     void setTexture(std::vector<Texture*> textures);
-    void setIndices(std::vector<unsigned int> indices);
-    void setVertices(std::vector<Vertex> vertices);
+    void setMaterial(Material mat);
     void setShader(Shader* shader);
     void setLightingOn(bool l);
-    void setMaterial(Material mat);
+
+    //Set methods. Either vectors or floats + count to generate vectors.
+    void setVertices(std::vector<Vertex> vertices);
+    void setVertices(std::vector<float> v);
+    void setIndices(std::vector<unsigned int> ind);
+    void setTextureUVs(std::vector<float> uvs);
+    void setNormals(std::vector<float> norms);
+    void setColors(std::vector<float> c);
+
+    void setVertices(float* v, unsigned int count);
+    void setIndices(unsigned int* ind, unsigned int count);
+    void setTextureUVs(float* uvs, unsigned int count);
+    void setNormals(float* norms, unsigned int count);
+    void setColors(float* c, unsigned int count);
+    void setUseTexture(bool use);
+    //Get functions for our copy Constructor
     unsigned int getVertexCount();
+    Shader* getShader();
     bool getLightingOn();
-    void loadMaterial();
-    void cleanup();
+    std::vector<Texture*> getTextures();
+    std::vector<float> getUVS();
+    std::vector<float> getNormals();
+    std::vector<float> getVertices();
+    std::vector<float> getColors();
+    std::vector<unsigned int> getIndices();
+
+
 };
 
 #endif

@@ -26,8 +26,8 @@ Light::Light(){
   constant = 1.0f;
   linear = 0;
   quadratic = 0;
-  // linear = 0.045f;
-  // quadratic = 0.0075f;
+  linear = 0.045f;
+  quadratic = 0.0075f;
 }
 /**
 \brief Constructor

@@ -10,7 +10,7 @@
 #include "graphics/Texture.hpp"
 #include "graphics/Shader.hpp"
 #include "graphics/GraphicsDefinitions.hpp"
-
+#include "graphics/ObjModel.hpp"
 class Yuki;
 /**
 \file AssetManager.hpp
@@ -39,6 +39,7 @@ class AssetManager {
     std::string shaders_dir; ///< Our shaders directory
     std::string textures_dir; ///< Our textures directory
     Yuki *yuki; ///< Yuki game engine pointer.
+
   public:
     AssetManager(Yuki *yuki);
     ~AssetManager();
@@ -49,6 +50,7 @@ class AssetManager {
     void loadShaderIndex();
     Shader* getShader(std::string key);
     std::map<std::string, Shader*> getShaders();
+
 };
 
 #endif

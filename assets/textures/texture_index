@@ -5,10 +5,9 @@
 # c texture_id image1_path image2_path image3_path image4_path image5_path image6_path
 # Let's avoid spaces because I'm lazy.
 
-s doge doge.jpg
-c blue_space_box bkg1_right.png bkg1_left.png bkg1_top.png bkg1_bot.png bkg1_back.png bkg1_front.png
 c totality totality_rt.tga totality_lf.tga totality_up.tga totality_dn.tga totality_bk.tga totality_ft.tga
-s cat1 cat1.jpg
-s cat2 cat2.jpg
-s cat3 cat3.jpg
-s stone stonewall1.jpg
+s grass1 grass_digital.png
+s dirt1 dirt_0.png
+s water1 water.png
+s spruce Spruce_Branches.png
+s grass4 grass4.png

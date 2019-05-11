@@ -8,9 +8,9 @@
 #include "../graphics/Scene.hpp"
 #include "../graphics/drawables/Mesh.hpp"
 using namespace std;
-
+class Light;
 class Yuki;
-class Cube;
+class Mesh;
 class TerrainChunk;
 class Light;
 class TGenScene : public Scene {
@@ -18,7 +18,9 @@ class TGenScene : public Scene {
     Cube* skybox;
     std::map<std::pair<int,int>, TerrainChunk*> chunks;
     std::vector<Light*> lights;
-
+    bool draw_mesh;
+    bool draw_skybox;
+    Light *Sun;
   public:
     TGenScene(Yuki *yuki);
     ~TGenScene();

@@ -83,7 +83,7 @@ void GraphicsEngine::toggleWireframe(){
 \param scene --- Scene to draw.
 */
 void GraphicsEngine::display(Scene *scene){
-	glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(scene!=nullptr){
 		scene->draw();

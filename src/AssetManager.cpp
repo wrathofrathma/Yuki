@@ -20,6 +20,7 @@ AssetManager::AssetManager(Yuki* yuki){
   asset_dir = "assets/";
   textures_dir = asset_dir + "textures/";
   shaders_dir = asset_dir + "shaders/";
+
 }
 
 /**
@@ -97,7 +98,7 @@ void AssetManager::loadShaderIndex(){
     return;
   }
   //Load into our index map before loading each shader.
-  string key, vs_path, fs_path, line;
+  string key, vs_path, fs_path, line, gs_path;
   while(getline(file, line)){
     if(line.size()==0 || line[0]=='#')
       continue;
@@ -105,11 +106,17 @@ void AssetManager::loadShaderIndex(){
     ss >> key;
     ss >> vs_path;
     ss >> fs_path;
+    if(!ss.eof())
+      ss >> gs_path;
+    else
+      gs_path=="";
     if(shaders.count(key)==0){
-      cout << "Loading shader " << key << " [ " << vs_path << " | " << fs_path << " ]"<< endl;
+      cout << "Loading shader " << key << " [ " << vs_path << " | " << fs_path << " | " << gs_path << " ]"<< endl;
       vs_path = shaders_dir + vs_path;
       fs_path = shaders_dir + fs_path;
-      Shader *shader = new Shader(vs_path, fs_path);
+      if(gs_path.size()>0)
+        gs_path = shaders_dir + gs_path;
+      Shader *shader = new Shader(vs_path, fs_path, gs_path);
       if(!shader->isLoaded()){
         cout << "Couldn't load shader: " << key << endl;
         delete shader;
@@ -191,13 +198,7 @@ Texture* AssetManager::getTexture(std::string key){
 */
 Shader* AssetManager::getShader(std::string key){
   if(shaders.count(key)==0){
-    Shader *s = new Shader(key);
-    if(!s->isLoaded()){
-      delete s;
-      return nullptr;
-    }
-    shaders.insert(pair<std::string, Shader*>(key, s));
-    return s;
+    return nullptr;
   }
   return shaders[key];
 }

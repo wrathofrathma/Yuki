@@ -174,10 +174,12 @@ void Cube::generateCube(){
 \brief Draws the cube.
 */
 void Cube::draw(){
+
   initDraw();
+  shader->bind();
   if(isSkybox()){
+    glDisable(GL_DEPTH_TEST);
     //Clip the view matrix if it's a skybox.
-    shader->bind();
     Scene* s = asset_manager->getYuki()->getActiveScene();
     if(s!=nullptr){
       Camera* c = s->getCamera();
@@ -186,6 +188,7 @@ void Cube::draw(){
         shader->setMat4("view", viewMat);
       }
     }
+    glDepthFunc(GL_GEQUAL);
     glDepthMask(GL_FALSE);
   }
   glBindVertexArray(VAO);
@@ -198,8 +201,11 @@ void Cube::draw(){
 
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+  if(isSkybox()){
+  glDepthFunc(GL_LESS);
+  glEnable(GL_DEPTH_TEST);
   glDepthMask(GL_TRUE);
-
+  }
 }
 /**
 \brief Sets either one texture for all faces, or is a cube map.

@@ -18,15 +18,8 @@ Default constructor. Only sets loaded to false.
 Shader::Shader(){
   loaded=false;
 }
-/**
-\brief Constructor
 
-Attempts to load the file by filename by appending .vs and .fs to the file path.
-\param filename --- File path of the shader to append to and load.
-*/
-Shader::Shader(const std::string &filename){
-  loadFromFile(filename);
-}
+
 /**
 \brief Constructor
 
@@ -34,8 +27,8 @@ Attempts to load the file paths for both the passed vertex and fragment shader.
 \param vert --- Vertex shader location
 \param frag --- Fragment shader location
 */
-Shader::Shader(std::string &vert, std::string &frag){
-  loadFromFile(vert, frag);
+Shader::Shader(const std::string &vert, const std::string &frag, const std::string &geom){
+  loadFromFile(vert, frag, geom);
 }
 /**
 \brief Destructor
@@ -43,46 +36,21 @@ Shader::Shader(std::string &vert, std::string &frag){
 Releases shader memory on the graphics card.
 */
 Shader::~Shader(){
-  for(unsigned int i = 0; i < NUM_SHADER; i++)
-    {
-        glDetachShader(m_program, m_shaders[i]);
-        glDeleteShader(m_shaders[i]);
-    }
+  glDetachShader(m_program, m_shaders[0]);
+  glDeleteShader(m_shaders[0]);
+
+  glDetachShader(m_program, m_shaders[1]);
+  glDeleteShader(m_shaders[1]);
+
+  if(gfile.size()>0){
+    glDetachShader(m_program, m_shaders[2]);
+    glDeleteShader(m_shaders[2]);
+  }
 
 	glDeleteProgram(m_program);
 }
 
-/**
-\brief Appends .vs and .fs to the passed file path and attempts to load them.
-\param filename --- File path of the shaders to load.
-*/
-void Shader::loadFromFile(std::string filename){
-  std::string vert = filename + ".vs";
-  std::string frag = filename + ".fs";
-  loadFromFile(vert, frag);
-}
 
-/**
-\brief Returns the uniform location of a given id in the shader.
-\param name --- ID of the uniform to find the location of.
-*/
-GLuint Shader::getUniformLocation(const std::string &name){
-  return glGetUniformLocation(m_program, name.c_str());
-}
-/**
-\brief Returns the uniform location of common uniforms we preload from the shader.
-*/
-GLuint Shader::getUniformLocation(UNIFORM_ID type){
-  switch(type){
-    case MODEL:
-      return m_uniforms[MODEL];
-    case VIEW:
-      return m_uniforms[VIEW];
-    case PROJECTION:
-      return m_uniforms[PROJECTION];
-  }
-  return 0;
-}
 
 /**
 \brief Returns a concatenated string containing both shader filenames.
@@ -90,21 +58,28 @@ GLuint Shader::getUniformLocation(UNIFORM_ID type){
 std::string Shader::getFilenames(){
   return vfile + " " + ffile;
 }
+
 /**
 \brief Loads a shader from the vertex and fragment filepaths and returns the program ID.
 \param vert --- File path of the vertex shader.
 \param frag --- File path of the fragment shader.
 */
-GLuint Shader::loadFromFile(std::string &vert, std::string &frag){
+GLuint Shader::loadFromFile(const std::string &vert, const std::string &frag, const std::string &geom){
   vfile = vert;
   ffile = frag;
+  gfile = geom;
+
   m_program = glCreateProgram();
   m_shaders[0] = createShader(loadShader(vert), GL_VERTEX_SHADER);
   m_shaders[1] = createShader(loadShader(frag), GL_FRAGMENT_SHADER);
-
-  for(unsigned int i = 0; i < NUM_SHADER; i++){
-    glAttachShader(m_program, m_shaders[i]);
+  if(geom.size()>0){
+    m_shaders[2] = createShader(loadShader(geom), GL_GEOMETRY_SHADER);
   }
+
+  glAttachShader(m_program, m_shaders[0]);
+  glAttachShader(m_program, m_shaders[1]);
+  if(geom.size()>0)
+    glAttachShader(m_program, m_shaders[2]);
 
   glLinkProgram(m_program);
   loaded = checkShaderError(m_program, GL_LINK_STATUS, true, "Invalid shader program.");
@@ -333,4 +308,25 @@ void Shader::setMat4(GLuint uniformLocation, glm::mat4 &value){
 void Shader::setMat3(GLuint uniformLocation, glm::mat3 &value){
   bind();
   glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
+}
+/**
+\brief Returns the uniform location of a given id in the shader.
+\param name --- ID of the uniform to find the location of.
+*/
+GLuint Shader::getUniformLocation(const std::string &name){
+  return glGetUniformLocation(m_program, name.c_str());
+}
+/**
+\brief Returns the uniform location of common uniforms we preload from the shader.
+*/
+GLuint Shader::getUniformLocation(UNIFORM_ID type){
+  switch(type){
+    case MODEL:
+      return m_uniforms[MODEL];
+    case VIEW:
+      return m_uniforms[VIEW];
+    case PROJECTION:
+      return m_uniforms[PROJECTION];
+  }
+  return 0;
 }

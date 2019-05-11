@@ -43,9 +43,8 @@ class Shader {
     Shader(const Shader& other) {}
     void operator=(const Shader& other) {}
     static const unsigned int NUM_UNIFORMS = 3; ///< Our number of uniforms we're going to track. For now just the MVP matrices since I think we'll change textures a bit later.
-    static const unsigned int NUM_SHADER = 2;
     GLuint m_program; ///< Shader program ID.
-    GLuint m_shaders[NUM_SHADER]; ///< Array containing our vertex & fragment shaders.
+    GLuint m_shaders[3]; ///< Array containing our shaders.
     GLuint m_uniforms[NUM_UNIFORMS]; ///< Array containing our uniform values so we don't have probe the graphics card every frame.
     GLuint createShader(const std::string &text, GLenum type);
     std::string getShaderString(GLenum);
@@ -54,10 +53,10 @@ class Shader {
     bool loaded; ///< Boolean marking whether the shader has successfully loaded.
     std::string vfile; ///< Vertex shader filename.
     std::string ffile; ///< Fragment shader filename
+    std::string gfile; ///< Geometry shader filename.
   public:
     Shader();
-    Shader(const std::string &filename);
-    Shader(std::string &vert, std::string &frag);
+    Shader(const std::string &vert, const std::string &frag, const std::string &geom=std::string());
     ~Shader();
     void bind();
     bool isLoaded();
@@ -77,7 +76,7 @@ class Shader {
     void setMat4(GLuint uniformLocation, glm::mat4 &value);
     void setMat3(GLuint uniformLocation, glm::mat3 &value);
 
-    GLuint loadFromFile(std::string &vert, std::string &frag);
+    GLuint loadFromFile(const std::string &vert, const std::string &frag, const std::string &geom);
     void loadFromFile(std::string filename);
     GLuint getUniformLocation(const std::string &name);
     GLuint getUniformLocation(UNIFORM_ID type);
