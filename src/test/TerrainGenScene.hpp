@@ -11,6 +11,7 @@ using namespace std;
 class Light;
 class Yuki;
 class Mesh;
+class Quad;
 class TerrainChunk;
 class Light;
 class TGenScene : public Scene {
@@ -21,6 +22,9 @@ class TGenScene : public Scene {
     bool draw_mesh;
     bool draw_skybox;
     Light *Sun;
+    std::vector<Quad> grass;
+    int chunk_view_distance;
+    bool framerate;
   public:
     TGenScene(Yuki *yuki);
     ~TGenScene();

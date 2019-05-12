@@ -3,12 +3,16 @@
 #include "../graphics/drawables/Mesh.hpp"
 #include "HeightGenerator.hpp"
 #include <thread>
+#include <SFML/System.hpp>
+#include "HeightGenerator.hpp"
 class Texture;
 class AssetManager;
-class HeightGenerator;
 class Mesh;
 class Light;
 class Quad;
+#include "Water.hpp"
+#include "Grass.hpp"
+
 /**
 \class TerrainChunk
 \brief The terrain chunk class will represent a 32x32 x/z area of terrain to render.
@@ -27,12 +31,16 @@ class TerrainChunk {
     Mesh water_mesh; ///< Our water mesh should be at sea level and always flat(ish)
     Quad *water_quad;
     std::thread gen_thread;
+    GrassPatch grass;
+    sf::Clock clock;
     std::vector<Texture*> textures;
+    HeightGenerator water_rip;
+    Water *waterQ;
   public:
     TerrainChunk(AssetManager* am, int x, int z, unsigned int seed=0,  unsigned int chunk_size = 32, unsigned int side_vertices=32);
     ~TerrainChunk();
     static void generateChunk(TerrainChunk* t);
-    void draw();
+    void draw(bool draw_w);
     Mesh& getMesh();
     void setReady(bool ready){ is_ready = ready;}
     unsigned int getSeed(){ return seed; }
@@ -40,7 +48,7 @@ class TerrainChunk {
     float getHeight(int x, int z);
     float heights[128][128];
     bool is_ready; ///< Is the chunk ready to be loaded?
-
+    glm::vec2 getPosition();
 };
 
 #endif

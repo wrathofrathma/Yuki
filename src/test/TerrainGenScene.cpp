@@ -12,84 +12,113 @@
 #include "../graphics/ObjModel.hpp"
 #include "TerrainGenScene.hpp"
 #include "../graphics/components/Light.hpp"
-
+#include <cmath>
+#include <sstream>
+#include <string>
+using namespace std;
 TGenScene::TGenScene(Yuki *yuki) : Scene(yuki){
   setGlobalAmbient(glm::vec4(0.1));
   draw_mesh = false;
+  framerate = false;
   draw_skybox = true;
   addCamera("Free", new FreeCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
   addCamera("Sphere", new SphericalCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
   setActiveCamera("Free");
   skybox = nullptr;
   getCamera()->setPosition(glm::vec3(4000,10,4000));
-  //((FreeCamera*)getCamera())->rotate(glm::vec3(3.2,0,0));
 
+  chunk_view_distance = 3;
 
-  // light->setPosition(glm::vec3(0));
-  //light->setConstant(1);
-  // light->setAmbient(glm::vec4(0.1));
-  // light->setSpecular(glm::vec4(0.4));
-  // light->setDiffuse(glm::vec4(138/255.0, 181/255.0, 119/255.0,1));
-  // light->setLinear(0.022);
-  // light->setQuadratic(0.0007);
-  //  lights.push_back(light);
-//  seed = std::chrono::system_clock::now().time_since_epoch().count();
   seed = 38383;
   chunk_size = 64;
   Sun = new Light(DIRECTIONAL);
   lights.push_back(Sun);
+  glLineWidth(2);
+
 }
 
 TGenScene::~TGenScene(){
   clearCameras();
-  // for(unsigned int i=0; i<lights.size(); i++){
-  //   if(lights[i]!=nullptr){
-  //     delete lights[i];
-  //     lights[i]=nullptr;
-  //   }
-  delete Sun;
-  // }
+
   if(skybox!=nullptr)
     delete skybox;
 
 }
 
 void TGenScene::draw(){
-  if(draw_skybox){
-    if(skybox!=nullptr)
-      skybox->draw();
-    else{
-      skybox = new Cube(yuki->am);
-      //std::vector<Texture*> st;
-      //st.push_back(yuki->am->getTexture("totality"));
-      skybox->setTexture(yuki->am->getTexture("totality"));
-      skybox->setLightingOn(true);
-      skybox->setMaterial(Materials::Default);
-      skybox->scale(glm::vec3(100));
-      skybox->setSkybox(true);
 
-    }
-  }
-  if(draw_mesh){
-    for(auto const& [key, val] : chunks) {
-      val->draw();
-    }
-  }
-}
-
-
-void TGenScene::update(float delta){
-  int viewDis = 2;
   //Camera position
   glm::vec3 cpos = getCamera()->getPosition();
   //Converted to chunk coordinates.
   int x = cpos.x/(chunk_size-2);
   int z = cpos.z/(chunk_size-2);
   //Generate range to check
-  int lower_x = x-viewDis;
-  int lower_z = z-viewDis;
-  int upper_x = x+viewDis;
-  int upper_z = z+viewDis;
+  int lower_x = x-chunk_view_distance;
+  int lower_z = z-chunk_view_distance;
+  int upper_x = x+chunk_view_distance;
+  int upper_z = z+chunk_view_distance;
+
+  glEnable(GL_CLIP_DISTANCE0);
+  yuki->am->bindReflectionFB();
+  if(draw_skybox){
+    if(skybox!=nullptr)
+      skybox->draw();
+    else{
+      skybox = new Cube(yuki->am);
+      skybox->setTexture(yuki->am->getTexture("mira"));
+      skybox->setLightingOn(true);
+      skybox->setMaterial(Materials::Default);
+      skybox->scale(glm::vec3(100));
+      skybox->setSkybox(true);
+    }
+  }
+
+  //Let's only draw shit near our draw distance.
+  if(draw_mesh){
+    for(auto const& [key, val] : chunks) {
+      glm::vec2 cp = val->getPosition();
+      // if(abs(cp.x - x)<=chunk_view_distance && abs(cp.y - z)<=chunk_view_distance)
+        val->draw(false);
+    }
+  }
+  yuki->am->unbindFB();
+
+  if(draw_skybox){
+    if(skybox!=nullptr)
+      skybox->draw();
+    else{
+      skybox = new Cube(yuki->am);
+      skybox->setTexture(yuki->am->getTexture("mira"));
+      skybox->setLightingOn(true);
+      skybox->setMaterial(Materials::Default);
+      skybox->scale(glm::vec3(100));
+      skybox->setSkybox(true);
+    }
+  }
+
+  //Let's only draw shit near our draw distance.
+  if(draw_mesh){
+    for(auto const& [key, val] : chunks) {
+      glm::vec2 cp = val->getPosition();
+      // if(abs(cp.x - x)<=chunk_view_distance && abs(cp.y - z)<=chunk_view_distance)
+        val->draw(true);
+    }
+  }
+
+}
+
+
+void TGenScene::update(float delta){
+  //Camera position
+  glm::vec3 cpos = getCamera()->getPosition();
+  //Converted to chunk coordinates.
+  int x = cpos.x/(chunk_size-2);
+  int z = cpos.z/(chunk_size-2);
+  //Generate range to check
+  int lower_x = x-chunk_view_distance;
+  int lower_z = z-chunk_view_distance;
+  int upper_x = x+chunk_view_distance;
+  int upper_z = z+chunk_view_distance;
 
   //Check all chunks that should be within our view.
   if(draw_mesh){
@@ -101,8 +130,14 @@ void TGenScene::update(float delta){
         if(chunks.count(p)==0){
           chunks.insert(std::make_pair(p,new TerrainChunk(asset_manager, i, j,seed, chunk_size,chunk_size)));
         }
+        else{
+
+        }
       }
     }
+  }
+  if(framerate){
+    yuki->ge->setTitle(yuki->program_title + " " +  to_string(1.0f/delta));
   }
 
 }
@@ -139,10 +174,14 @@ void TGenScene::updateShaders(){
 
 void TGenScene::keyPressedEventHandler(sf::Event::KeyEvent event){
   if(event.code==sf::Keyboard::T){
-    if(draw_mesh)
+    if(draw_mesh){
+      cout << "Terrain off." << endl;
       draw_mesh = false;
-    else
+    }
+    else{
+      cout << "Terrain on." << endl;
       draw_mesh = true;
+    }
   }
   if(event.code==sf::Keyboard::Y){
     if(draw_skybox)
@@ -154,7 +193,18 @@ void TGenScene::keyPressedEventHandler(sf::Event::KeyEvent event){
     delete skybox;
     skybox=nullptr;
   }
-}
+  if(event.code==sf::Keyboard::U){
+    if(Sun->getOn())
+      Sun->setOn(false);
+    else
+      Sun->setOn(true);
+  }
+  if(event.code==sf::Keyboard::F){
+    if(framerate)
+      framerate = false;
+    else
+      framerate = true;
+  }}
 
 void TGenScene::keyStateEventHandler(){
 

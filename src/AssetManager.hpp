@@ -40,16 +40,37 @@ class AssetManager {
     std::string textures_dir; ///< Our textures directory
     Yuki *yuki; ///< Yuki game engine pointer.
 
+
+
+    GLuint reflection_framebuffer;
+    GLuint refraction_framebuffer;
+    GLuint reflection_depthbuffer;
+    GLuint refraction_texture;
+    GLuint refraction_depthtex;
+    GLuint createFrameBuffer();
+    GLuint createTextureAttachment(int w, int h);
+    GLuint createDepthTextureAttachment(int w, int h);
+    GLuint createDepthBufferAttachment(int w, int h);
+    void bindFramebuffer(GLuint fb, int w, int h);
+    unsigned int refl_h;
+    unsigned int refl_w;
+    unsigned int refr_h;
+    unsigned int refr_w;
   public:
     AssetManager(Yuki *yuki);
     ~AssetManager();
     Yuki* getYuki();
     Texture* getTexture(std::string key);
-    bool loadTexture(std::vector<std::string> filenames, std::string key);
+    bool loadTexture(std::vector<std::string> filenames, std::string key, bool alpha);
     void loadTextureIndex();
     void loadShaderIndex();
     Shader* getShader(std::string key);
     std::map<std::string, Shader*> getShaders();
+    void bindReflectionFB();
+    void bindRefractionFB();
+    void init_fbs();
+    void unbindFB();
+    GLuint reflection_texture;
 
 };
 

@@ -5,9 +5,9 @@
 # c texture_id image1_path image2_path image3_path image4_path image5_path image6_path
 # Let's avoid spaces because I'm lazy.
 
-c totality totality_rt.tga totality_lf.tga totality_up.tga totality_dn.tga totality_bk.tga totality_ft.tga
-s grass1 grass_digital.png
-s dirt1 dirt_0.png
-s water1 water.png
-s spruce Spruce_Branches.png
-s grass4 grass4.png
+c o mira miramar_rt.tga miramar_lf.tga miramar_up.tga miramar_dn.tga miramar_bk.tga miramar_ft.tga
+s o grass1 grass_digital.png
+s o dirt1 dirt_0.png
+s o water1 water.png
+s a grass4 grass4.png
+s o dudv dudv.png

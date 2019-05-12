@@ -7,6 +7,7 @@
 #include "../graphics/components/Light.hpp"
 #include <cstdlib>
 #include <ctime>
+#include "Grass.hpp"
 #include "TerrainChunk.hpp"
 
 TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed, unsigned int chunk_size, unsigned int side_vertices){
@@ -20,15 +21,14 @@ TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed, un
 
   textures.push_back(asset_manager->getTexture("grass1"));
   textures.push_back(asset_manager->getTexture("dirt1"));
-  textures.push_back(asset_manager->getTexture("water1"));
 
   mesh.setTexture(textures);
   mesh.setShader(asset_manager->getShader("Terrain"));
-  mesh.setMaterial(Materials::Dark);
-  water_mesh.setMaterial(Materials::Dark);
-  water_mesh.setShader(asset_manager->getShader("Terrain"));
-  water_mesh.setTexture(textures);
-  water_mesh.setUseTexture(true);
+  mesh.setMaterial(Materials::Default);
+  // water_mesh.setMaterial(Materials::Default);
+  // water_mesh.setShader(asset_manager->getShader("Terrain"));
+  // water_mesh.setTexture(textures);
+  // water_mesh.setUseTexture(true);
   //Chunk x & z coordinates.
   cx = x;
   cz = z;
@@ -38,22 +38,41 @@ TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed, un
   this->side_vertices = side_vertices;
   this->chunk_size = chunk_size;
   mesh.setPosition(glm::vec3(x*(chunk_size-2),0,z*(chunk_size-2)));
-  water_mesh.setPosition(glm::vec3(x*(chunk_size-2),0,z*(chunk_size-2)));
-
-  water_quad = new Quad(am);
-  water_quad->setPosition(glm::vec3(x*(chunk_size-2),-6,z*(chunk_size-2)));
-  water_quad->scale(glm::vec3(chunk_size));
-  water_quad->setMaterial(Materials::Default);
-  water_quad->rotate(glm::vec3(0,PI/2,0));
-  water_quad->setTexture(asset_manager->getTexture("water1"));
+  // water_mesh.setPosition(glm::vec3(x*(chunk_size-2),0,z*(chunk_size-2)));
+  waterQ = new Water(am);
+  waterQ->setPosition(glm::vec3(x*(chunk_size-2),-5,z*(chunk_size-2)));
+  waterQ->scale(glm::vec3(chunk_size*2));
+  waterQ->setMaterial(Materials::Default);
+  // waterQ->setShader("Water");
+   //waterQ->setTexture(asset_manager->getTexture("water1"));
+  waterQ->tex_id = am->reflection_texture;
+  waterQ->setUseTexture(true);
+  // water_quad = new Quad(am);
+  // water_quad->setPosition(glm::vec3(x*(chunk_size-2),-6,z*(chunk_size-2)));
+  // water_quad->scale(glm::vec3(chunk_size));
+  // water_quad->setMaterial(Materials::Default);
+  // water_quad->rotate(glm::vec3(0,PI/2,0));
+  // water_quad->setTexture(asset_manager->getTexture("water1"));
+  grass.setShader(asset_manager->getShader("Grass"));
+  grass.setChunkPos(cx,cz, chunk_size);
+  vector<Texture*> grass_texts;
+  grass_texts.push_back(asset_manager->getTexture("grass4"));
+  grass.setTexture(grass_texts);
 }
 
 TerrainChunk::~TerrainChunk(){
-   delete water_quad;
+  // if(water_quad!=nullptr)
+  //   delete water_quad;
+  delete waterQ;
+
+}
+
+glm::vec2 TerrainChunk::getPosition(){
+  return glm::vec2(cx,cz);
 }
 
 
-void TerrainChunk::draw(){
+void TerrainChunk::draw(bool draw_w){
   if(!is_ready){
     if(!gen_thread.joinable()){
       gen_thread = std::thread(generateChunk,this);
@@ -63,12 +82,23 @@ void TerrainChunk::draw(){
     if(gen_thread.joinable()){
       gen_thread.join();
     }
+
+    if(draw_w){
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+      waterQ->draw();
+      //glDepthFunc(GL_LESS);
+
+      glDisable(GL_BLEND);
+    }
+
+    grass.draw();
     mesh.draw();
-    glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  //  water_quad->draw();
-     water_mesh.draw();
-    glDisable(GL_BLEND);
+    // glEnable(GL_BLEND);
+  // glDepthFunc(GL_LEQUAL);
+      // glDepthFunc(GL_LESS);
+    // glDisable(GL_BLEND);
   }
 }
 
@@ -81,7 +111,7 @@ Mesh& TerrainChunk::getMesh(){
 \param t --- Terrain chunk pointer.
 */
 void TerrainChunk::generateChunk(TerrainChunk* t){
-
+  std::vector<float> grass_vertices;
   float rgbc = 1/255.0;
   glm::vec3 grass = glm::vec3(0.3764,0.73725, 0.545);
   glm::vec3 snow = glm::vec3(212, 230, 221)*rgbc;
@@ -98,7 +128,7 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
   std::vector<unsigned int> indices;
   HeightGenerator hg;
   hg.setSeed(t->getSeed());
-  hg.setRoughness(0.15);
+  hg.setRoughness(0.10);
   hg.setOctaves(4);
   float amp = 70;
   hg.setAmplitude(amp);
@@ -108,6 +138,7 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
   int cz = t->cz;
   unsigned int side_vertices = t->side_vertices;
   unsigned int chunk_size = t->chunk_size;
+  unsigned int water_side_verts = side_vertices / 8;
   int sv = side_vertices;
   for(int i = 0; i<sv; i++){
     for(int j = 0; j<sv; j++){
@@ -122,17 +153,24 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
       t->heights[j][i] = height;
       //Generate water mesh.
       //This is pretty wasteful, but we're in a hurry.
-      Vertex wv;
-      wv.position = glm::vec4(vx,water_level,vz,1);
-      wv.color = water;
-      wv.normal = glm::vec3(0,1,0);
-      water_mesh_vertices.push_back(wv);
 
+      // if(int(vx) % water_side_verts==0 && int(vz) % water_side_verts == 0){
+        Vertex wv;
+        wv.position = glm::vec4(vx,water_level,vz,1);
+        wv.color = water;
+        wv.normal = glm::vec3(0,1,0);
+        water_mesh_vertices.push_back(wv);
+      // }
       //Coloring, this is honestly more for show since I started doing stuff in the shaders, but it looks cool when we turn stuff off.
-      if(height>snow_thresh)
-        vertex.color = snow;
-      else if(height > grass_thresh)
-        vertex.color = grass;
+      if(height > grass_thresh-1){
+        if(height > grass_thresh)
+          vertex.color = grass;
+        grass_vertices.push_back(vx);
+        grass_vertices.push_back(height);
+        grass_vertices.push_back(vz);
+        grass_vertices.push_back(1);
+
+      }
       // else if(height < water_level)
       //   vertex.color = water;
       else{
@@ -142,8 +180,9 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
       vertices.push_back(vertex);
     }
   }
-  for(unsigned int i=0; i<sv-1; i++){
-    for(unsigned int j=0; j<sv-1; j++){
+  std::vector<unsigned int> water_inds;
+  for(int i=0; i<sv-1; i++){
+    for(int j=0; j<sv-1; j++){
       int tl = i*(sv) + j;
       int tr = tl+1;
       int bl = (i+1)*(sv) + j;
@@ -156,12 +195,27 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
       indices.push_back(br);
     }
   }
+  // for(int i=0; i<water_side_verts-1; i++){
+  //   for(int j=0; j<water_side_verts-1; j++){
+  //     int tl = i*(water_side_verts) + j;
+  //     int tr = tl+1;
+  //     int bl = (i+1)*(water_side_verts) + j;
+  //     int br = bl+1;
+  //     water_inds.push_back(tl);
+  //     water_inds.push_back(bl);
+  //     water_inds.push_back(tr);
+  //     water_inds.push_back(tr);
+  //     water_inds.push_back(bl);
+  //     water_inds.push_back(br);
+  //   }
+  // }
   t->mesh.setVertices(vertices);
   t->mesh.setIndices(indices);
 
-  t->water_mesh.setVertices(water_mesh_vertices);
-  t->water_mesh.setIndices(indices);
+  // t->water_mesh.setVertices(water_mesh_vertices);
+  // t->water_mesh.setIndices(indices);
   t->setReady(true);
+  t->grass.setPoints(grass_vertices);
 }
 
 float TerrainChunk::getHeight(int x, int z){

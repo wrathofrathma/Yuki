@@ -62,6 +62,8 @@ class Yuki {
 		void addScene(std::string s, Scene* scene);
 		void setActiveScene(std::string s);
 		void removeScene(std::string s);
+		std::string program_title; ///< The title of our game.
+
 		Scene* getActiveScene();
 };
 

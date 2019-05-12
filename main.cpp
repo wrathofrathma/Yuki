@@ -5,6 +5,8 @@
 #include "src/UserInput.hpp"
 #include "src/test/TerrainGenScene.hpp"
 #include <random>
+#include "src/graphics/ObjModel.hpp"
+
 using namespace std;
 
 
@@ -155,5 +157,6 @@ int main(){
 	yuki.addScene("tgen", tg);
 	yuki.setActiveScene("tgen");
 	yuki.run();
+
 	return 0;
 }

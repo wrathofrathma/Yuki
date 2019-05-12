@@ -34,7 +34,7 @@ GraphicsEngine::GraphicsEngine(Yuki* yu, std::string title, GLint MajorVersion, 
 	sscount = 0;
 	yuki->am->loadShaderIndex(); // We need to call this from here because we need an active opengl context.
 	yuki->am->loadTextureIndex(); //We also need an active context for this too.
-
+	yuki->am->init_fbs();
 	wireframe = false;
 	setVerticalSyncEnabled(true);
 	glEnable(GL_DEPTH_TEST);
