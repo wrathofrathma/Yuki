@@ -24,6 +24,12 @@ Polygon::Polygon(AssetManager *am) : Drawable(am){
   shader->bind();
   uModel = shader->getUniformLocation("model");
 }
+
+Polygon::Polygon(){
+  orientation = glm::vec3(0,0,0);
+  setUseTexture(false);
+  update = true;
+}
 /**
 \brief Destructor
 

@@ -159,6 +159,14 @@ void Mesh::updateMesh(){
   update = false;
 }
 
+void Mesh::updateVertices(std::vector<float> vs){
+  glBindVertexArray(VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, dataPtr);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), &vertices[0]);
+  // glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
+  glBindBuffer(GL_ARRAY_BUFFER,0);
+}
+
 /**
 \brief Loads the material data to the shader.
 */

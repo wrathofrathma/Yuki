@@ -58,6 +58,7 @@ class Shader {
     Shader();
     Shader(const std::string &vert, const std::string &frag, const std::string &geom=std::string());
     ~Shader();
+    GLint getID();
     void bind();
     bool isLoaded();
     void setBool(const std::string &name, bool value);

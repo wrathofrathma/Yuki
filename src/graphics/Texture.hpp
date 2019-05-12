@@ -43,7 +43,7 @@ class Texture {
     int height; ///< Height of the texture.
     std::string _filename; ///< Filename of the texture. If multiple files for a cubemap, then they're appended with commas.
   public:
-    Texture(std::string filename);
+    Texture(std::string filename, bool alpha);
     Texture(std::vector<std::string> filenames);
     ~Texture();
     TextureType getType();

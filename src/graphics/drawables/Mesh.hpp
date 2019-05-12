@@ -111,7 +111,7 @@ class Mesh : public QuaternionObject {
     std::vector<float> getVertices();
     std::vector<float> getColors();
     std::vector<unsigned int> getIndices();
-
+    void updateVertices(std::vector<float> vs);
 
 };
 

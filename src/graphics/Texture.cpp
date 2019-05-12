@@ -18,7 +18,7 @@ using namespace std;
 Loads a single image texture from file into an OpenGL texture ID.
 \param filename --- File path of the texture to load.
 */
-Texture::Texture(std::string filename){
+Texture::Texture(std::string filename, bool alpha){
   type = Single;
   texture_images.emplace_back(sf::Image());
   loaded = texture_images[0].loadFromFile(filename);
@@ -29,8 +29,14 @@ Texture::Texture(std::string filename){
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    if(!alpha){
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    }
+    else{
+      glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_images[0].getSize().x, texture_images[0].getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_images[0].getPixelsPtr());
@@ -56,14 +62,14 @@ Texture::Texture(std::vector<std::string> filenames){
 
   glGenTextures(1, &texID);
   glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
-
   for(unsigned int i = 0; i<6; i++){
     _filename+=","+filenames[i];
     texture_images.emplace_back(sf::Image());
     loaded = texture_images[i].loadFromFile(filenames[i]);
     if(!loaded)
       return;
-    texture_images[i].flipVertically();
+    //texture_images[i].flipVertically();
+
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, texture_images[i].getSize().x, texture_images[i].getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_images[i].getPixelsPtr());
   }
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

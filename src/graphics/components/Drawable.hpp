@@ -57,9 +57,10 @@ class Drawable : virtual public QuaternionObject {
     bool lighting_on; ///< Determines if we apply lighting to this drawable.
     bool update; ///< Signals that we need to update the graphics card.
   public:
+    Drawable();
     Drawable(AssetManager *am);
     virtual ~Drawable();
-
+    void setAssetManager(AssetManager *am);
     //Draw needs to be virtual to make thing simple.
     virtual void draw() = 0;
 

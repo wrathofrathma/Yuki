@@ -23,7 +23,7 @@ class Model : public Drawable {
   public:
     Model(AssetManager *asset_manager);
     Model(Model &m1);
-
+    void loadObjFromFile(std::string filepath);
     void draw();
 };
 #endif

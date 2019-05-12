@@ -23,7 +23,14 @@ Quad::Quad(AssetManager *am, float x, float y, float z, float w) : Polygon(am){
   setDimensions(glm::vec4(x,y,z,w));
 
 }
+Quad::Quad(){
 
+}
+void Quad::loadQuad(AssetManager *am, float x, float y, float z, float w){
+  asset_manager = am;
+  setDimensions(glm::vec4(x,y,z,w));
+
+}
 /**
 \brief Destructor
 

@@ -19,7 +19,9 @@ Shader::Shader(){
   loaded=false;
 }
 
-
+GLint Shader::getID(){
+  return m_program;
+}
 /**
 \brief Constructor
 

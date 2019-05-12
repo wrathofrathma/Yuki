@@ -31,6 +31,7 @@ class Polygon : public Drawable {
 
   public:
     Polygon(AssetManager *am);
+    Polygon();
     ~Polygon();
 
     void draw();

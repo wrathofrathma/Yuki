@@ -40,7 +40,6 @@ class Yuki {
 		void checkOpenGL();
 
 		bool DEBUG; ///< Boolean to flag whether we're debugging or not. Typically this enables more verbose printing.
-		std::string program_title; ///< The title of our game.
 		GLint opengl_major; ///< The OpenGL major version detected.
 		GLint opengl_minor; ///< The OpenGL minor version detected.
 

@@ -8,6 +8,23 @@
 \date 4/20/2019
 
 */
+/**
+\brief Constructor
+
+Sets default shader position IDs and calls init() to generate buffers.
+*/
+Drawable::Drawable(){
+  vPosition = 0;
+  vNormal = 1;
+  vColor = 2;
+  vTexture = 3;
+  lighting_on = true;
+}
+
+void Drawable::setAssetManager(AssetManager *am){
+  asset_manager = am;
+  init();
+}
 
 /**
 \brief Constructor
