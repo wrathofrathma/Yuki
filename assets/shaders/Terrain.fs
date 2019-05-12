@@ -1,8 +1,10 @@
 #version 420 core
 /**
-\file Default.fs
+\file Terrain.fs
 
-\brief Default fragment shader.
+\brief Terrain fragment shader.
+
+The primary difference here will be how we handle multiple textures and blend them together.
 
 \param [in] frag_pos --- vec4 fragmentx position.
 
@@ -81,7 +83,9 @@ in vec2 tex_coord; ///< Texture coordinates.
 
 out vec4 FragColor; ///< Our resulting color.
 
-uniform sampler2D texture1; ///< Texture to use if we're using one.
+#define NR_TEXTURES 10
+uniform sampler2D textures[NR_TEXTURES]; ///< Texture array.
+
 uniform bool useTexture; ///< Boolean value that determines if we render the texture.
 uniform vec3 camera_pos; ///< Camera position.
 uniform Material material; ///< Material of the surface.
@@ -180,10 +184,34 @@ vec4 CalcSpotLight(SpotLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
 
 void main()
 {
-  if(useTexture)
-    FragColor =  texture(texture1, tex_coord);
-  else
+  int grass_thresh = 2;
+  if(useTexture){
+    if(frag_pos.y > grass_thresh)
+      FragColor =  texture(textures[0], frag_pos.xz); //Our grass texture.
+    else if(frag_pos.y > (grass_thresh-1) && frag_pos.y < grass_thresh){ //Blending grass with dirt.
+      vec4 t0 = texture(textures[0], frag_pos.xz);
+      vec4 t1 = texture(textures[1], frag_pos.xz);
+      FragColor = mix(t0,t1,grass_thresh-frag_pos.y);
+    }
+    else if(abs(frag_pos.y+6)<1){
+      FragColor =  texture(textures[2], frag_pos.xz);
+    }
+    else if(frag_pos.y>-6) //Dirt texture.
+      FragColor =  texture(textures[1], frag_pos.xz);
+
+    // else if(frag_pos.y>-7 && frag_pos.y <-6){
+    //   //Blend dirt into water.
+    //   vec4 t1 = texture(textures[1], frag_pos.xz);
+    //   FragColor = mix(t1, vec4(icolor,1),-6-frag_pos.y);
+    //
+    // }
+    else{
+      FragColor = vec4(icolor,1);
+    }
+  }
+  else{
     FragColor = vec4(icolor,1);
+  }
 
   if(lighting_on){
     vec3 norm = normalize(normal);
