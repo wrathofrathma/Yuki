@@ -122,6 +122,17 @@ sf::Vector2i UI::getLastMousePos(){
 	return last_mouse_pos;
 }
 /**
+\brief Returns the current mouse position on the screen in normalized device coordiantes
+*/
+glm::vec2 UI::getMouseNDC(){
+  sf::Vector2i screen_coords = sf::Mouse::getPosition(*yuki->ge);
+	sf::Vector2u screen_size = yuki->ge->getSize();
+	// float x = (2.0f*screen_coords.x) / screen_size.x- 1.0;
+	// float y = (2.0f*screen_coords.y) / screen_size.y -1.0;
+	return glm::vec2(float(screen_coords.x)/ float(screen_size.x)*2 -1, (float(screen_size.y) - float(screen_coords.y))/float(screen_size.y)*2-1);
+}
+
+/**
 \brief Adds an event to our list of callbacks for key pressed events.
 \param callback --- Callback to store, which is void type and takes the parameters (sf::Event::KeyEvent , Yuki*)
 */

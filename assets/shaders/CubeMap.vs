@@ -33,6 +33,7 @@ uniform mat4 model; // Model matrix
 uniform mat4 view; // View matrix
 uniform mat4 proj; // Projection matrix
 uniform mat3 normal_matrix; ///< Normal matrix.
+uniform vec4 plane;
 
 out vec4 frag_pos; ///< Our vertex position in model coordinates.
 out vec3 normal; ///< Our vertex normal.

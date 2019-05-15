@@ -35,7 +35,9 @@ Cube::Cube(AssetManager *am) : Drawable(am){
 Default empty destructor.
 */
 Cube::~Cube(){
-
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &dataPtr);
+  glDeleteBuffers(1, &indicePtr);
 }
 
 /**

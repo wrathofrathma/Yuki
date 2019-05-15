@@ -41,7 +41,7 @@ class Scene {
     //Update stuff
     sf::Time last_time; ///< Time variable containing our last measured time for delta calculations.
     sf::Clock clock; ///< Clock for determining delta value between updates.
-
+    float current_delta; ///< Current delta between update ticks.
     glm::vec4 global_ambient; ///< A vec4 containing our global ambient for the scene. It'll be used in our lighting updates later.
     void clearCameras();
 

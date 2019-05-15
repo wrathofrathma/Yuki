@@ -6,7 +6,6 @@
 #include <string>
 #include <sstream>
 #include <map>
-
 #include "graphics/Texture.hpp"
 #include "graphics/Shader.hpp"
 #include "graphics/GraphicsDefinitions.hpp"
@@ -45,7 +44,6 @@ class AssetManager {
     GLuint reflection_framebuffer;
     GLuint refraction_framebuffer;
     GLuint reflection_depthbuffer;
-    GLuint refraction_texture;
     GLuint refraction_depthtex;
     GLuint createFrameBuffer();
     GLuint createTextureAttachment(int w, int h);
@@ -71,6 +69,7 @@ class AssetManager {
     void init_fbs();
     void unbindFB();
     GLuint reflection_texture;
+    GLuint refraction_texture;
 
 };
 

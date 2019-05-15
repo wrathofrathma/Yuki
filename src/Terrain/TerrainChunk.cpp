@@ -9,7 +9,30 @@
 #include <ctime>
 #include "Grass.hpp"
 #include "TerrainChunk.hpp"
+#include "../graphics/GraphicsDefinitions.hpp"
 
+/**
+\file TerrainChunk.cpp
+\brief Implementation file of the TerrainChunk class
+
+\author Christopher Arausa
+\date 05/14/2019
+\version Final
+
+*/
+
+/**
+\brief Contructor
+
+Constructs our terrain chunk and initializes a thread for terrain generation.
+
+\param am --- AssetManager class.
+\param x --- x world grid coordinate.
+\param z --- z world grid coordinate
+\param seed --- unsigned integer for the seed of the world.
+\param chunk_size --- the size of the chunk scale
+\param side_vertices --- number of vertices on each side.
+*/
 TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed, unsigned int chunk_size, unsigned int side_vertices){
   if(seed!=0)
     this->seed = seed;
@@ -45,7 +68,8 @@ TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed, un
   waterQ->setMaterial(Materials::Default);
   // waterQ->setShader("Water");
    //waterQ->setTexture(asset_manager->getTexture("water1"));
-  waterQ->tex_id = am->reflection_texture;
+  waterQ->reflection_id = am->reflection_texture;
+  waterQ->refraction_id = am->refraction_texture;
   waterQ->setUseTexture(true);
   // water_quad = new Quad(am);
   // water_quad->setPosition(glm::vec3(x*(chunk_size-2),-6,z*(chunk_size-2)));
@@ -60,6 +84,11 @@ TerrainChunk::TerrainChunk(AssetManager* am, int x, int z, unsigned int seed, un
   grass.setTexture(grass_texts);
 }
 
+/**
+\brief Destructor
+
+Deletes our water class
+*/
 TerrainChunk::~TerrainChunk(){
   // if(water_quad!=nullptr)
   //   delete water_quad;
@@ -67,12 +96,22 @@ TerrainChunk::~TerrainChunk(){
 
 }
 
+/**
+\brief Returns the position of the chunk
+*/
 glm::vec2 TerrainChunk::getPosition(){
   return glm::vec2(cx,cz);
 }
 
+/**
+\brief Draws the chunk
 
-void TerrainChunk::draw(bool draw_w){
+\param delta --- Delta time between draws.
+\param draw_w --- boolean for whether to draw the water.
+\param draw_g --- boolean for whether to draw the grass.
+\param water_distortion --- boolean for whether to apply dudv distortion to the water.
+ */
+void TerrainChunk::draw(float delta, bool draw_w, bool draw_g, bool water_distortion){
   if(!is_ready){
     if(!gen_thread.joinable()){
       gen_thread = std::thread(generateChunk,this);
@@ -82,19 +121,21 @@ void TerrainChunk::draw(bool draw_w){
     if(gen_thread.joinable()){
       gen_thread.join();
     }
+    if(draw_g)
+      grass.draw();
+    mesh.draw();
 
     if(draw_w){
       glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-      waterQ->draw();
+      waterQ->draw(delta, water_distortion);
       //glDepthFunc(GL_LESS);
 
       glDisable(GL_BLEND);
     }
 
-    grass.draw();
-    mesh.draw();
+
     // glEnable(GL_BLEND);
   // glDepthFunc(GL_LEQUAL);
       // glDepthFunc(GL_LESS);
@@ -102,6 +143,9 @@ void TerrainChunk::draw(bool draw_w){
   }
 }
 
+/**
+\brief Returns the mesh object of the terrain chunk
+*/
 Mesh& TerrainChunk::getMesh(){
   return mesh;
 }
@@ -176,11 +220,10 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
       else{
         vertex.color = dirt;
       }
-      vertex.normal = glm::vec3(0,1,0);
+      vertex.normal = glm::vec3(0,0,0);
       vertices.push_back(vertex);
     }
   }
-  std::vector<unsigned int> water_inds;
   for(int i=0; i<sv-1; i++){
     for(int j=0; j<sv-1; j++){
       int tl = i*(sv) + j;
@@ -193,8 +236,26 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
       indices.push_back(tr);
       indices.push_back(bl);
       indices.push_back(br);
+
+      //Calculate face normals and normalize.
+      std::vector<glm::vec3> t1;
+      t1.push_back(glm::vec3(vertices[tl].position.x,vertices[tl].position.y,vertices[tl].position.z));
+      t1.push_back(glm::vec3(vertices[bl].position.x,vertices[bl].position.y,vertices[bl].position.z));
+      t1.push_back(glm::vec3(vertices[tr].position.x,vertices[tr].position.y,vertices[tr].position.z));
+      std::vector<glm::vec3> t2;
+      t2.push_back(glm::vec3(vertices[tr].position.x,vertices[tr].position.y,vertices[tr].position.z));
+      t2.push_back(glm::vec3(vertices[bl].position.x,vertices[bl].position.y,vertices[bl].position.z));
+      t2.push_back(glm::vec3(vertices[br].position.x,vertices[br].position.y,vertices[br].position.z));
+      glm::vec3 n1 = calcSurfaceNormal(t1);
+      glm::vec3 n2 = calcSurfaceNormal(t2);
+      vertices[tl].normal = glm::normalize(n1+vertices[tl].normal+n2);
+      vertices[bl].normal = glm::normalize(n1+vertices[tl].normal+n2);
+      vertices[tr].normal = glm::normalize(n1+vertices[tr].normal+n2);
+      vertices[br].normal = glm::normalize(n1+vertices[bl].normal+n2);
+
     }
   }
+  std::vector<unsigned int> water_inds;
   // for(int i=0; i<water_side_verts-1; i++){
   //   for(int j=0; j<water_side_verts-1; j++){
   //     int tl = i*(water_side_verts) + j;
@@ -218,6 +279,11 @@ void TerrainChunk::generateChunk(TerrainChunk* t){
   t->grass.setPoints(grass_vertices);
 }
 
+/**
+\brief Returns the height at a given location
+\param x --- x coordinate
+\param z --- z coordinate
+*/
 float TerrainChunk::getHeight(int x, int z){
   //Convert to chunk coords.
   cout << x << " " << z << endl;

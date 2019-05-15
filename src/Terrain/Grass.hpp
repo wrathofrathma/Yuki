@@ -5,10 +5,23 @@
 #include "../graphics/components/QuaternionObject.hpp"
 #include <SFML/System.hpp>
 
+/**
+\file Grass.hpp
+\brief Implementation file for Grass.cpp
+
+\author Christopher Arausa
+\date 05/14/2019
+\version Final
+*/
+
 class Shader;
 class Texture;
 // So in theory we're going to take all teh points in our mesh above the Y value for grass, and then send them to the graphics card as points.
 //Then turn them into blades in the geometry shader....
+
+/**
+\class GrassPatch
+\brief The grass patch class is responsible for drawing grass on a single chunk */
 class GrassPatch : QuaternionObject {
   private:
     GLint vPosition; ///< Shader position of vertex data.
@@ -32,10 +45,10 @@ class GrassPatch : QuaternionObject {
     GLuint uModel; ///< Shader uniform position of model matrix.
     bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.
     bool lighting_on; ///< Determines if we apply lighting to this drawable.
-    Shader* shader;
+    Shader* shader; ///< Shader the class uses
     std::vector<float> points; ///< Places in the world to draw the grass.
     std::vector<float> vertices; ///< Vertices of the object we're instancing.
-    sf::Clock clock;
+    sf::Clock clock; ///< The clock used to oscilate the top.
   public:
     GrassPatch();
     ~GrassPatch();

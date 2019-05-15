@@ -4,6 +4,21 @@
 #include <sstream>
 #include <string>
 using namespace std;
+
+/**
+\file Grass.cpp
+\brief Implementation file for GrassPatch class
+
+\author Christopher Arausa
+\date 05/14/2019
+\version Final
+\*/
+
+/**
+\brief Constructor
+
+Initializes a single point
+*/
 GrassPatch::GrassPatch(){
   shader = nullptr;
   ready = false;
@@ -43,6 +58,11 @@ GrassPatch::GrassPatch(){
   // vertices.push_back(0);
 }
 
+/**
+\brief Destructor
+
+releases memory from gpu
+*/
 GrassPatch::~GrassPatch(){
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &vertex_buffer);
@@ -50,10 +70,22 @@ GrassPatch::~GrassPatch(){
 
 }
 
+/**
+\brief Sets the grass's chunk position
+
+\param cx --- chunk x coordinate
+\param cz --- chunk z cooardinate
+\param cs --- chunk size
+*/
+
 void GrassPatch::setChunkPos(int cx, int cz, int cs){
   position = glm::vec3(cx*(cs-2), 0, cz*(cs-2));
 }
 
+
+/**
+\brief Draws the grass patch using instanced rendering
+*/
 void GrassPatch::draw(){
   if(shader==nullptr)
     return;
@@ -80,10 +112,21 @@ void GrassPatch::draw(){
   glDrawArraysInstanced(GL_POINTS, 0, points.size()/4, 1);
   glBindVertexArray(0);
 }
+
+/**
+\brief Sets the points to draw the grass at
+
+\param p --- The vector of float points.
+*/
 void GrassPatch::setPoints(std::vector<float> p){
   points = p;
 }
 
+/**
+\brief Sets the shader to use
+
+\param shader --- The shader pointer.
+*/
 void GrassPatch::setShader(Shader* shader){
   this->shader = shader;
   if(shader!=nullptr){
@@ -95,11 +138,19 @@ void GrassPatch::setShader(Shader* shader){
   // texture_1 = shader->getUniformLocation("texture_1");
 }
 
+
+/**
+\brief Sets the texture
+\param texts --- vector of texture pointers.
+*/
 void GrassPatch::setTexture(std::vector<Texture*> texts){
   textures = texts;
 
 }
 
+/**
+\brief initializes the grass on the gpu
+*/
 void GrassPatch::init(){
   shader->bind();
   uModel = shader->getUniformLocation("model");

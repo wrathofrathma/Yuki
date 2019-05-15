@@ -20,7 +20,7 @@ void GenerateQuad(vec4 seed) {
 
   //Amount we'll scale up in size.
   vec4 scale = vec4(5);
-  vec4 wave = vec4(0.02,0.001,0.02,0) * sin(time * speed);
+  vec4 wave = vec4(0.03,0.001,0.03,0) * sin(time * speed);
   //vec4 wave = vec4(0);
   //We need to create a quad with 12 vertices at our seed position.
   vec4 center = seed;

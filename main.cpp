@@ -3,7 +3,7 @@
 #include "src/graphics/Scene.hpp"
 #include "src/Graphics.hpp"
 #include "src/UserInput.hpp"
-#include "src/test/TerrainGenScene.hpp"
+#include "src/Project/TerrainGenScene.hpp"
 #include <random>
 #include "src/graphics/ObjModel.hpp"
 

@@ -26,7 +26,7 @@ class Cube : public Drawable {
     Cube(AssetManager *am);
     void setSkybox(bool sb);
     bool isSkybox();
-    ~Cube();
+    virtual ~Cube();
     void draw();
     void setTexture(Texture* text);
 };

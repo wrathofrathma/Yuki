@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <glm/vec2.hpp>
 
 class Yuki;
 class Scene;
@@ -56,6 +57,8 @@ class UI {
 		void setMousePos(sf::Vector2i pos);
 		void setMouseSensitivity(sf::Vector2f sensitivity);
 		sf::Vector2f getMouseSensitivity();
+		glm::vec2 getMouseNDC();
+
 };
 
 #endif

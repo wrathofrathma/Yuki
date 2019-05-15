@@ -25,5 +25,7 @@ LightCube::LightCube(AssetManager *am) : Cube(am) {
 Default empty destructor.
 */
 LightCube::~LightCube(){
-
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &dataPtr);
+  glDeleteBuffers(1, &indicePtr);
 }

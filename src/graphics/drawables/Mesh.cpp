@@ -40,10 +40,7 @@ Mesh::Mesh(Mesh&m1){
   setTexture(m1.getTextures());
   setIndices(m1.getIndices());
   update = true;
-  cout << "Vertices: " << vertices.size() << endl;
-  cout << "Normals: " << normals.size() << endl;
-  cout << "UVs: " << texture_uvs.size() << endl;
-  cout << "Indicies: " << indices.size() << endl;
+
 }
 std::vector<Texture*> Mesh::getTextures(){
   return textures;

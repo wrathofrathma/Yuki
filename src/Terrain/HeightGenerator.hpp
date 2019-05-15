@@ -6,13 +6,26 @@
 #include <cmath>
 using namespace std;
 
+/**
+\file HeightGenerator.hpp
+\brief Header file for HeightGenerator.cpp
+
+\author Christopher Arausa
+\version Final
+\date 05/14/2019
+*/
+
+/**
+\class HeightGenerator
+\brief the height generator class is responsible for generating smooth noise to use for generating heightmaps
+*/
 class HeightGenerator {
   private:
-    float amplitude;
-    int octaves;
-    float roughness;
-    mt19937_64 random_generator;
-    unsigned int seed;
+    float amplitude; ///< Amplitude of the generator
+    int octaves; ///< Number of loops to apply smoothing
+    float roughness; ///< How rough do we want it
+    mt19937_64 random_generator; ///< Random generator for reasons
+    unsigned int seed; ///< The seed we're using .
   public:
     HeightGenerator();
     ~HeightGenerator();

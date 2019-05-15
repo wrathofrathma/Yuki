@@ -50,7 +50,7 @@ class Light : virtual public SpacialObject {
     //Generic
     Light(LIGHT_TYPE t, bool onoff, glm::vec4 a, glm::vec4 d, glm::vec4 s);
     Light(LIGHT_TYPE t);
-    ~Light();
+    virtual ~Light();
 
     bool getOn();
     glm::vec4 getAmbient();

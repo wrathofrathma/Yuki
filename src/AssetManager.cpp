@@ -24,8 +24,8 @@ AssetManager::AssetManager(Yuki* yuki){
   shaders_dir = asset_dir + "shaders/";
   refr_h = 720;
   refr_w = 1280;
-  refl_h = 1280;
-  refl_w = 720;
+  refl_h = 720;
+  refl_w = 128;
 }
 
 /**

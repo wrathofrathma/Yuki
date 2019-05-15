@@ -98,37 +98,37 @@ float HeightGenerator::getAmplitude(){
   return amplitude;
 }
 /**
-\brief TODO
+\brief Returns the seed
 */
 unsigned int HeightGenerator::getSeed(){
   return seed;
 }
 /**
-\brief TODO
+\brief returns the octaves
 */
 float HeightGenerator::getOctaves(){
   return octaves;
 }
 /**
-\brief TODO
+\brief returns the roughness
 */
 float HeightGenerator::getRoughness(){
   return roughness;
 }
 /**
-\brief TODO
+\brief Sets the octaves
 */
 void HeightGenerator::setOctaves(float o){
   octaves = o;
 }
 /**
-\brief TODO
+\brief Sets the roughness
 */
 void HeightGenerator::setRoughness(float r){
   roughness = r;
 }
 /**
-\brief TODO
+\brief sets the seed 
 */
 void HeightGenerator::setSeed(unsigned int s){
   seed = s;

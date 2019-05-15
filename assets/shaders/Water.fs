@@ -82,10 +82,10 @@ in vec4 clipspace; ///< Texture coordinates.
 
 out vec4 FragColor; ///< Our resulting color.
 
-uniform sampler2D texture1; ///< Texture to use if we're using one.
-uniform sampler2D texture2;
-uniform sampler2D texture3;
-
+uniform sampler2D texture1; ///< Reflection texture
+uniform sampler2D texture2; ///< Refraction texture
+uniform sampler2D texture3; ///< dudv map
+uniform sampler2D texture4; ///< Water texture
 uniform bool useTexture; ///< Boolean value that determines if we render the texture.
 uniform vec3 camera_pos; ///< Camera position.
 uniform Material material; ///< Material of the surface.
@@ -98,109 +98,47 @@ uniform DirectionalLight directionalLights[NR_DIRECTIONAL_LIGHTS]; ///< C style 
 uniform SpotLight spotLights[NR_SPOT_LIGHTS]; ///< C style array of spot lights.
 uniform vec4 global_ambient; ///< Global ambient for the scene.
 uniform bool lighting_on; ///< Whether we're applying lighting calculation to the scene.
-
-/**
-\brief Calculates a single point light's contribution to lighting the fragment.
-
-\param light --- PointLight struct
-\param norm --- vec3 normal vector
-\param fragPos --- vec4 fragment position
-\param viewDir --- vec3 containing the view direction.
-*/
-// vec4 CalcPointLight(PointLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
-//   vec3 lightDirection = normalize(light.position.xyz - fragPos.xyz);
-//   //Diffuse
-//   float diff = max(dot(norm, lightDirection.xyz), 0.0);
-//   //Specular.
-//   vec3 reflectDirection = reflect(-lightDirection.xyz, norm);
-//   float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);
-//   //Attenuation
-//   float distance = length(light.position - fragPos);
-//   float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-//
-//   vec4 ambient  = light.ambient  * material.ambient;
-//   vec4 diffuse  = light.diffuse  * diff * material.diffuse;
-//   vec4 specular = light.specular * spec * material.specular;
-//   ambient  *= attenuation;
-//   diffuse  *= attenuation;
-//   specular *= attenuation;
-//   return (ambient + diffuse + specular);
-// }
-//
-// /**
-// \brief Calculates a single directional light's contribution to lighting the fragment.
-//
-// \param light --- DirectionalLight struct
-// \param norm --- vec3 normal vector
-// \param viewDir --- vec3 containing the view direction.
-// */
-// vec4 CalcDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDir){
-//   vec3 lightDirection = normalize(-light.direction.xyz);
-//   //Diffuse
-//   float diff = max(dot(normal, lightDirection), 0.0);
-//   //Specular1
-//   vec3 reflectDir = reflect(-lightDirection.xyz, normal);
-//   float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-//
-//   vec4 ambient  = light.ambient  * material.ambient;
-//   vec4 diffuse  = light.diffuse  * diff * material.diffuse;
-//   vec4 specular = light.specular * spec * material.specular;
-//   return (ambient + diffuse + specular);
-// }
-// /**
-// \brief Calculates a single spot light's contribution to lighting the fragment.
-//
-// \param light --- SpotLight struct
-// \param norm --- vec3 normal vector
-// \param fragPos --- vec4 fragment position
-// \param viewDir --- vec3 containing the view direction.
-// */
-// vec4 CalcSpotLight(SpotLight light, vec3 norm, vec4 fragPos, vec3 viewDir){
-//   vec3 lightDirection = normalize(light.position.xyz - fragPos.xyz);
-//   //Diffuse
-//   float diff = max(dot(norm, lightDirection.xyz), 0.0);
-//   //Specular.
-//   vec3 reflectDirection = reflect(-lightDirection.xyz, norm);
-//   float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);
-//   //Attenuation
-//   float distance = length(light.position - fragPos);
-//   float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-//
-//   //Spotlight intensity
-//   float theta = dot(lightDirection, normalize(-light.direction.xyz));
-//   float epsilon = light.cutOff - light.outerCutOff;
-//   float intensity = clamp((theta - light.outerCutOff)/epsilon, 0.0, 1.0);
-//
-//   vec4 ambient  = light.ambient  * material.ambient;
-//   vec4 diffuse  = light.diffuse  * diff * material.diffuse;
-//   vec4 specular = light.specular * spec * material.specular;
-//
-//   ambient *= attenuation * intensity;
-//   diffuse *= attenuation * intensity;
-//   specular *= attenuation * intensity;
-//   return (ambient + diffuse + specular);
-// }
-
+uniform float dudv_offset; ///< Dudv offset that controls where we sample.
+uniform float time;
+uniform bool apply_distortion; ///< Do we apply distortion to our water.
 
 void main()
 {
-  float strength = 0.02;
+  // This is the strength of our distortion. By changing this we can achieve a ripple effect.
+  // We want to clamp it fairly low though. Between 0.0 to 0.2 maybe. So using a sin function we can add 1 and divide by 100
 
+  float strength = 0.1;
+  //float strength = 0.1;
   vec2 normaldevice = clipspace.xy / clipspace.w;
   normaldevice /= 2.0;
   normaldevice+=0.5;
 
-  vec2 refractTextureUVs = vec2 (normaldevice.x, normaldevice.y);
-  vec2 reflectTextureUVs = vec2(normaldevice.x, -normaldevice.y);
+  vec2 refract_uvs = vec2(normaldevice.x, normaldevice.y);
+  vec2 reflect_uvs = vec2(normaldevice.x, -normaldevice.y);
 
-  vec2 dist = texture(texture2, tex_coord).rg*2.0-1.0;
-  dist *= strength;
-  refractTextureUVs+=dist;
-  reflectTextureUVs+= dist;
-  if(useTexture)
-    FragColor =  mix(texture(texture3, tex_coord), texture(texture1, vec2(normaldevice.x, -normaldevice.y)),0.8);
-  else
-    FragColor = vec4(icolor,1);
+
+  if(apply_distortion){
+  vec2 dudv_distortion = texture(texture3, vec2(tex_coord.x, tex_coord.y)).rg*2.0-1.0;
+    dudv_distortion *= strength;
+    refract_uvs+=dudv_distortion;
+    reflect_uvs+= dudv_distortion;
+  }
+  refract_uvs = clamp(refract_uvs, 0.001,0.999);
+  reflect_uvs.x = clamp(reflect_uvs.x, 0.001,0.999);
+  reflect_uvs.y = clamp(reflect_uvs.y, -0.999,-0.001);
+
+  vec4 reflect_color = texture(texture1, reflect_uvs);
+  vec4 refract_color = texture(texture2, refract_uvs);
+
+  FragColor = mix(reflect_color, refract_color, 0.5);
+  FragColor = mix(FragColor, vec4(0,0.1,0.3,0),0.3);
+  // if(useTexture)
+  //   FragColor =  mix(texture(texture2, tex_coord), texture(texture1, vec2(normaldevice.x, -normaldevice.y)),0.7);
+  // else
+  //   FragColor = vec4(icolor,1);
+
+
+
   //
   // if(lighting_on){
   //   vec3 norm = normalize(normal);

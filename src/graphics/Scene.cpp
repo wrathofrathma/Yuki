@@ -24,7 +24,7 @@ Default constructor that just stores our game engine pointer.
 Scene::Scene(Yuki* yuki) {
   this->yuki = yuki;
   this->asset_manager = yuki->am;
-  global_ambient = glm::vec4(0.1);
+  global_ambient = glm::vec4(0.05);
 }
 
 /**
@@ -45,14 +45,14 @@ void Scene::tick(){
   //Generate delta
   sf::Time curr_time = clock.getElapsedTime();
   sf::Time delta = curr_time - last_time;
-  float dt = delta.asSeconds();
+  current_delta = delta.asSeconds();
   last_time = curr_time;
   //Generate camera updates
   Camera *c = getCamera();
   if(c!=nullptr)
     c->update();
   updateShaders();
-  update(dt);
+  update(current_delta);
 }
 
 /**

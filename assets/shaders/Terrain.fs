@@ -194,7 +194,7 @@ void main()
       FragColor = mix(t0,t1,grass_thresh-frag_pos.y);
     }
     else if(abs(frag_pos.y+6)<1){
-      FragColor =  texture(textures[2], frag_pos.xz);
+      FragColor =  texture(textures[1], frag_pos.xz);
     }
     else if(frag_pos.y>-6) //Dirt texture.
       FragColor =  texture(textures[1], frag_pos.xz);

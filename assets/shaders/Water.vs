@@ -45,10 +45,16 @@ out vec3 icolor; ///< Our input surface color if one exists.
 out vec2 tex_coord;
 out vec4 clipspace;
 
-const float tile = 12.0;
+uniform vec4 plane;
+in float time;
+
+const float tile = 6.0;
+
+uniform vec3 camera_pos; ///< Camera position.
+
 
 void main(){
-  normal = normal_matrix * vnormal;
+  normal = normal_matrix * vec3(0,0,1);
   frag_pos = model * vpos; // Converting to world position.
   icolor = vcolor;
   tex_coord = vec2(vpos.x/2.0 + 0.5, vpos.y/2.0 + 0.5)*tile;
