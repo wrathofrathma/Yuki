@@ -38,6 +38,8 @@ TGenScene::TGenScene(Yuki *yuki) : Scene(yuki){
   setGlobalAmbient(glm::vec4(0.1));
   draw_mesh = true;
   framerate = true;
+  clip_plane = false;
+  clip_low = false;
   draw_skybox = true;
   addCamera("Free", new FreeCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
   addCamera("Sphere", new SphericalCamera(yuki->ge->getSize().x, yuki->ge->getSize().y, 50.0f));
@@ -157,7 +159,25 @@ void TGenScene::draw(){
   yuki->am->unbindFB();
 
   //Real draw time.
-  glDisable(GL_CLIP_DISTANCE0);
+  if(clip_plane){
+    glEnable(GL_CLIP_DISTANCE0);
+    if(clip_low){
+      for(auto const& [key, val] : yuki->am->getShaders()) {
+        val->bind();
+        val->setVec4("plane", lower_plane);
+      }
+    }
+    else{
+      for(auto const& [key, val] : yuki->am->getShaders()) {
+        val->bind();
+        val->setVec4("plane", upper_plane);
+      }
+    }
+  }
+  else{
+    glDisable(GL_CLIP_DISTANCE0);
+
+  }
   if(draw_skybox){
     if(skybox!=nullptr)
       skybox->draw();
@@ -307,6 +327,12 @@ void TGenScene::keyPressedEventHandler(sf::Event::KeyEvent event){
   }
   if(event.code == sf::Keyboard::Q){
     apply_distortion = !apply_distortion;
+  }
+  if(event.code == sf::Keyboard::C){
+    clip_plane = !clip_plane;
+  }
+  if(event.code == sf::Keyboard::V){
+    clip_low = !clip_low;
   }
 }
 

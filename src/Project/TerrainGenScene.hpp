@@ -75,7 +75,8 @@ Toggle Options
 - F: Toggles the framerate calc in the title.
 - T: Toggles the terrain generator on and off.
 - Q: Toggles the water distortion.
-
+- C: Toggles clipping of the water plane
+- V: Toggles which plane to clip, higher or lower. 
 Left clicking and dragging the mouse will rotate the camera in place and look around.
 
 Right clicking in the scene places a light cube 30 units in the direction of the ray vector.
@@ -111,6 +112,8 @@ class TGenScene : public Scene {
     bool apply_distortion; ///< Boolean for whether to apply distortion to our water.
     MouseCaster mouse_caster; ///< MouseCaster class for using raycasting to location our mouse in the scene.
     std::deque<LightCube*> cubes; ///< Light cubes to draw.
+    bool clip_plane; ///< Boolean value for whether to clip the planes
+    bool clip_low; ///< Boolean value for whether to clip high or low.
   public:
     TGenScene(Yuki *yuki);
     ~TGenScene();
