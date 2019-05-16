@@ -24,7 +24,7 @@
 */
 class Water : public Quad {
   GLint gl_textures[3]; ///< Our individual texture for uv mapping
-  float time;
+  float time; ///< Time was used in some calcs for moving teh water but I disabled it for now. 
   float dudv_offset; ///< Offset used for moving our distortion samples and getting a water ripple effect.
   public:
     Water();

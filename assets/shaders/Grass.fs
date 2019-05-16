@@ -1,4 +1,23 @@
 #version 420
+/**
+\file Grass.fs
+\brief Grass fragment shader.
+
+\author Christopher Arausa
+\date 05/15/2019
+\version Final
+
+\param [in] usetexture --- Boolean for whether to apply a texture to the grass.
+
+\param [in] texture_0 --- Texture for the grass
+
+\param [in] texture_1 --- Another grass texture
+
+\param [in] tex_coord --- vec2 texture coordinates for the grass.
+
+\param [out] FragColor --- vec4 containing the final color of the grass.
+
+*/
 out vec4 FragColor;
 
 uniform bool useTexture;

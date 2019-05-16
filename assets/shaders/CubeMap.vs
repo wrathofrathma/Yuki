@@ -24,6 +24,8 @@
 
 \param [out] tex_coord --- vec3 texture coordinates.
 
+\param [in] plane --- vec4 containing the clippling plane, if we are clipping one.
+
 */
 layout(location = 0) in vec4 vpos;
 layout(location = 1) in vec3 vnormal;
@@ -33,7 +35,7 @@ uniform mat4 model; // Model matrix
 uniform mat4 view; // View matrix
 uniform mat4 proj; // Projection matrix
 uniform mat3 normal_matrix; ///< Normal matrix.
-uniform vec4 plane;
+uniform vec4 plane; ///< Plane to clip.
 
 out vec4 frag_pos; ///< Our vertex position in model coordinates.
 out vec3 normal; ///< Our vertex normal.

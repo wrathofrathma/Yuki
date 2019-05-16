@@ -22,7 +22,7 @@ class Camera;
 */
 class MouseCaster {
   private:
-   glm::vec3 current_ray;
+   glm::vec3 current_ray; ///< vec3 containing the current direction of the mouse. 
  public:
    MouseCaster();
    void update(glm::vec2 mouse_pos, Camera* camera);

@@ -1,4 +1,23 @@
 #version 420 core
+
+/**
+\file Grass.gs
+\brief Grass geometry shader.
+
+\author Christopher Arausa
+\date 05/15/2019
+\version Final
+
+\param [in] model --- mat4 model matrix
+
+\param [in] view --- mat4 view matrix
+
+\param [in] proj --- mat4 projection matrix
+
+\param [in] time --- float time value for the elapsed time
+
+\param [out] tex_coord --- vec2 texture coordinates for the grass texture.
+*/
 layout (points) in; //We take in points and output line strips.
 layout (triangle_strip, max_vertices = 24) out; //We'll output a 3 segment line strip with a seed, middle and top.
 

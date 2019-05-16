@@ -27,6 +27,14 @@
 \param [out] normal --- normal vector that's been modified with the model matrix.
 
 \param [out] tex_coord --- vec2 texture coordinates.
+
+\param [in] plane --- vec4 containing the clippling plane, if we are clipping one.
+
+\param [in] time --- float containing the total time elapsed.
+
+\param [out] clipspace --- Texture coordinates used for the refraction/reflection textures.
+
+\param [in] camera_pos --- vec3 containing the camera's position in the world.
 */
 
 layout(location = 0) in vec4 vpos;

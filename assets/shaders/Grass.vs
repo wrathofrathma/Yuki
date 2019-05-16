@@ -13,6 +13,9 @@
 \param [in] proj --- mat4 Projection matrix.
 
 \param [in] offset --- vec4 offset
+
+\param [in] plane --- vec4 containing the clippling plane, if we are clipping one.
+
 */
 
 layout(location = 0) in vec4 vertex_position;

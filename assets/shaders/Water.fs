@@ -26,6 +26,17 @@
 
 \param [uniform] global_ambient --- vec4 global ambient color vector.
 
+\param [in] clipspace --- Texture coordinates used for the refraction/reflection textures.
+
+\param [in] texture[1,4] --- Uniform sampler2Ds for the textures.
+
+\param [in] useTexture --- boolean for whether we use a texture.
+
+\param [in] time --- float for total time elapsed.
+
+\param [in] dudv_offset --- The offset used for moving the water.
+
+\param [in] apply_distortion --- boolean for whether we will apply the dudv distortion.
 */
 
 //Point lights have a position in the world and radiate light in all directions.

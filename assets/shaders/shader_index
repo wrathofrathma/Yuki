@@ -11,4 +11,3 @@ Terrain Default.vs Terrain.fs
 # Water Water.vs Water.fs
 Water Water.vs Water.fs
 Grass Grass.vs Grass.fs Grass.gs
-# Default Default.vs Default.fs

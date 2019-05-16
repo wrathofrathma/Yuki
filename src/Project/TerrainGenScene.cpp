@@ -321,6 +321,8 @@ void TGenScene::keyStateEventHandler(){
 \brief Empty mouse button logic handler.
 */
 void TGenScene::mouseButtonEventHandler(sf::Event::MouseButtonEvent event){
+  glm::vec3 ray_dir = mouse_caster.getRay();
+  glm::vec3 cpos = getCamera()->getPosition();
   if(event.button == sf::Mouse::Right){
     if(lights.size()==10){
       delete lights[0];
@@ -328,8 +330,6 @@ void TGenScene::mouseButtonEventHandler(sf::Event::MouseButtonEvent event){
       cubes.pop_front();
     }
     LightCube *lc = new LightCube(asset_manager);
-    glm::vec3 ray_dir = mouse_caster.getRay();
-    glm::vec3 cpos = getCamera()->getPosition();
     ray_dir *= 30;
     lc->setAmbient(glm::vec4(0.8,0,0,0));
     glm::vec3 lpos = cpos + ray_dir;
@@ -337,6 +337,9 @@ void TGenScene::mouseButtonEventHandler(sf::Event::MouseButtonEvent event){
     lc->setPosition(glm::vec3(lpos));
     cubes.push_back(lc);
     lights.push_back(lc);
+  }
+  else if(event.button == sf::Mouse::Left){
+
   }
 }
 /**
